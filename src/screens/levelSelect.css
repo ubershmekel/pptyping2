@@ -1,0 +1,547 @@
+/* ── Arc colour tokens ────────────────────────────────────────────────────── */
+.arc-1 { --arc-col: #4ade80; --arc-glow: rgba(74, 222, 128, 0.22); }
+.arc-2 { --arc-col: #facc15; --arc-glow: rgba(250, 204,  21, 0.22); }
+.arc-3 { --arc-col: #67e8f9; --arc-glow: rgba(103, 232, 249, 0.22); }
+.arc-4 { --arc-col: #60a5fa; --arc-glow: rgba( 96, 165, 250, 0.22); }
+.arc-5 { --arc-col: #e2e8f0; --arc-glow: rgba(226, 232, 240, 0.22); }
+
+/* ── Screen shell ─────────────────────────────────────────────────────────── */
+.level-select-screen {
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(ellipse at 50% 0%, #0e1630 0%, #080b18 60%);
+  overflow: hidden;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.ls-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.ls-back-btn {
+  padding: 0.4rem 0.9rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: #aaa;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.ls-back-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #e0e0e0;
+}
+
+.ls-title {
+  flex: 1;
+  font-family: var(--font-game);
+  font-size: 0.7rem;
+  color: #e0e0f0;
+  letter-spacing: 1px;
+}
+
+.ls-progress-pill {
+  padding: 0.3rem 0.8rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.ls-prog-count {
+  color: var(--team-primary, #ffd700);
+}
+
+.ls-prog-denom {
+  color: #555;
+}
+
+/* ── Locked-level notice banner ───────────────────────────────────────────── */
+.ls-notice {
+  padding: 0.5rem 1.25rem;
+  background: rgba(220, 80, 80, 0.1);
+  border-bottom: 1px solid rgba(220, 80, 80, 0.2);
+  color: #f07e7e;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+/* ── Arc map ──────────────────────────────────────────────────────────────── */
+.ls-map {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding: 12px 14px 10px;
+  overflow: hidden;
+}
+
+/* ── Arc column ───────────────────────────────────────────────────────────── */
+.ls-arc {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ls-arc-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.ls-arc-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px var(--arc-col, #fff));
+  animation: ls-icon-bob 3s ease-in-out infinite;
+}
+
+.ls-arc-text {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ls-arc-name {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: var(--arc-col, #fff);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.ls-arc-label {
+  font-size: 0.58rem;
+  color: #555;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@keyframes ls-icon-bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }
+}
+
+/* ── Connector track ──────────────────────────────────────────────────────── */
+.ls-arc-nodes {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  padding-left: 10px;
+}
+
+.ls-arc-nodes::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 16px;
+  bottom: 16px;
+  width: 2px;
+  background: linear-gradient(to bottom,
+    var(--arc-col, #444) 0%,
+    rgba(255, 255, 255, 0.06) 100%);
+  border-radius: 1px;
+}
+
+/* ── Level card ───────────────────────────────────────────────────────────── */
+.ls-level-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+  flex-shrink: 0;
+}
+
+/* Connector dot */
+.ls-level-card::before {
+  content: '';
+  position: absolute;
+  left: -11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--arc-col, #555);
+  box-shadow: 0 0 6px var(--arc-col, #555);
+}
+
+.ls-card-locked {
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.04);
+  /* Diagonal hatch overlay */
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.015) 0px,
+      rgba(255, 255, 255, 0.015) 1px,
+      transparent 1px,
+      transparent 6px
+    );
+}
+
+.ls-card-locked::before {
+  background: #282828;
+  box-shadow: none;
+  width: 5px;
+  height: 5px;
+}
+
+/* Locked text + icons go very dim */
+.ls-card-locked .ls-lv-num { color: #383838; }
+.ls-card-locked .ls-stats-empty { color: #333; }
+.ls-card-locked .ls-chip {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.04);
+  color: #333;
+}
+
+.ls-card-open {
+  border-color: color-mix(in srgb, var(--arc-col, #fff) 28%, transparent);
+  border-left: 3px solid color-mix(in srgb, var(--arc-col, #aaa) 60%, transparent);
+  background: color-mix(in srgb, var(--arc-col, #fff) 4%, rgba(255,255,255,0.03));
+}
+
+.ls-card-open:hover,
+.ls-card-open:focus-visible {
+  transform: translateY(-2px) scale(1.02);
+  border-color: var(--arc-col, #ffd700);
+  border-left-color: var(--arc-col, #ffd700);
+  background: color-mix(in srgb, var(--arc-col, #fff) 10%, rgba(255,255,255,0.04));
+  box-shadow: 0 4px 18px var(--arc-glow, transparent);
+  outline: none;
+}
+
+/* Play icon gets arc color on open cards */
+.ls-card-open .ls-open { color: var(--arc-col, #aaa); opacity: 0.9; }
+
+.ls-card-done {
+  border-color: color-mix(in srgb, var(--arc-col, #4ade80) 45%, transparent);
+  background: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.3),
+    color-mix(in srgb, var(--arc-col, #4ade80) 8%, transparent));
+  box-shadow: 0 2px 10px var(--arc-glow, transparent);
+}
+
+.ls-card-done:hover,
+.ls-card-done:focus-visible {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 22px var(--arc-glow, transparent);
+  outline: none;
+}
+
+/* Next level to play — subtle pulse to draw the eye */
+.ls-card-next {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--arc-col, #aaa) 50%, transparent),
+              0 4px 16px var(--arc-glow, transparent);
+  animation: ls-next-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes ls-next-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--arc-col, #aaa) 40%, transparent), 0 4px 14px var(--arc-glow, transparent); }
+  50%       { box-shadow: 0 0 0 2px color-mix(in srgb, var(--arc-col, #aaa) 70%, transparent), 0 6px 22px var(--arc-glow, transparent); }
+}
+
+.ls-attempted {
+  border-color: rgba(220, 80, 80, 0.5) !important;
+  box-shadow: 0 0 12px rgba(220, 80, 80, 0.2) !important;
+  animation: ls-attempted-pulse 2s ease-in-out 3;
+}
+
+/* ── Card rows ────────────────────────────────────────────────────────────── */
+.ls-card-row1 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ls-lv-num {
+  font-family: var(--font-game);
+  font-size: 0.52rem;
+  color: #e0e0f0;
+  flex: 1;
+  letter-spacing: 0.5px;
+}
+
+.ls-speed-badge {
+  font-size: 0.58rem;
+  padding: 1px 5px;
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(250, 204, 21, 0.25);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.ls-status {
+  font-size: 0.75rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.ls-done        { color: var(--arc-col, #4ade80); text-shadow: 0 0 8px var(--arc-col, transparent); }
+.ls-open        { color: #666; }
+.ls-locked-icon { color: #444; }
+
+.ls-card-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.ls-wpm  { color: var(--arc-col, #4ade80); }
+.ls-sep  { color: #444; }
+.ls-acc  { color: #aaa; }
+
+.ls-card-stats small {
+  font-size: 0.55rem;
+  font-weight: 700;
+  opacity: 0.7;
+  margin-left: 1px;
+}
+
+.ls-stats-empty {
+  color: #444;
+  font-size: 0.62rem;
+  font-style: italic;
+}
+
+/* ── Letter chips ─────────────────────────────────────────────────────────── */
+.ls-card-letters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.ls-chip {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-game);
+  font-size: 0.46rem;
+  color: #aaa;
+  line-height: 1.6;
+  transition: background 0.15s, color 0.15s;
+}
+
+.ls-card-done .ls-chip {
+  background: color-mix(in srgb, var(--arc-col, #4ade80) 12%, transparent);
+  border-color: color-mix(in srgb, var(--arc-col, #4ade80) 25%, transparent);
+  color: var(--arc-col, #ccc);
+}
+
+/* ── Cutscene node ────────────────────────────────────────────────────────── */
+.ls-cs-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border-radius: var(--radius-md);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+  flex-shrink: 0;
+  min-height: 42px;
+}
+
+/* Connector dot for cutscene nodes */
+.ls-cs-node::before {
+  content: '';
+  position: absolute;
+  left: -11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--arc-col, #555);
+  box-shadow: 0 0 8px var(--arc-col, transparent);
+  border: 2px solid #0d0d1a;
+}
+
+.ls-cs-locked {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+.ls-cs-locked::before { background: #333; box-shadow: none; }
+
+.ls-cs-open:hover,
+.ls-cs-open:focus-visible {
+  transform: translateY(-1px) scale(1.02);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--arc-col, #aaa);
+  border-style: solid;
+  outline: none;
+}
+
+.ls-cs-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ls-cs-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #888;
+  letter-spacing: 0.3px;
+}
+
+.ls-cs-open .ls-cs-label {
+  color: var(--arc-col, #ccc);
+}
+
+/* ── Entrance animation ───────────────────────────────────────────────────── */
+.ls-level-card,
+.ls-cs-node {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.ls-entering {
+  animation: ls-enter 0.38s cubic-bezier(0.2, 1, 0.3, 1) var(--enter-delay, 0ms) forwards;
+}
+
+@keyframes ls-enter {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Shake (locked click) ─────────────────────────────────────────────────── */
+.ls-shake {
+  animation: ls-shake 0.35s ease !important;
+}
+
+@keyframes ls-shake {
+  0%  { transform: translateX(0); }
+  15% { transform: translateX(-5px) rotate(-1deg); }
+  35% { transform: translateX(5px)  rotate( 1deg); }
+  55% { transform: translateX(-3px) rotate(-0.5deg); }
+  75% { transform: translateX(3px)  rotate( 0.5deg); }
+  100%{ transform: translateX(0); }
+}
+
+/* ── Attempted pulse ──────────────────────────────────────────────────────── */
+@keyframes ls-attempted-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(220, 80, 80, 0.2); }
+  50%       { box-shadow: 0 0 22px rgba(220, 80, 80, 0.45); }
+}
+
+/* ── Icon bob per-arc offset ─────────────────────────────────────────────── */
+.arc-1 .ls-arc-icon { animation-delay: 0s;    }
+.arc-2 .ls-arc-icon { animation-delay: 0.6s;  }
+.arc-3 .ls-arc-icon { animation-delay: 1.2s;  }
+.arc-4 .ls-arc-icon { animation-delay: 1.8s;  }
+.arc-5 .ls-arc-icon { animation-delay: 2.4s;  }
+
+/* ── Particles ────────────────────────────────────────────────────────────── */
+.ls-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ls-particle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--team-primary, #ffd700);
+  opacity: 0;
+  animation: ls-particle-float 7s ease-in-out infinite;
+}
+
+.ls-particle:nth-child(1)  { left:  6%; animation-delay: 0s;    }
+.ls-particle:nth-child(2)  { left: 13%; animation-delay: 1.2s;  }
+.ls-particle:nth-child(3)  { left: 20%; animation-delay: 2.5s;  }
+.ls-particle:nth-child(4)  { left: 28%; animation-delay: 0.7s;  }
+.ls-particle:nth-child(5)  { left: 36%; animation-delay: 3.1s;  }
+.ls-particle:nth-child(6)  { left: 44%; animation-delay: 1.8s;  }
+.ls-particle:nth-child(7)  { left: 52%; animation-delay: 0.3s;  }
+.ls-particle:nth-child(8)  { left: 60%; animation-delay: 4.2s;  }
+.ls-particle:nth-child(9)  { left: 68%; animation-delay: 2.0s;  }
+.ls-particle:nth-child(10) { left: 75%; animation-delay: 0.9s;  }
+.ls-particle:nth-child(11) { left: 82%; animation-delay: 3.5s;  }
+.ls-particle:nth-child(12) { left: 88%; animation-delay: 1.5s;  }
+.ls-particle:nth-child(13) { left: 93%; animation-delay: 2.8s;  }
+.ls-particle:nth-child(14) { left: 98%; animation-delay: 5.0s;  }
+
+@keyframes ls-particle-float {
+  0%   { bottom: 2%;  opacity: 0;   transform: scale(0.8); }
+  10%  { opacity: 0.35; }
+  80%  { opacity: 0.15; }
+  100% { bottom: 92%; opacity: 0;   transform: scale(0.4) translateX(8px); }
+}
+
+/* ── Team theming ─────────────────────────────────────────────────────────── */
+.team-pokemon.level-select-screen {
+  background: radial-gradient(ellipse at 50% 0%, #0f1a2a 0%, #080b18 60%);
+}
+
+.team-mlp.level-select-screen {
+  background: radial-gradient(ellipse at 50% 0%, #170f22 0%, #0d0816 60%);
+}
+
+/* ── Narrow viewport fallback ────────────────────────────────────────────── */
+@media (max-width: 800px) {
+  .ls-map {
+    grid-template-columns: repeat(3, 1fr);
+    overflow-y: auto;
+  }
+
+  .ls-arc:nth-child(4),
+  .ls-arc:nth-child(5) {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .ls-map {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -2,6 +2,7 @@ import type { AppScreen, Difficulty, LevelStats, Team } from './types';
 import { loadProfile, saveProfile, applyLevelResult, selectTeam, switchTeam, setDifficulty } from './state/gameState';
 import { cutsceneAfterLevel, levelAfterCutscene } from './data/levels';
 import { renderTeamSelect }    from './screens/teamSelect';
+import { renderLevelSelect }   from './screens/levelSelect';
 import { renderCutscene }      from './screens/cutscene';
 import { renderLevelScreen }   from './screens/levelScreen';
 import { renderLevelComplete }  from './screens/levelComplete';
@@ -157,7 +158,13 @@ export class App {
       );
 
     } else if (screen.id === 'level-select') {
-      return this.renderLevelSelect(screen.attempted);
+      return renderLevelSelect(
+        this.profile,
+        (n)   => this.navigate({ id: 'level', number: n }),
+        (idx) => this.navigate({ id: 'cutscene', index: idx }),
+        ()    => this.navigate({ id: 'main-menu' }),
+        screen.attempted,
+      );
 
     } else if (screen.id === 'cutscene') {
       return renderCutscene(
@@ -234,61 +241,6 @@ export class App {
         this.navigate({ id: 'team-select' });
       } else if (action === 'settings') {
         this.navigate({ id: 'settings' });
-      }
-    });
-
-    return el;
-  }
-
-  private renderLevelSelect(attempted?: number): HTMLElement {
-    const el = document.createElement('div');
-    el.className = 'screen level-select-screen';
-
-    const levelBtns = Array.from({ length: 14 }, (_, i) => {
-      const n = i + 1;
-      const unlocked = n <= this.profile.highestUnlockedLevel;
-      const record = this.profile.levelRecords[n];
-      const completed = record?.completed ?? false;
-      const isAttempted = n === attempted;
-
-      return `
-        <button
-          class="level-btn ${unlocked ? 'unlocked' : 'locked'} ${completed ? 'completed' : ''} ${isAttempted ? 'attempted' : ''}"
-          data-level="${n}"
-          ${unlocked ? '' : 'disabled'}
-          title="${unlocked ? `Level ${n}` : 'Locked'}"
-        >
-          ${n}
-          ${completed ? '<span class="level-check">✓</span>' : ''}
-        </button>
-      `;
-    }).join('');
-
-    const attemptedMsg = attempted
-      ? `<p class="level-select-notice">Level ${attempted} is locked. Complete earlier levels first.</p>`
-      : '';
-
-    el.innerHTML = `
-      <div class="screen-header">
-        <button class="btn btn-ghost back-btn" data-action="back">← Back</button>
-        <h2>Choose a Level</h2>
-      </div>
-      ${attemptedMsg}
-      <div class="level-grid">${levelBtns}</div>
-    `;
-
-    el.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest('[data-level]') as HTMLElement | null;
-      if (btn) {
-        const n = parseInt(btn.dataset['level'] ?? '1', 10);
-        if (n <= this.profile.highestUnlockedLevel) {
-          this.navigate({ id: 'level', number: n });
-        }
-        return;
-      }
-      const action = (e.target as HTMLElement).closest('[data-action]') as HTMLElement | null;
-      if (action?.dataset['action'] === 'back') {
-        this.navigate({ id: 'main-menu' });
       }
     });
 
