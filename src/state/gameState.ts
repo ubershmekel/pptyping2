@@ -7,6 +7,7 @@ const STORAGE_KEY = 'pptyping_profile';
 
 export const DEFAULT_PROFILE: PlayerProfile = {
   team: 'pokemon',
+  teamSelected: false,
   difficulty: 'easy',
   levelRecords: {
     1: { bestWpm: 0, bestAccuracy: 0, completed: false },
@@ -86,9 +87,17 @@ export function applyLevelResult(
   return next;
 }
 
+/** Mark that the player has explicitly selected a team. */
+export function selectTeam(profile: PlayerProfile, team: Team): PlayerProfile {
+  const base = team !== profile.team ? { ...DEFAULT_PROFILE } : { ...profile };
+  const next: PlayerProfile = { ...base, team, teamSelected: true, difficulty: profile.difficulty };
+  saveProfile(next);
+  return next;
+}
+
 /** Change team (resets progress). */
 export function switchTeam(profile: PlayerProfile, team: Team): PlayerProfile {
-  const next: PlayerProfile = { ...DEFAULT_PROFILE, team, difficulty: profile.difficulty };
+  const next: PlayerProfile = { ...DEFAULT_PROFILE, team, teamSelected: true, difficulty: profile.difficulty };
   saveProfile(next);
   return next;
 }

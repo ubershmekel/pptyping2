@@ -46,6 +46,7 @@ export interface LevelRecord {
 
 export interface PlayerProfile {
   team: Team;
+  teamSelected: boolean;   // true once the player has explicitly picked a team
   difficulty: Difficulty;
   levelRecords: Record<number, LevelRecord>;
   highestUnlockedLevel: number;
@@ -54,10 +55,13 @@ export interface PlayerProfile {
 // ─── Screen navigation ──────────────────────────────────────────────────────
 
 export type AppScreen =
+  | { id: 'main-menu' }
   | { id: 'team-select' }
+  | { id: 'level-select'; attempted?: number }   // attempted = locked level the user tried to deep-link to
   | { id: 'cutscene'; index: number }
   | { id: 'level'; number: number }
-  | { id: 'level-complete'; number: number; stats: LevelStats };
+  | { id: 'level-complete'; number: number; stats: LevelStats }
+  | { id: 'settings' };
 
 // ─── Level & story definitions ───────────────────────────────────────────────
 
