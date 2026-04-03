@@ -23,7 +23,9 @@ dismiss.
    preserved)
 2. **Retry** — confirms (or immediately) restarts the current level from the
    beginning; discards the current attempt's stats
-3. **Quit to Main Menu** — navigates to `/`; the current attempt is discarded
+3. **Level Select** — navigates to the level select screen; the current attempt
+   is discarded
+4. **Quit to Main Menu** — navigates to `/`; the current attempt is discarded
    (no partial save)
 
 ## Stats During Pause

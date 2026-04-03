@@ -9,6 +9,7 @@ export function renderLevelComplete(
   difficulty: Difficulty,
   onNext:             () => void,
   onRetry:            () => void,
+  onLevelSelect:      () => void,
   onChangeDifficulty: (d: Difficulty) => void,
 ): HTMLElement {
   const thresholds = DIFFICULTY_THRESHOLDS[difficulty];
@@ -86,6 +87,7 @@ export function renderLevelComplete(
         ${!passed ? `<button class="lc-btn lc-btn-secondary" id="lc-next-anyway">
           Skip ahead anyway →
         </button>` : ''}
+        <button class="lc-btn lc-btn-secondary" id="lc-level-select">Level Select</button>
       </div>
 
       <!-- Difficulty switcher -->
@@ -115,6 +117,7 @@ export function renderLevelComplete(
   screen.querySelector('#lc-next')?.addEventListener('click', onNext);
   screen.querySelector('#lc-retry')?.addEventListener('click', onRetry);
   screen.querySelector('#lc-next-anyway')?.addEventListener('click', onNext);
+  screen.querySelector('#lc-level-select')?.addEventListener('click', onLevelSelect);
 
   // Difficulty buttons
   screen.querySelectorAll('.lc-diff-btn').forEach(btn => {

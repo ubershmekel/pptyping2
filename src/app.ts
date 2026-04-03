@@ -173,6 +173,7 @@ export class App {
         this.profile.difficulty,
         (stats) => this.onLevelComplete(screen.number, stats),
         () => this.navigate({ id: 'level', number: screen.number }),
+        () => this.navigate({ id: 'level-select', attempted: screen.number }),
         () => this.navigate({ id: 'main-menu' }),
       );
       this.levelCleanup = cleanup;
@@ -186,6 +187,7 @@ export class App {
         this.profile.difficulty,
         () => this.onLevelCompleteNext(screen.number, screen.stats),
         () => this.navigate({ id: 'level', number: screen.number }),
+        () => this.navigate({ id: 'level-select', attempted: screen.number }),
         (d) => this.onDifficultyChange(d),
       );
 

@@ -219,6 +219,7 @@ export function renderLevelScreen(
   difficulty: Difficulty,
   onComplete: (stats: LevelStats) => void,
   onRetry: () => void,
+  onLevelSelect: () => void,
   onQuit: () => void,
 ): { el: HTMLElement; cleanup: () => void } {
   const def = getLevelDef(levelNumber);
@@ -258,6 +259,7 @@ export function renderLevelScreen(
         <div class="pause-actions">
           <button class="pause-action pause-action-primary" id="pause-resume" type="button">Resume</button>
           <button class="pause-action" id="pause-retry" type="button">Retry</button>
+          <button class="pause-action" id="pause-level-select" type="button">Level Select</button>
           <button class="pause-action" id="pause-quit" type="button">Quit to Main Menu</button>
         </div>
       </div>
@@ -285,6 +287,7 @@ export function renderLevelScreen(
   const pauseTime = screen.querySelector('#pause-time') as HTMLElement;
   const pauseResume = screen.querySelector('#pause-resume') as HTMLButtonElement;
   const pauseRetry = screen.querySelector('#pause-retry') as HTMLButtonElement;
+  const pauseLevelSelect = screen.querySelector('#pause-level-select') as HTMLButtonElement;
   const pauseQuit = screen.querySelector('#pause-quit') as HTMLButtonElement;
   const progressBeam = screen.querySelector('#progress-beam') as HTMLElement;
 
@@ -450,6 +453,7 @@ export function renderLevelScreen(
   pauseBtn.addEventListener('click', openPause);
   pauseResume.addEventListener('click', closePause);
   pauseRetry.addEventListener('click', onRetry);
+  pauseLevelSelect.addEventListener('click', onLevelSelect);
   pauseQuit.addEventListener('click', onQuit);
   document.addEventListener('keydown', keyHandler);
   window.setTimeout(() => updateCharacterPosition(), 60);

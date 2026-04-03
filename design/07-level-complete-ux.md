@@ -38,6 +38,7 @@ level record if it's a new personal best.
 - **Next Level** — available on pass; navigates to the next level or to the
   cutscene if the arc is complete
 - **Retry** — restarts the current level attempt; always available
+- **Level Select** — navigates to the level select screen; always available
 - If the arc is complete (this was the 3rd level of the arc): the Next button
   navigates to the cutscene instead of directly to a level
 
