@@ -21,8 +21,9 @@ The screen has four visible regions, all fitting within the viewport:
    readout; updates in real time but draws no attention
 3. **Typing area** (center) — the character companion walking above a single
    line of letter spans; this is the dominant visual element
-4. **Minimal controls** (accessible but not prominent) — pause button (also
-   triggered by Escape key)
+4. **Minimal controls** — pause button (also triggered by Escape key); visible
+   enough to locate at a glance but styled to recede during active typing — it
+   must never require hunting for
 
 There is no progress bar, no level title during play, no level number on screen.
 Those belong to other screens. During typing, nothing competes with the text.
@@ -39,7 +40,9 @@ all visual styling based on the state:
 
 When the engine emits `lineComplete`, the current line fades out and the new
 line fades in. The character companion resets to the left edge. This transition
-should feel snappy (~150–200ms) so flow is not interrupted.
+should feel snappy (~150–200ms) so flow is not interrupted. The engine must
+automatically skip any whitespace between lines — the player's next keystroke
+should target the first character of the new line, never a space separator.
 
 ## Keystroke Effects
 

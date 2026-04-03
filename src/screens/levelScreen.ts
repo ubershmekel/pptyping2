@@ -59,6 +59,7 @@ class TypingEngine {
       return;
     }
     this.currentLineIndex++;
+    this.index = this.lines[this.currentLineIndex].start;
     this.renderCurrentLine(container);
   }
 
