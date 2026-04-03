@@ -1,3 +1,4 @@
+import './teamSelect.css';
 import type { Team } from "../types";
 import { CHARACTER_PORTRAITS } from "../assets/characters";
 

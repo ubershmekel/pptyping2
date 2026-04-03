@@ -1,3 +1,4 @@
+import './levelScreen.css';
 import type { Difficulty, LevelStats, Team } from '../types';
 import { DIFFICULTY_THRESHOLDS } from '../types';
 import { getLevelText } from '../data/wordLists';

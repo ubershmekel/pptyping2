@@ -1,0 +1,748 @@
+.cutscene-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #05050f;
+  overflow: auto;
+}
+
+.team-pokemon.cutscene-screen {
+  background: linear-gradient(135deg, #0d0b00, #1a1200, #0d0d1a);
+}
+
+.team-mlp.cutscene-screen {
+  background: linear-gradient(135deg, #0d000a, #1a0020, #0d0d1a);
+}
+
+.cs-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  align-items: start;
+  gap: 2rem;
+  width: 100%;
+  max-width: 900px;
+  padding: 2rem;
+}
+
+.cs-story {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.cs-chapter {
+  margin-bottom: 0.6rem;
+  color: var(--team-primary, #ffd700);
+  font-family: var(--font-game);
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: cs-fade-up 0.6s ease 0.2s forwards;
+}
+
+.cs-title {
+  margin-bottom: 1.2rem;
+  color: #fff;
+  font-family: var(--font-game);
+  font-size: clamp(0.7rem, 1.8vw, 1.1rem);
+  line-height: 1.5;
+  opacity: 0;
+  animation: cs-fade-up 0.6s ease 0.3s forwards;
+}
+
+.cs-paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.cs-p {
+  color: #ccc;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  opacity: 0;
+  animation: cs-fade-up 0.7s ease forwards;
+}
+
+@keyframes cs-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cs-art-container {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.cs-art {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #111;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  transition: box-shadow 0.6s ease;
+}
+
+.cs-art-revealed {
+  box-shadow: 0 0 40px var(--team-glow, rgba(255, 215, 0, 0.3));
+}
+
+.cs-art-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: #111;
+  transition: opacity 1.2s ease 0.3s;
+}
+
+.cs-art-revealed .cs-art-reveal {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cs-art-caption {
+  margin-top: 0.6rem;
+  color: #888;
+  font-size: 0.75rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.cs-art-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.cs-sky {
+  position: absolute;
+  inset: 0;
+  bottom: 40%;
+}
+
+.cs-sky-electric {
+  background: linear-gradient(180deg, #0a0020 0%, #200040 50%, #3a006a 100%);
+}
+
+.cs-sky-dawn {
+  background: linear-gradient(180deg, #0a0a30 0%, #4a2060 40%, #ff8c42 80%, #ffcc44 100%);
+}
+
+.cs-sky-ponyville {
+  background: linear-gradient(180deg, #1a6080 0%, #4ab8d0 50%, #9fdce8 100%);
+}
+
+.cs-sky-cave {
+  background: linear-gradient(180deg, #050510 0%, #101830 100%);
+}
+
+.cs-sky-ocean {
+  background: linear-gradient(180deg, #0a2040 0%, #1a5080 50%, #2a90c0 100%);
+}
+
+.cs-sky-summit {
+  background: linear-gradient(180deg, #000010 0%, #0a1040 50%, #203070 100%);
+}
+
+.cs-sky-victory {
+  background: linear-gradient(180deg, #fff8c0 0%, #ffdd44 30%, #ff8844 60%, #cc44aa 100%);
+}
+
+.cs-sky-rainbow {
+  background: linear-gradient(135deg, #ff6b6b, #ffcc44, #44ffaa, #4499ff, #cc44ff);
+  opacity: 0.9;
+}
+
+.cs-ground {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 42%;
+  background: linear-gradient(180deg, #1a3a10 0%, #0d2a08 100%);
+  border-radius: 60% 60% 0 0 / 20% 20% 0 0;
+}
+
+.cs-ground-lit {
+  background: linear-gradient(180deg, #3a6a20 0%, #1a3a10 100%);
+}
+
+.cs-ground-rainbow {
+  background: linear-gradient(180deg, #4aaa20 0%, #2a8a10 100%);
+}
+
+.cs-ground-flowers {
+  background: linear-gradient(180deg, #5ab030 0%, #3a8020 100%);
+}
+
+.cs-ground-flowers::before {
+  content: "🌸🌼🌸🌼🌸🌼🌸";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  font-size: 1.4rem;
+  text-align: center;
+  transform: translateY(-60%);
+}
+
+.cs-art-pikachu-big,
+.cs-art-pinkie-big {
+  position: absolute;
+  bottom: 36%;
+  left: 50%;
+  font-size: 5rem;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.8));
+  transform: translateX(-50%);
+  animation: cs-char-idle 2s ease-in-out infinite;
+}
+
+.cs-art-pikachu-big::before {
+  content: "⚡";
+  font-size: 3.5rem;
+}
+
+.cs-art-pikachu-big::after {
+  content: "🐭";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-size: 4.5rem;
+  transform: translateX(-50%);
+}
+
+.cs-art-pinkie-big::before {
+  content: "🦄";
+  font-size: 4.5rem;
+}
+
+.cs-art-pinkie-big::after {
+  content: "🎀";
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  font-size: 3rem;
+  transform: translateX(-50%);
+}
+
+.cs-pikachu-celebrate,
+.cs-pinkie-celebrate {
+  animation: cs-char-celebrate 0.4s ease infinite alternate;
+}
+
+.cs-pikachu-determined {
+  filter: drop-shadow(0 4px 24px rgba(255, 215, 0, 0.8));
+}
+
+@keyframes cs-char-idle {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+@keyframes cs-char-celebrate {
+  from {
+    transform: translateX(-50%) translateY(0) rotate(-5deg) scale(1);
+  }
+
+  to {
+    transform: translateX(-50%) translateY(-14px) rotate(5deg) scale(1.08);
+  }
+}
+
+.cs-sparkles-electric::before,
+.cs-sparkles-electric::after {
+  content: "⚡⚡⚡";
+  position: absolute;
+  top: 20%;
+  font-size: 1.5rem;
+  opacity: 0.7;
+  animation: cs-sparkle-drift 2s ease-in-out infinite;
+}
+
+.cs-sparkles-electric::before {
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.cs-sparkles-electric::after {
+  right: 20%;
+  animation-delay: 1s;
+}
+
+.cs-sparkles-rainbow::before,
+.cs-sparkles-rainbow::after {
+  content: "🌈✨🌈";
+  position: absolute;
+  top: 20%;
+  font-size: 1.5rem;
+  opacity: 0.8;
+  animation: cs-sparkle-drift 2s ease-in-out infinite;
+}
+
+.cs-sparkles-rainbow::before {
+  left: 10%;
+}
+
+.cs-sparkles-rainbow::after {
+  right: 10%;
+  animation-delay: 1s;
+}
+
+@keyframes cs-sparkle-drift {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-15px) rotate(10deg);
+  }
+}
+
+.cs-keyboard-corrupted {
+  position: absolute;
+  bottom: 22%;
+  left: 50%;
+  color: inherit;
+  font-size: 2rem;
+  opacity: 0.8;
+  filter: saturate(2) hue-rotate(120deg);
+  transform: translateX(-50%);
+  animation: cs-key-flicker 0.8s ease infinite;
+}
+
+.cs-keyboard-corrupted::before,
+.cs-keyboard-yellow::before {
+  content: "⌨️";
+}
+
+.cs-keyboard-yellow::before {
+  filter: sepia(1) saturate(3);
+}
+
+.cs-keys-glowing {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  font-size: 1.5rem;
+  letter-spacing: 4px;
+  transform: translateX(-50%);
+  animation: cs-keys-pulse 1s ease infinite alternate;
+}
+
+.cs-keys-glowing::before {
+  content: "⌨️ ✓";
+}
+
+.cs-keys-pink::before {
+  content: "💖⌨️💖";
+}
+
+.cs-keys-all-glowing::before {
+  content: "⌨️✨";
+  font-size: 2.5rem;
+}
+
+.cs-keys-rainbow::before {
+  content: "🌈⌨️🌈";
+  font-size: 2rem;
+}
+
+@keyframes cs-key-flicker {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes cs-keys-pulse {
+  from {
+    transform: translateX(-50%) scale(1);
+  }
+
+  to {
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+.cs-lightning-burst {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  font-size: 3rem;
+  opacity: 0.9;
+  transform: translateX(-50%);
+  animation: cs-burst 0.3s ease infinite alternate;
+}
+
+.cs-lightning-burst::before {
+  content: "⚡";
+}
+
+.cs-rainbow-burst {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  font-size: 2.5rem;
+  transform: translateX(-50%);
+  animation: cs-burst 0.4s ease infinite alternate;
+}
+
+.cs-rainbow-burst::before {
+  content: "🌈";
+}
+
+@keyframes cs-burst {
+  from {
+    transform: translateX(-50%) scale(1) rotate(-5deg);
+  }
+
+  to {
+    transform: translateX(-50%) scale(1.2) rotate(5deg);
+  }
+}
+
+.cs-rowlet-silhouette {
+  position: absolute;
+  top: 30%;
+  right: 15%;
+  font-size: 2.5rem;
+  opacity: 0.6;
+  animation: cs-char-idle 3s ease-in-out infinite;
+}
+
+.cs-rowlet-silhouette::before,
+.cs-art-rowlet::before {
+  content: "🦉";
+}
+
+.cs-art-rowlet {
+  position: absolute;
+  bottom: 38%;
+  left: 28%;
+  font-size: 3rem;
+  animation: cs-char-idle 2s ease-in-out infinite;
+}
+
+.cs-confetti-burst,
+.cs-confetti-burst::before,
+.cs-confetti-burst::after {
+  position: absolute;
+  font-size: 2rem;
+  animation: cs-confetti-fall 2s ease infinite;
+}
+
+.cs-confetti-burst {
+  top: 5%;
+  left: 30%;
+}
+
+.cs-confetti-burst::before {
+  content: "🎉";
+  top: 10%;
+  left: 60%;
+  animation-delay: 0.3s;
+}
+
+.cs-confetti-burst::after {
+  content: "✨";
+  top: 0;
+  left: 50%;
+  font-size: 1.5rem;
+  animation-delay: 0.7s;
+}
+
+.cs-crystals {
+  position: absolute;
+  right: 0;
+  bottom: 30%;
+  left: 0;
+  font-size: 2rem;
+  opacity: 0.7;
+  text-align: center;
+}
+
+.cs-crystals::before {
+  content: "💎 💎 💎";
+}
+
+.cs-crystals-pink::before {
+  content: "💖 💗 💖";
+}
+
+.cs-waves {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 42%;
+  background: linear-gradient(180deg, #1a6080 0%, #0a3050 100%);
+  border-radius: 60% 40% 0 0;
+  animation: cs-wave-sway 3s ease-in-out infinite;
+}
+
+@keyframes cs-wave-sway {
+  0%,
+  100% {
+    border-radius: 60% 40% 0 0;
+  }
+
+  50% {
+    border-radius: 40% 60% 0 0;
+  }
+}
+
+.cs-mountains {
+  position: absolute;
+  right: 0;
+  bottom: 30%;
+  left: 0;
+  height: 50%;
+  background: linear-gradient(180deg, #2a3060 0%, #1a2040 100%);
+  clip-path: polygon(0 100%, 15% 30%, 30% 70%, 45% 10%, 60% 55%, 75% 20%, 90% 60%, 100% 40%, 100% 100%);
+}
+
+.cs-mountains-pastel {
+  background: linear-gradient(180deg, #6a4080 0%, #4a2060 100%);
+}
+
+.cs-balloons {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  font-size: 2rem;
+  transform: translateX(-50%);
+}
+
+.cs-balloons::before {
+  content: "🎈🎈🎈";
+}
+
+.cs-balloons-many::before {
+  content: "🎈🎈🎈🎈🎈";
+  font-size: 2.5rem;
+  animation: cs-balloon-float 2s ease-in-out infinite;
+}
+
+@keyframes cs-balloon-float {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-12px);
+  }
+}
+
+.cs-party-cannon {
+  position: absolute;
+  bottom: 28%;
+  left: 20%;
+  font-size: 2.5rem;
+  animation: cs-burst 0.5s ease infinite alternate;
+}
+
+.cs-party-cannon::before {
+  content: "🎊";
+}
+
+.cs-actions {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1;
+  grid-row: 2;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.cs-next-btn {
+  max-width: 280px;
+  padding: 0.9rem 2rem;
+  background: var(--team-primary, #ffd700);
+  color: #1a1a1a;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px var(--team-glow, rgba(255, 215, 0, 0.3));
+  font-size: 1rem;
+  font-weight: 800;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+
+.cs-next-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 24px var(--team-glow, rgba(255, 215, 0, 0.5));
+}
+
+.cs-hint {
+  color: #666;
+  font-size: 0.75rem;
+}
+
+.cs-bg-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cs-particle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: var(--team-primary, #ffd700);
+  opacity: 0;
+  border-radius: 50%;
+  animation: cs-particle-drift 6s ease-in-out infinite;
+}
+
+.cs-particle:nth-child(odd) {
+  animation-duration: 7s;
+}
+
+.cs-particle:nth-child(1) {
+  top: 20%;
+  left: 5%;
+  animation-delay: 0s;
+}
+
+.cs-particle:nth-child(2) {
+  top: 60%;
+  left: 15%;
+  animation-delay: 1s;
+}
+
+.cs-particle:nth-child(3) {
+  top: 40%;
+  left: 25%;
+  animation-delay: 2s;
+}
+
+.cs-particle:nth-child(4) {
+  top: 80%;
+  left: 35%;
+  animation-delay: 0.5s;
+}
+
+.cs-particle:nth-child(5) {
+  top: 15%;
+  left: 50%;
+  animation-delay: 1.5s;
+}
+
+.cs-particle:nth-child(6) {
+  top: 55%;
+  left: 60%;
+  animation-delay: 3s;
+}
+
+.cs-particle:nth-child(7) {
+  top: 30%;
+  left: 70%;
+  animation-delay: 2.5s;
+}
+
+.cs-particle:nth-child(8) {
+  top: 70%;
+  left: 80%;
+  animation-delay: 0.8s;
+}
+
+.cs-particle:nth-child(9) {
+  top: 45%;
+  left: 88%;
+  animation-delay: 4s;
+}
+
+.cs-particle:nth-child(10) {
+  top: 20%;
+  left: 95%;
+  animation-delay: 1.2s;
+}
+
+.cs-particle:nth-child(11) {
+  top: 90%;
+  left: 42%;
+  animation-delay: 3.5s;
+}
+
+.cs-particle:nth-child(12) {
+  top: 10%;
+  left: 73%;
+  animation-delay: 0.3s;
+}
+
+@keyframes cs-particle-drift {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(1);
+  }
+
+  20% {
+    opacity: 0.6;
+  }
+
+  80% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.5);
+  }
+}
+
+@keyframes cs-confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(-20px) rotate(0deg);
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: translateY(40px) rotate(360deg);
+  }
+}
+
+@media (max-width: 700px) {
+  .cs-content {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .cs-story {
+    grid-column: 1;
+  }
+
+  .cs-art-container {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .cs-actions {
+    grid-column: 1;
+  }
+}

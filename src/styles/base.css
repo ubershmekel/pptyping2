@@ -1,0 +1,107 @@
+:root {
+  --pokemon-primary: #ffd700;
+  --pokemon-secondary: #e3350d;
+  --pokemon-dark: #1a1a2e;
+  --pokemon-glow: rgba(255, 215, 0, 0.6);
+  --pokemon-done-tint: rgba(255, 215, 0, 0.18);
+  --pokemon-accent: #4fc3f7;
+
+  --mlp-primary: #ff6eb4;
+  --mlp-secondary: #9c27b0;
+  --mlp-dark: #1a0a2e;
+  --mlp-glow: rgba(255, 110, 180, 0.6);
+  --mlp-done-tint: rgba(255, 110, 180, 0.18);
+  --mlp-accent: #ffd700;
+
+  --font-game: "Press Start 2P", monospace;
+  --font-ui: "Nunito", sans-serif;
+  --font-typing: "Lora", Georgia, serif;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+
+  --transition-fast: 0.15s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+.team-pokemon {
+  --team-primary: var(--pokemon-primary);
+  --team-secondary: var(--pokemon-secondary);
+  --team-dark: var(--pokemon-dark);
+  --team-glow: var(--pokemon-glow);
+  --team-done-tint: var(--pokemon-done-tint);
+}
+
+.team-mlp {
+  --team-primary: var(--mlp-primary);
+  --team-secondary: var(--mlp-secondary);
+  --team-dark: var(--mlp-dark);
+  --team-glow: var(--mlp-glow);
+  --team-done-tint: var(--mlp-done-tint);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: #0d0d1a;
+  color: #e8e8f0;
+  transition: background var(--transition-slow);
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--team-primary, #ffd700);
+  outline-offset: 3px;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  overflow: hidden;
+  transition:
+    opacity var(--transition-medium),
+    transform var(--transition-medium);
+}
+
+.screen-enter {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+.screen-exit {
+  opacity: 0;
+  transform: scale(1.02);
+  pointer-events: none;
+}

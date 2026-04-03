@@ -1,3 +1,4 @@
+import './levelComplete.css';
 import type { Difficulty, LevelStats, Team } from '../types';
 import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from '../types';
 

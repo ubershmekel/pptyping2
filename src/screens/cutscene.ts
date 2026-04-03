@@ -1,3 +1,4 @@
+import './cutscene.css';
 import type { Team } from '../types';
 import { CUTSCENE_STORIES } from '../data/stories';
 

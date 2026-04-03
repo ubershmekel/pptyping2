@@ -1,3 +1,4 @@
+import './character.css';
 import { CHARACTER_FRAMES } from '../assets/characters';
 import type { CharacterState, Team } from '../types';
 

@@ -1,4 +1,4 @@
-import './styles/main.css';
+import './styles/base.css';
 import { App } from './app';
 
 const container = document.getElementById('app');
