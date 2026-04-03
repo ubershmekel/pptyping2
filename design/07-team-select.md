@@ -2,15 +2,15 @@
 
 ## Intent
 
-Team Select is a first-time-only flow that sets the player's entire experience:
-storyline, character companion, color palette, and narrative voice. It should
-feel like a meaningful choice, not a settings toggle. The two teams are
-presented as equals with distinct identities.
+Team Select is a flow that sets the player's entire experience: storyline,
+character companion, color palette, and narrative voice. It should feel like a
+meaningful choice, not a settings toggle. The two teams are presented as equals
+with distinct identities.
 
-The screen is only shown when no team is stored in the player profile. If the
-player wants to try the other team later, a separate "New Game (other team)"
-flow routes back here — but it is framed as starting a fresh adventure on that
-side, not changing a setting.
+The screen is shown when no team is stored in the player profile. If the player
+wants to try the other team later, a separate "New Game (other team)" flow
+routes back here — but it is framed as starting a fresh adventure on that side,
+not changing a setting.
 
 ## Behavior
 
