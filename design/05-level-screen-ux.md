@@ -68,6 +68,28 @@ subsystems:
   `particleManager.triggerBurst("combo")`
 - `levelComplete` → tear down, navigate to level complete screen
 
+## Progress Beam
+
+A team-themed energy beam extends from the left edge of the screen toward the
+right as the player types, reaching full width at level completion. It lives in
+the background layer (behind text and character) so it never competes with
+typing, but it is deliberately loud — a glance downward reveals exactly how far
+through the level the player is.
+
+- **Pokemon**: a jagged golden lightning beam with a bright leading-edge glow
+  and a subtle flicker animation; box-shadow fans out in gold to fill the
+  environment with electric light
+- **MLP**: a full-spectrum rainbow beam (red → violet) with a pink glow; no
+  flicker — smooth and continuous
+
+The beam is driven by the typing engine's `progress` value (0–1) mapped to a
+CSS `width` percentage, updated on every `syncStats` call (~250 ms interval plus
+every correct keystroke). Transition is 180 ms so motion feels responsive
+without being jittery.
+
+Future work: per-arc visual variants (e.g. crystal shards for Crystal Cavern,
+stardust trail for Stardrift Coast) that override the team default.
+
 ## Pause
 
 Pressing Escape or the pause button mounts the pause overlay (see

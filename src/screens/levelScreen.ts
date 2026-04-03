@@ -263,6 +263,8 @@ export function renderLevelScreen(
       </div>
     </div>
 
+    <div class="progress-beam" id="progress-beam" aria-hidden="true"></div>
+
     <div class="env-bg-deco" aria-hidden="true">
       <span class="env-particle"></span><span class="env-particle"></span>
       <span class="env-particle"></span><span class="env-particle"></span>
@@ -284,6 +286,7 @@ export function renderLevelScreen(
   const pauseResume = screen.querySelector('#pause-resume') as HTMLButtonElement;
   const pauseRetry = screen.querySelector('#pause-retry') as HTMLButtonElement;
   const pauseQuit = screen.querySelector('#pause-quit') as HTMLButtonElement;
+  const progressBeam = screen.querySelector('#progress-beam') as HTMLElement;
 
   const character = new CharacterCompanion(team);
   character.mount(charTrack);
@@ -313,12 +316,13 @@ export function renderLevelScreen(
   }
 
   function syncStats(): void {
-    const { wpm, accuracy, timeSeconds } = engine.getLiveStats();
+    const { wpm, accuracy, timeSeconds, progress } = engine.getLiveStats();
     wpmVal.textContent = String(wpm);
     accVal.textContent = `${accuracy}%`;
     pauseWpm.textContent = String(wpm);
     pauseAcc.textContent = `${accuracy}%`;
     pauseTime.textContent = formatSeconds(timeSeconds);
+    progressBeam.style.width = `${Math.round(progress * 100)}%`;
   }
 
   function openPause(): void {

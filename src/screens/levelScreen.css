@@ -350,6 +350,77 @@
   animation-play-state: paused;
 }
 
+.progress-beam {
+  position: absolute;
+  left: 0;
+  top: 65%;
+  width: 0%;
+  height: 6px;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 0 3px 3px 0;
+  transition: width 0.18s ease;
+  will-change: width;
+}
+
+.progress-beam::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--team-primary, #ffd700);
+  filter: blur(10px);
+  opacity: 0.9;
+}
+
+.team-pokemon .progress-beam {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 215, 0, 0.1) 0%,
+    rgba(255, 215, 0, 0.55) 60%,
+    rgba(255, 251, 180, 0.9) 90%,
+    #fffbe6 100%
+  );
+  box-shadow:
+    0 0 10px 3px rgba(255, 215, 0, 0.45),
+    0 0 32px 8px rgba(255, 215, 0, 0.2),
+    0 0 80px 20px rgba(255, 215, 0, 0.08);
+  animation: beam-flicker 0.12s ease-in-out infinite;
+}
+
+.team-mlp .progress-beam {
+  height: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 0, 80, 0.3) 0%,
+    rgba(255, 100, 0, 0.6) 18%,
+    rgba(255, 220, 0, 0.7) 34%,
+    rgba(0, 200, 80, 0.7) 50%,
+    rgba(0, 120, 255, 0.7) 68%,
+    rgba(160, 0, 255, 0.8) 84%,
+    #ff6eb4 100%
+  );
+  box-shadow:
+    0 0 12px 4px rgba(255, 110, 180, 0.5),
+    0 0 36px 10px rgba(255, 110, 180, 0.22),
+    0 0 80px 22px rgba(255, 110, 180, 0.1);
+}
+
+@keyframes beam-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.82;
+  }
+}
+
 .env-bg-deco {
   position: fixed;
   inset: 0;
