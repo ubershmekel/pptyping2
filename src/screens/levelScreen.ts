@@ -1,189 +1,266 @@
 import type { Difficulty, LevelStats, Team } from '../types';
-import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from '../types';
+import { DIFFICULTY_THRESHOLDS } from '../types';
 import { getLevelText } from '../data/wordLists';
 import { getLevelDef, ARC_ENVIRONMENTS } from '../data/levels';
-import { LEVEL_STORIES } from '../data/stories';
 import { CharacterCompanion } from '../components/character';
 
-// ─── Typing Engine ────────────────────────────────────────────────────────────
+type LineDef = {
+  text: string;
+  start: number;
+  end: number;
+};
 
 class TypingEngine {
   private text: string;
   private index = 0;
   private correctStrokes = 0;
-  private totalStrokes  = 0;
+  private totalStrokes = 0;
   private startTime: number | null = null;
-  private endTime:   number | null = null;
-  private spans: HTMLSpanElement[] = [];
+  private endTime: number | null = null;
+  private pausedAt: number | null = null;
+  private pausedDurationMs = 0;
+  private currentLineIndex = 0;
+  private readonly lines: LineDef[];
+  private visibleSpans: HTMLSpanElement[] = [];
 
-  onCorrect?: (charIndex: number) => void;
-  onError?:   (charIndex: number) => void;
-  onProgress?:(index: number, total: number) => void;
-  onComplete?:(stats: LevelStats) => void;
+  onCorrect?: (charIndex: number, span: HTMLSpanElement | null) => void;
+  onError?: (charIndex: number, span: HTMLSpanElement | null) => void;
+  onProgress?: (index: number, total: number) => void;
+  onLineComplete?: (lineIndex: number) => void;
+  onComplete?: (stats: LevelStats) => void;
 
   constructor(text: string) {
-    // Normalize: lowercase, no leading/trailing spaces
     this.text = text.trim().toLowerCase();
+    this.lines = buildLines(this.text);
   }
 
-  /** Render character spans into the given container element. */
-  renderInto(container: HTMLElement): void {
+  renderCurrentLine(container: HTMLElement): void {
+    const line = this.lines[this.currentLineIndex];
     container.innerHTML = '';
-    this.spans = [];
-    for (let i = 0; i < this.text.length; i++) {
+    this.visibleSpans = [];
+
+    for (let i = 0; i < line.text.length; i++) {
       const span = document.createElement('span');
-      const ch = this.text[i];
-      span.textContent = ch === '\n' ? ' ' : ch;
-      span.className = 'char pending';
-      if (ch === ' ')  span.classList.add('is-space');
-      if (ch === '\n') { span.classList.add('is-newline'); }
-      if (i === 0) span.classList.add('current');
-      this.spans.push(span);
+      const globalIndex = line.start + i;
+      span.className = 'char';
+      span.dataset.state = globalIndex < this.index ? 'done' : globalIndex === this.index ? 'current' : 'pending';
+      span.textContent = line.text[i] === ' ' ? '\u00A0' : line.text[i];
+      if (line.text[i] === ' ') {
+        span.classList.add('is-space');
+      }
+      this.visibleSpans.push(span);
       container.appendChild(span);
-      if (ch === '\n') container.appendChild(document.createElement('br'));
     }
   }
 
-  handleKey(key: string): void {
-    if (this.index >= this.text.length) return;
-    if (key.length !== 1) return; // ignore Shift, Ctrl, etc.
+  advanceLine(container: HTMLElement): void {
+    if (this.currentLineIndex >= this.lines.length - 1) {
+      return;
+    }
+    this.currentLineIndex++;
+    this.renderCurrentLine(container);
+  }
 
-    if (this.startTime === null) this.startTime = Date.now();
+  handleKey(key: string, container: HTMLElement): void {
+    if (this.pausedAt !== null || this.index >= this.text.length || key.length !== 1) {
+      return;
+    }
+
+    if (this.startTime === null) {
+      this.startTime = Date.now();
+    }
 
     const expected = this.text[this.index];
-    const pressed  = key.toLowerCase();
+    const pressed = key.toLowerCase();
     this.totalStrokes++;
 
-    if (pressed === expected || (expected === '\n' && pressed === ' ')) {
-      // ✓ Correct
-      this.correctStrokes++;
-      const span = this.spans[this.index];
-      span.classList.remove('current', 'pending');
-      span.classList.add('done');
-      this.index++;
+    if (pressed !== expected) {
+      this.visibleSpans[this.index - this.lines[this.currentLineIndex].start]?.classList.add('error-flash');
+      this.onError?.(this.index, this.visibleSpans[this.index - this.lines[this.currentLineIndex].start] ?? null);
+      return;
+    }
 
-      if (this.index < this.text.length) {
-        this.spans[this.index].classList.remove('pending');
-        this.spans[this.index].classList.add('current');
-      }
+    this.correctStrokes++;
 
-      this.onCorrect?.(this.index - 1);
-      this.onProgress?.(this.index, this.text.length);
+    const line = this.lines[this.currentLineIndex];
+    const localIndex = this.index - line.start;
+    const span = this.visibleSpans[localIndex];
+    setSpanState(span, 'done');
 
-      if (this.index >= this.text.length) {
-        this.endTime = Date.now();
-        this.onComplete?.(this.buildStats());
-      }
+    this.index++;
+    this.onCorrect?.(this.index - 1, span ?? null);
+    this.onProgress?.(this.index, this.text.length);
+
+    if (this.index >= this.text.length) {
+      this.endTime = Date.now();
+      this.onComplete?.(this.buildStats());
+      return;
+    }
+
+    if (this.index >= line.end) {
+      this.onLineComplete?.(this.currentLineIndex);
     } else {
-      // ✗ Error
-      const span = this.spans[this.index];
-      span.classList.add('error-flash');
-      span.addEventListener('animationend', () => span.classList.remove('error-flash'), { once: true });
-      this.onError?.(this.index);
+      setSpanState(this.visibleSpans[localIndex + 1], 'current');
     }
   }
 
-  getLiveStats(): { wpm: number; accuracy: number; progress: number } {
-    const elapsed = this.startTime ? (Date.now() - this.startTime) / 1000 : 0;
-    const wpm = elapsed > 3
-      ? Math.round((this.correctStrokes / 5) / (elapsed / 60))
-      : 0;
-    const accuracy = this.totalStrokes > 0
-      ? Math.round((this.correctStrokes / this.totalStrokes) * 100)
-      : 100;
+  pause(): void {
+    if (this.pausedAt !== null || this.startTime === null || this.endTime !== null) {
+      return;
+    }
+    this.pausedAt = Date.now();
+  }
+
+  resume(): void {
+    if (this.pausedAt === null) {
+      return;
+    }
+    this.pausedDurationMs += Date.now() - this.pausedAt;
+    this.pausedAt = null;
+  }
+
+  getLiveStats(): { wpm: number; accuracy: number; progress: number; timeSeconds: number } {
+    const elapsedMs = this.getElapsedMs();
+    const elapsed = elapsedMs / 1000;
+    const wpm = elapsed > 3 ? Math.round((this.correctStrokes / 5) / (elapsed / 60)) : 0;
+    const accuracy = this.totalStrokes > 0 ? Math.round((this.correctStrokes / this.totalStrokes) * 100) : 100;
     const progress = this.text.length > 0 ? this.index / this.text.length : 0;
-    return { wpm, accuracy, progress };
+
+    return { wpm, accuracy, progress, timeSeconds: elapsed };
   }
 
   getCurrentSpan(): HTMLSpanElement | null {
-    return this.spans[this.index] ?? null;
+    const line = this.lines[this.currentLineIndex];
+    return this.visibleSpans[this.index - line.start] ?? null;
+  }
+
+  private getElapsedMs(): number {
+    if (this.startTime === null) {
+      return 0;
+    }
+
+    const endPoint = this.endTime ?? this.pausedAt ?? Date.now();
+    return Math.max(0, endPoint - this.startTime - this.pausedDurationMs);
   }
 
   private buildStats(): LevelStats {
-    const elapsed = ((this.endTime ?? Date.now()) - (this.startTime ?? Date.now())) / 1000;
+    const elapsed = this.getElapsedMs() / 1000;
     const wpm = elapsed > 0 ? Math.round((this.correctStrokes / 5) / (elapsed / 60)) : 0;
-    const accuracy = this.totalStrokes > 0
-      ? Math.round((this.correctStrokes / this.totalStrokes) * 100)
-      : 100;
+    const accuracy = this.totalStrokes > 0 ? Math.round((this.correctStrokes / this.totalStrokes) * 100) : 100;
+
     return {
       wpm,
       accuracy,
       timeSeconds: elapsed,
-      errors:          this.totalStrokes - this.correctStrokes,
+      errors: this.totalStrokes - this.correctStrokes,
       totalKeystrokes: this.totalStrokes,
-      passed: false, // app.ts will determine passed based on difficulty
+      passed: false,
     };
   }
 }
 
-// ─── Render level screen ──────────────────────────────────────────────────────
+function buildLines(text: string, maxLength = 32): LineDef[] {
+  const words = text.split(/\s+/).filter(Boolean);
+  const lines: LineDef[] = [];
+  let cursor = 0;
+  let lineWords: string[] = [];
+  let lineStart = 0;
+
+  for (const word of words) {
+    const nextWords = lineWords.length === 0 ? [word] : [...lineWords, word];
+    const nextText = nextWords.join(' ');
+
+    if (lineWords.length > 0 && nextText.length > maxLength) {
+      const textLine = lineWords.join(' ');
+      lines.push({
+        text: textLine,
+        start: lineStart,
+        end: lineStart + textLine.length,
+      });
+      cursor += textLine.length + 1;
+      lineStart = cursor;
+      lineWords = [word];
+    } else {
+      lineWords = nextWords;
+    }
+  }
+
+  if (lineWords.length > 0) {
+    const textLine = lineWords.join(' ');
+    lines.push({
+      text: textLine,
+      start: lineStart,
+      end: lineStart + textLine.length,
+    });
+  }
+
+  return lines;
+}
+
+function setSpanState(span: HTMLSpanElement | undefined, state: 'done' | 'current' | 'pending'): void {
+  if (!span) {
+    return;
+  }
+  span.dataset.state = state;
+}
+
+function formatSeconds(timeSeconds: number): string {
+  const whole = Math.max(0, Math.floor(timeSeconds));
+  const minutes = Math.floor(whole / 60);
+  const seconds = whole % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
 
 export function renderLevelScreen(
   team: Team,
   levelNumber: number,
   difficulty: Difficulty,
   onComplete: (stats: LevelStats) => void,
+  onRetry: () => void,
+  onQuit: () => void,
 ): { el: HTMLElement; cleanup: () => void } {
   const def = getLevelDef(levelNumber);
   const env = ARC_ENVIRONMENTS[def.arc];
-  const storyText = LEVEL_STORIES[team][levelNumber] ?? '';
   const levelText = getLevelText(levelNumber);
   const thresholds = DIFFICULTY_THRESHOLDS[difficulty];
-  const diffName = DIFFICULTY_DISPLAY[team][difficulty];
-
-  // ── Build DOM ──────────────────────────────────────────────────────────────
 
   const screen = document.createElement('div');
   screen.className = `screen level-screen team-${team} ${env.cssClass}`;
 
   screen.innerHTML = `
-    <!-- Top bar -->
     <div class="level-topbar">
-      <div class="level-topbar-left">
-        <span class="level-num">Level ${levelNumber}</span>
-        <span class="level-env">${env.name}</span>
+      <div class="level-stats" aria-live="polite">
+        <span class="stat-chip"><span class="stat-label">WPM</span><span class="stat-val" id="stat-wpm-val">0</span></span>
+        <span class="stat-chip"><span class="stat-label">ACC</span><span class="stat-val" id="stat-acc-val">100%</span></span>
       </div>
-      <div class="level-stats" id="live-stats">
-        <span class="stat-wpm">  <span class="stat-val" id="stat-wpm-val">—</span> <span class="stat-label">WPM</span></span>
-        <span class="stat-acc">  <span class="stat-val" id="stat-acc-val">100%</span><span class="stat-label">Accuracy</span></span>
-        <span class="stat-goal"><span class="stat-label">Goal:</span> ${thresholds.wpm} WPM · ${thresholds.accuracy}% acc</span>
-      </div>
-      <div class="level-topbar-right">
-        <span class="level-diff-badge team-${team}">${diffName}</span>
-      </div>
+      <button class="pause-btn" id="pause-btn" type="button" aria-haspopup="dialog" aria-controls="pause-overlay">
+        Pause
+      </button>
     </div>
 
-    <!-- Story blurb -->
-    <div class="level-story" id="level-story">
-      <div class="level-story-inner">${storyText}</div>
-    </div>
-
-    <!-- Main typing area -->
     <div class="level-body">
-      <!-- Character track -->
-      <div class="char-track" id="char-track">
-        <!-- CharacterCompanion will be inserted here -->
-      </div>
-
-      <!-- Progress bar -->
-      <div class="level-progress-bar">
-        <div class="level-progress-fill" id="progress-fill" style="width:0%"></div>
-      </div>
-
-      <!-- Text display (the "document") -->
-      <div class="text-display" id="text-display" tabindex="0" aria-label="Typing area" role="textbox" aria-readonly="true">
-      </div>
-
-      <!-- Focus hint -->
-      <div class="focus-hint" id="focus-hint">
-        Click here or press any key to start typing
+      <div class="char-track" id="char-track"></div>
+      <div class="text-stage">
+        <div class="text-display" id="text-display" tabindex="0" aria-label="Typing area" role="textbox" aria-readonly="true"></div>
       </div>
     </div>
 
-    <!-- Combo / feedback overlay -->
-    <div class="combo-overlay" id="combo-overlay" aria-hidden="true"></div>
+    <div class="pause-overlay" id="pause-overlay" hidden>
+      <div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+        <h2 id="pause-title" class="pause-title">Paused</h2>
+        <div class="pause-stats">
+          <span class="pause-stat"><span class="pause-stat-label">WPM</span><span class="pause-stat-val" id="pause-wpm">0</span></span>
+          <span class="pause-stat"><span class="pause-stat-label">ACC</span><span class="pause-stat-val" id="pause-acc">100%</span></span>
+          <span class="pause-stat"><span class="pause-stat-label">TIME</span><span class="pause-stat-val" id="pause-time">00:00</span></span>
+        </div>
+        <div class="pause-actions">
+          <button class="pause-action pause-action-primary" id="pause-resume" type="button">Resume</button>
+          <button class="pause-action" id="pause-retry" type="button">Retry</button>
+          <button class="pause-action" id="pause-quit" type="button">Quit to Main Menu</button>
+        </div>
+      </div>
+    </div>
 
-    <!-- Env background decoration -->
     <div class="env-bg-deco" aria-hidden="true">
       <span class="env-particle"></span><span class="env-particle"></span>
       <span class="env-particle"></span><span class="env-particle"></span>
@@ -192,138 +269,191 @@ export function renderLevelScreen(
     </div>
   `;
 
-  // ── Init engine ────────────────────────────────────────────────────────────
-
   const engine = new TypingEngine(levelText);
   const textDisplay = screen.querySelector('#text-display') as HTMLElement;
-  const charTrack   = screen.querySelector('#char-track')   as HTMLElement;
-  const focusHint   = screen.querySelector('#focus-hint')   as HTMLElement;
-  const progressFill= screen.querySelector('#progress-fill')as HTMLElement;
-  const wpmVal      = screen.querySelector('#stat-wpm-val') as HTMLElement;
-  const accVal      = screen.querySelector('#stat-acc-val') as HTMLElement;
-  const comboOverlay= screen.querySelector('#combo-overlay')as HTMLElement;
-
-  engine.renderInto(textDisplay);
-
-  // ── Character companion ───────────────────────────────────────────────────
+  const charTrack = screen.querySelector('#char-track') as HTMLElement;
+  const wpmVal = screen.querySelector('#stat-wpm-val') as HTMLElement;
+  const accVal = screen.querySelector('#stat-acc-val') as HTMLElement;
+  const pauseOverlay = screen.querySelector('#pause-overlay') as HTMLDivElement;
+  const pauseBtn = screen.querySelector('#pause-btn') as HTMLButtonElement;
+  const pauseWpm = screen.querySelector('#pause-wpm') as HTMLElement;
+  const pauseAcc = screen.querySelector('#pause-acc') as HTMLElement;
+  const pauseTime = screen.querySelector('#pause-time') as HTMLElement;
+  const pauseResume = screen.querySelector('#pause-resume') as HTMLButtonElement;
+  const pauseRetry = screen.querySelector('#pause-retry') as HTMLButtonElement;
+  const pauseQuit = screen.querySelector('#pause-quit') as HTMLButtonElement;
 
   const character = new CharacterCompanion(team);
   character.mount(charTrack);
+  engine.renderCurrentLine(textDisplay);
+  pauseBtn.setAttribute('aria-expanded', 'false');
 
-  // Keep character aligned with current span
-  function updateCharacterPosition(): void {
+  let comboCount = 0;
+  let isPaused = false;
+  let isTransitioningLine = false;
+  let lineTransitionTimer: number | null = null;
+
+  function updateCharacterPosition(reset = false): void {
+    if (reset) {
+      character.moveTo(28);
+      return;
+    }
+
     const span = engine.getCurrentSpan();
-    if (!span) return;
+    if (!span) {
+      return;
+    }
+
     const trackRect = charTrack.getBoundingClientRect();
-    const spanRect  = span.getBoundingClientRect();
+    const spanRect = span.getBoundingClientRect();
     const relX = spanRect.left - trackRect.left + spanRect.width * 0.5;
     character.moveTo(relX);
   }
 
-  // ── Live stats ticker ──────────────────────────────────────────────────────
-
-  const statsInterval = setInterval(() => {
-    const { wpm, accuracy, progress } = engine.getLiveStats();
-    wpmVal.textContent = wpm > 0 ? String(wpm) : '—';
+  function syncStats(): void {
+    const { wpm, accuracy, timeSeconds } = engine.getLiveStats();
+    wpmVal.textContent = String(wpm);
     accVal.textContent = `${accuracy}%`;
-    progressFill.style.width = `${Math.round(progress * 100)}%`;
-    updateCharacterPosition();
-  }, 250);
-
-  // ── Combo counter ─────────────────────────────────────────────────────────
-
-  let comboCount = 0;
-  let comboTimer: number | null = null;
-
-  function showCombo(n: number): void {
-    if (n < 10 || n % 10 !== 0) return;
-    comboOverlay.textContent = `🔥 ${n} COMBO!`;
-    comboOverlay.classList.add('combo-show');
-    if (comboTimer !== null) clearTimeout(comboTimer);
-    comboTimer = window.setTimeout(() => {
-      comboOverlay.classList.remove('combo-show');
-    }, 1200);
+    pauseWpm.textContent = String(wpm);
+    pauseAcc.textContent = `${accuracy}%`;
+    pauseTime.textContent = formatSeconds(timeSeconds);
   }
 
-  // ── Keystroke effects ─────────────────────────────────────────────────────
+  function openPause(): void {
+    if (isPaused) {
+      return;
+    }
+
+    isPaused = true;
+    engine.pause();
+    syncStats();
+    screen.classList.add('level-paused');
+    pauseOverlay.hidden = false;
+    pauseBtn.setAttribute('aria-expanded', 'true');
+    pauseResume.focus();
+  }
+
+  function closePause(): void {
+    if (!isPaused) {
+      return;
+    }
+
+    isPaused = false;
+    engine.resume();
+    screen.classList.remove('level-paused');
+    pauseOverlay.hidden = true;
+    pauseBtn.setAttribute('aria-expanded', 'false');
+    textDisplay.focus();
+  }
 
   function spawnEffect(span: HTMLSpanElement | null, type: 'correct' | 'error'): void {
-    if (!span) return;
-    const effect = document.createElement('div');
-    effect.className = `keystroke-effect keystroke-${type}`;
-    const rect   = span.getBoundingClientRect();
-    const bodyRect = document.body.getBoundingClientRect();
-    effect.style.left = `${rect.left - bodyRect.left + rect.width * 0.5}px`;
-    effect.style.top  = `${rect.top  - bodyRect.top  - 6}px`;
-    effect.textContent = type === 'correct' ? (team === 'pokemon' ? '⚡' : '✨') : '✗';
-    document.body.appendChild(effect);
-    effect.addEventListener('animationend', () => effect.remove(), { once: true });
+    if (!span) {
+      return;
+    }
+
+    span.classList.remove('letter-hit', 'letter-error');
+    void span.offsetWidth;
+    span.classList.add(type === 'correct' ? 'letter-hit' : 'letter-error');
+    span.addEventListener(
+      'animationend',
+      () => {
+        span.classList.remove('letter-hit', 'letter-error', 'error-flash');
+      },
+      { once: true },
+    );
   }
 
-  // ── Engine callbacks ───────────────────────────────────────────────────────
-
-  engine.onCorrect = (i) => {
+  engine.onCorrect = (_charIndex, span) => {
     comboCount++;
-    const prev = engine.getCurrentSpan();
-    // spawnEffect on the span BEFORE advance (index i is the typed one)
-    const spans = textDisplay.querySelectorAll('.char');
-    spawnEffect(spans[i] as HTMLSpanElement, 'correct');
-    showCombo(comboCount);
-    if (comboCount % 10 === 0) character.celebrate();
+    spawnEffect(span, 'correct');
+    if (comboCount > 0 && comboCount % 10 === 0) {
+      character.celebrate();
+    }
+    syncStats();
     updateCharacterPosition();
-    void prev;
   };
 
-  engine.onError = (i) => {
+  engine.onError = (_charIndex, span) => {
     comboCount = 0;
-    const spans = textDisplay.querySelectorAll('.char');
-    spawnEffect(spans[i] as HTMLSpanElement, 'error');
+    spawnEffect(span ?? engine.getCurrentSpan(), 'error');
     character.flinch();
+    syncStats();
+  };
+
+  engine.onLineComplete = () => {
+    isTransitioningLine = true;
+    textDisplay.classList.remove('line-enter');
+    textDisplay.classList.add('line-exit');
+    updateCharacterPosition(true);
+
+    if (lineTransitionTimer !== null) {
+      clearTimeout(lineTransitionTimer);
+    }
+
+    lineTransitionTimer = window.setTimeout(() => {
+      engine.advanceLine(textDisplay);
+      textDisplay.classList.remove('line-exit');
+      textDisplay.classList.add('line-enter');
+      isTransitioningLine = false;
+      updateCharacterPosition();
+    }, 170);
   };
 
   engine.onComplete = (stats) => {
-    clearInterval(statsInterval);
     const passed = stats.accuracy >= thresholds.accuracy && stats.wpm >= thresholds.wpm;
     const finalStats: LevelStats = { ...stats, passed };
 
-    // Victory effect
+    syncStats();
     character.celebrate();
     screen.classList.add('level-complete-flash');
     document.removeEventListener('keydown', keyHandler);
 
-    setTimeout(() => onComplete(finalStats), 800);
+    window.setTimeout(() => onComplete(finalStats), 800);
   };
 
-  // ── Keyboard listener ──────────────────────────────────────────────────────
-
-  let started = false;
+  const statsInterval = window.setInterval(() => {
+    syncStats();
+    if (!isPaused) {
+      updateCharacterPosition();
+    }
+  }, 250);
 
   const keyHandler = (e: KeyboardEvent) => {
-    // Ignore modifier-only keys
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
-    if (e.key === 'Tab') { e.preventDefault(); return; }
-
-    if (!started) {
-      started = true;
-      focusHint.classList.add('hint-hidden');
+    if (e.ctrlKey || e.metaKey || e.altKey) {
+      return;
     }
-    engine.handleKey(e.key);
+
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      if (isPaused) {
+        closePause();
+      } else {
+        openPause();
+      }
+      return;
+    }
+
+    if (isPaused || isTransitioningLine || e.key === 'Tab') {
+      e.preventDefault();
+      return;
+    }
+
+    engine.handleKey(e.key, textDisplay);
   };
 
+  pauseBtn.addEventListener('click', openPause);
+  pauseResume.addEventListener('click', closePause);
+  pauseRetry.addEventListener('click', onRetry);
+  pauseQuit.addEventListener('click', onQuit);
   document.addEventListener('keydown', keyHandler);
-
-  // Click on text area focuses it and hides hint
-  textDisplay.addEventListener('click', () => {
-    focusHint.classList.add('hint-hidden');
-  });
-
-  // Initial character position
-  setTimeout(updateCharacterPosition, 100);
+  window.setTimeout(() => updateCharacterPosition(), 60);
 
   const cleanup = () => {
-    clearInterval(statsInterval);
+    window.clearInterval(statsInterval);
     document.removeEventListener('keydown', keyHandler);
-    if (comboTimer !== null) clearTimeout(comboTimer);
+    if (lineTransitionTimer !== null) {
+      clearTimeout(lineTransitionTimer);
+    }
     character.destroy();
   };
 

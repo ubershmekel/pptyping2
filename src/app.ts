@@ -14,6 +14,7 @@ export class App {
   private profile = loadProfile();
   private levelCleanup: (() => void) | null = null;
   private router: Router;
+  private mountTimer: number | null = null;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -116,8 +117,13 @@ export class App {
 
   // ─── Rendering ──────────────────────────────────────────────────────────────
 
-  /** Tear down current screen and mount the new one with a crossfade. */
+  /** Tear down current screen and mount the new one. */
   private showScreen(screen: AppScreen): void {
+    if (this.mountTimer !== null) {
+      clearTimeout(this.mountTimer);
+      this.mountTimer = null;
+    }
+
     // Cleanup previous level if needed
     if (this.levelCleanup) {
       this.levelCleanup();
@@ -127,20 +133,14 @@ export class App {
     this.currentScreen = screen;
     this.applyBodyClasses();
 
-    // Fade out old content
-    const old = this.container.firstElementChild as HTMLElement | null;
-    if (old) {
-      old.classList.add('screen-exit');
-      setTimeout(() => { if (old.parentNode) old.remove(); }, 300);
-    }
-
     const el = this.buildScreenElement(screen);
-
     el.classList.add('screen-enter');
-    setTimeout(() => {
-      this.container.appendChild(el);
+
+    this.mountTimer = window.setTimeout(() => {
+      this.container.replaceChildren(el);
       requestAnimationFrame(() => el.classList.remove('screen-enter'));
-    }, old ? 250 : 0);
+      this.mountTimer = null;
+    }, 0);
   }
 
   /** Instantiate the DOM element for the given screen. */
@@ -172,6 +172,8 @@ export class App {
         screen.number,
         this.profile.difficulty,
         (stats) => this.onLevelComplete(screen.number, stats),
+        () => this.navigate({ id: 'level', number: screen.number }),
+        () => this.navigate({ id: 'main-menu' }),
       );
       this.levelCleanup = cleanup;
       return el;
