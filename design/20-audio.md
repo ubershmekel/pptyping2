@@ -1,5 +1,7 @@
 # Audio
 
+STATUS: NOT YET IMPLEMENTED - PLEASE IGNORE THIS FILE
+
 ## Intent
 
 Audio is a significant part of the game feel. Sound effects give instant tactile
