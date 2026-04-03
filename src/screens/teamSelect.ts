@@ -1,12 +1,12 @@
-import type { Team } from '../types';
-import { pikachuSVG, pinkiePieSVG } from '../components/character';
+import type { Team } from "../types";
+import { CHARACTER_PORTRAITS } from "../assets/characters";
 
 export function renderTeamSelect(
   onSelect: (team: Team) => void,
   existingTeam?: Team,
 ): HTMLElement {
-  const screen = document.createElement('div');
-  screen.className = 'screen team-select-screen';
+  const screen = document.createElement("div");
+  screen.className = "screen team-select-screen";
 
   screen.innerHTML = `
     <div class="ts-header">
@@ -18,19 +18,19 @@ export function renderTeamSelect(
 
     <div class="ts-panels">
       <!-- POKEMON PANEL -->
-      <button class="ts-panel ts-panel-pokemon" data-team="pokemon" aria-label="Choose Team Pokémon">
+      <button class="ts-panel ts-panel-pokemon" data-team="pokemon" aria-label="Choose Team Pokemon">
         <div class="ts-panel-bg ts-panel-bg-pokemon"></div>
         <div class="ts-panel-glow ts-panel-glow-pokemon"></div>
         <div class="ts-panel-content">
           <div class="ts-character ts-character-pokemon">
-            ${pikachuSVG(100)}
+            <img class="ts-character-art" src="${CHARACTER_PORTRAITS.pokemon}" alt="Pikachu companion preview" draggable="false">
           </div>
           <div class="ts-panel-text">
-            <h2 class="ts-team-name">Team <span>Pokémon</span></h2>
+            <h2 class="ts-team-name">Team <span>Pokemon</span></h2>
             <p class="ts-team-lore">
               Rowlet has been birdnapped.<br>
               Pikachu must zap the keyboard<br>
-              clean — one key at a time.
+              clean - one key at a time.
             </p>
             <div class="ts-btn ts-btn-pokemon">
               ⚡ Choose Pokémon
@@ -55,14 +55,14 @@ export function renderTeamSelect(
         <div class="ts-panel-glow ts-panel-glow-mlp"></div>
         <div class="ts-panel-content">
           <div class="ts-character ts-character-mlp">
-            ${pinkiePieSVG(100)}
+            <img class="ts-character-art" src="${CHARACTER_PORTRAITS.mlp}" alt="Pinkie Pie companion preview" draggable="false">
           </div>
           <div class="ts-panel-text">
             <h2 class="ts-team-name">Team <span>Ponies</span></h2>
             <p class="ts-team-lore">
               Friendship is the only antidote.<br>
               Pinkie Pie must befriend every<br>
-              key — one at a time.
+              key - one at a time.
             </p>
             <div class="ts-btn ts-btn-mlp">
               🌈 Choose Ponies
@@ -77,36 +77,38 @@ export function renderTeamSelect(
       </button>
     </div>
 
-    ${existingTeam ? `
+    ${
+      existingTeam
+        ? `
     <div class="ts-existing-save">
-      <span>You have a saved game as Team ${existingTeam === 'pokemon' ? 'Pokémon' : 'Ponies'}.</span>
+      <span>You have a saved game as Team ${existingTeam === "pokemon" ? "Pokemon" : "Ponies"}.</span>
       <button class="ts-continue-btn" id="ts-continue">Continue saved game</button>
-    </div>` : ''}
+    </div>`
+        : ""
+    }
   `;
 
-  // Click handlers
-  screen.querySelectorAll('.ts-panel').forEach(panel => {
-    panel.addEventListener('click', () => {
+  screen.querySelectorAll(".ts-panel").forEach((panel) => {
+    panel.addEventListener("click", () => {
       const team = (panel as HTMLElement).dataset.team as Team;
-      // Flash the chosen panel
-      panel.classList.add('ts-panel-selected');
+      panel.classList.add("ts-panel-selected");
       setTimeout(() => onSelect(team), 350);
     });
 
-    // Hover: expand panel slightly via CSS data-hovered
-    panel.addEventListener('mouseenter', () => {
-      screen.querySelectorAll('.ts-panel').forEach(p => p.removeAttribute('data-hovered'));
-      (panel as HTMLElement).dataset.hovered = 'true';
+    panel.addEventListener("mouseenter", () => {
+      screen
+        .querySelectorAll(".ts-panel")
+        .forEach((p) => p.removeAttribute("data-hovered"));
+      (panel as HTMLElement).dataset.hovered = "true";
     });
-    panel.addEventListener('mouseleave', () => {
-      (panel as HTMLElement).removeAttribute('data-hovered');
+    panel.addEventListener("mouseleave", () => {
+      (panel as HTMLElement).removeAttribute("data-hovered");
     });
   });
 
-  // Continue saved game
-  const continueBtn = screen.querySelector('#ts-continue');
+  const continueBtn = screen.querySelector("#ts-continue");
   if (continueBtn && existingTeam) {
-    continueBtn.addEventListener('click', (e) => {
+    continueBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       onSelect(existingTeam);
     });

@@ -236,16 +236,16 @@ button:focus-visible {
   justify-content: center;
   padding-bottom: 1rem;
 }
-.ts-character svg {
+.ts-character-art {
   width: clamp(80px, 14vw, 140px);
   height: auto;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
   transition: transform 0.3s ease;
   animation: ts-char-float 3s ease-in-out infinite;
 }
-.ts-panel-pokemon .ts-character svg { animation-delay: 0s; }
-.ts-panel-mlp     .ts-character svg { animation-delay: 1.5s; }
-.ts-panel:hover .ts-character svg {
+.ts-panel-pokemon .ts-character-art { animation-delay: 0s; }
+.ts-panel-mlp     .ts-character-art { animation-delay: 1.5s; }
+.ts-panel:hover .ts-character-art {
   transform: scale(1.08) translateY(-6px);
 }
 
@@ -1002,7 +1002,11 @@ button:focus-visible {
 }
 
 .char-svg-wrapper { width: 100%; height: 100%; }
-.char-svg { display: block; }
+.char-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
 /* Idle: gentle pulse */
 .character-companion[data-state="idle"] .char-svg {
@@ -1259,3 +1263,4 @@ button:focus-visible {
   .stat-goal { display: none; }
   .text-display { font-size: 1.1rem; padding: 1.2rem 1.5rem; }
 }
+
