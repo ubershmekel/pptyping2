@@ -37,4 +37,4 @@ These are non-negotiable constraints that every screen must satisfy:
 - `index.html` — single page shell; all screens are rendered into one root container
 - `src/main.ts` — entry point; bootstraps the router, loads persisted state, renders the initial screen
 - `vite.config.ts` — build configuration
-- `src/types/index.ts` — canonical TypeScript types for the entire game (see `02-data-model-and-types.md`)
+- `src/types/index.ts` — canonical TypeScript types for the entire game (see `13-data-model-tech.md`)

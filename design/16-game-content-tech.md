@@ -14,7 +14,7 @@ is unused in testing.
 ## Level Definitions
 
 14 levels. Each level is defined as a `LevelDefinition` object (see
-`02-data-model-and-types.md`).
+`13-data-model-tech.md`).
 
 **Letter introduction order** follows English frequency so that real words are
 available as early as possible. Level 1 is a speed test using the full keyboard.
@@ -46,7 +46,7 @@ follow frequency order, genuine English words are available from level 4 onward
 
 Word lists are curated per level, not generated at runtime. Each level has a
 list of valid words. The typing engine draws from this list when constructing
-lines (see `09-typing-engine.md`). Words are all lowercase.
+lines (see `17-typing-engine-tech.md`). Words are all lowercase.
 
 For the speed test (level 1), the word list is a standard common-words corpus —
 the goal is establishing a baseline WPM, not teaching letters.
@@ -69,17 +69,4 @@ content for one team is never shown to a player on the other team.
 5 arcs, each grouping 3 levels under one environment theme. Arc definitions
 include the `EnvironmentConfig` (background image, CSS variables, particle
 preset, ambient sound key) and a reference to the cutscene that follows the arc.
-See `11-environments.md` for how environment configs are applied.
-
-## Key Files
-
-- `src/content/levels.ts` — array of all 14 `LevelDefinition` objects; exported
-  as `LEVELS`
-- `src/content/wordLists.ts` — per-level word arrays; keyed by level number
-- `src/content/letterSets.ts` — cumulative letter sets per level; used by both
-  the typing engine and word list filtering tooling
-- `src/content/arcs.ts` — array of all 5 `ArcDefinition` objects including
-  environment configs; exported as `ARCS`
-- `src/content/stories.ts` — all narrative text; exports
-  `getCutsceneText(team, cutsceneNumber): string` and
-  `getLevelBlurb(team, levelNumber): string`
+See `11-environments-ux.md` for how 

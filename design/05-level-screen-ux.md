@@ -68,7 +68,7 @@ subsystems:
 ## Pause
 
 Pressing Escape or the pause button mounts the pause overlay (see
-`16-pause-overlay.md`) on top of the level screen without destroying it. The
+`08-pause-overlay-ux.md`) on top of the level screen without destroying it. The
 typing engine is paused (stops accepting input, stops the stat timer). On
 resume, everything continues from where it left off.
 
@@ -77,4 +77,4 @@ resume, everything continues from where it left off.
 - `src/screens/levelScreen.ts` — the orchestration layer; reads level
   definition, instantiates and connects the typing engine, character companion,
   stats display, and environment; handles the event glue between subsystems;
-  manages the lifecycle of a level attempt
+  manages the lifecycle 

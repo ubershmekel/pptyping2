@@ -15,7 +15,7 @@ it and move on quickly.
 
 The engine emits final stats (WPM and accuracy). The level complete screen
 compares them against the current difficulty's thresholds (see
-`18-difficulty-system.md`):
+`18-difficulty-system-tech.md`):
 
 - **Pass**: WPM ≥ threshold AND accuracy ≥ threshold
 - **Fail**: either metric below threshold
@@ -52,4 +52,4 @@ within the same world.
 - `src/screens/levelCompleteScreen.ts` — receives final stats from the level
   screen (via navigation state or a shared results object), renders the results
   layout, updates `gameState.ts` with new records, handles the next/retry
-  navigation
+  navig

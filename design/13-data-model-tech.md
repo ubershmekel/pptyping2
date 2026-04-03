@@ -74,9 +74,9 @@ Defines the full visual/audio theme for an arc:
 - `cssVariables: Record<string, string>` — injected as CSS custom properties on
   the root element (text tint, glow color, particle color, UI accent)
 - `particlePreset: string` — key into the particle presets registry (see
-  `13-particles.md`)
+  `12-particles-ux.md`)
 - `ambientSoundKey: string` — key into the audio manager's loop registry (see
-  `12-audio.md`)
+  `20-audio-tech.md`)
 
 ### `CutsceneDefinition`
 
@@ -96,4 +96,4 @@ Represents where a player currently is:
 ## Key Files
 
 - `src/types/index.ts` — all types and enums exported from a single barrel file;
-  every other module imports types from here
+  every other m

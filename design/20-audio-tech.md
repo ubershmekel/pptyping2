@@ -36,7 +36,7 @@ acceptable.
 Each environment has one ambient background loop that plays during the level
 screen, level complete screen, and cutscene within that arc. Loops are defined
 in the `EnvironmentConfig` and started/stopped by the environment manager (see
-`11-environments.md`).
+`11-environments-ux.md`).
 
 The audio manager maintains a reference to the currently playing loop. When
 switching environments, it fades out the previous loop and fades in the new one.
@@ -59,14 +59,4 @@ The settings screen exposes:
 - Separate toggles for SFX and ambient music (players may want ambient but no
   click sounds, or vice versa)
 
-Volume settings are persisted to localStorage alongside the `PlayerProfile`. The
-audio manager reads these on init and applies them.
-
-## Key Files
-
-- `src/audio/audioManager.ts` — Howler.js wrapper; manages all sound instances;
-  exposes `playSfx(key: SoundKey)`, `startLoop(key: LoopKey)`, `stopLoop()`,
-  `setVolume(type, level)`, and `setMuted(type, muted)`. Owns loop state and
-  fade logic.
-- `src/audio/soundEffects.ts` — defines the `SoundKey` enum and the manifest of
-  all SFX file paths; consumed by `audioManager.ts` on init
+Volume s

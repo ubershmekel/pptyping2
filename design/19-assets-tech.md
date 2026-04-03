@@ -39,7 +39,7 @@ via the `EnvironmentConfig` in `src/content/arcs.ts`.
 
 ### Character Sprites
 
-Pose sets for the companion character (see `10-character-companion.md`).
+Pose sets for the companion character (see `10-character-companion-ux.md`).
 
 - Pokemon: Pikachu poses (idle, walk-frame-1, walk-frame-2, celebrate, flinch)
 - MLP: Pinkie Pie poses (same states)
@@ -94,9 +94,3 @@ Naming convention: `public/audio/ambient/{key}.webm`
   (references `public/audio/sfx/`)
 - `src/audio/audioManager.ts` — maps loop keys to file paths (references
   `public/audio/ambient/`)
-- `src/character/companion.ts` — maps team + state to sprite paths (references
-  `public/images/characters/`)
-- `src/content/arcs.ts` — `EnvironmentConfig.backgroundImage` references
-  `public/images/environments/`
-- `src/content/stories.ts` — `CutsceneDefinition.imageAssetPath` references
-  `public/images/stories/`
