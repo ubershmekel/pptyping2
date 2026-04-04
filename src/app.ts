@@ -1,4 +1,4 @@
-import type { AppScreen, Difficulty, LevelStats, Team } from './types';
+import type { AppScreen, Difficulty, LevelStats, ScreenMount, Team } from './types';
 import { loadProfile, saveProfile, applyLevelResult, selectTeam, switchTeam, setDifficulty } from './state/gameState';
 import { cutsceneAfterLevel, levelAfterCutscene } from './data/levels';
 import { renderTeamSelect }    from './screens/teamSelect';
@@ -12,10 +12,10 @@ import type { Route }          from './router';
 export class App {
   private container: HTMLElement;
   private currentScreen: AppScreen = { id: 'main-menu' };
+  private currentMount: ScreenMount | null = null;
   private profile = loadProfile();
-  private levelCleanup: (() => void) | null = null;
   private router: Router;
-  private mountTimer: number | null = null;
+  private enterAnimationFrame: number | null = null;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -120,35 +120,35 @@ export class App {
 
   /** Tear down current screen and mount the new one. */
   private showScreen(screen: AppScreen): void {
-    if (this.mountTimer !== null) {
-      clearTimeout(this.mountTimer);
-      this.mountTimer = null;
+    if (this.enterAnimationFrame !== null) {
+      cancelAnimationFrame(this.enterAnimationFrame);
+      this.enterAnimationFrame = null;
     }
 
-    // Cleanup previous level if needed
-    if (this.levelCleanup) {
-      this.levelCleanup();
-      this.levelCleanup = null;
+    if (this.currentMount !== null) {
+      this.currentMount.cleanup();
+      this.currentMount = null;
     }
 
     this.currentScreen = screen;
     this.applyBodyClasses();
 
-    const el = this.buildScreenElement(screen);
-    el.classList.add('screen-enter');
+    const mount = this.buildScreenMount(screen);
+    mount.el.classList.add('screen-enter');
+    this.currentMount = mount;
+    this.container.replaceChildren(mount.el);
 
-    this.mountTimer = window.setTimeout(() => {
-      this.container.replaceChildren(el);
-      requestAnimationFrame(() => {
+    this.enterAnimationFrame = window.requestAnimationFrame(() => {
+      if (this.currentMount === mount) {
         console.log(`[transition] fade in → ${screen.id}`);
-        el.classList.remove('screen-enter');
-      });
-      this.mountTimer = null;
-    }, 0);
+        mount.el.classList.remove('screen-enter');
+      }
+      this.enterAnimationFrame = null;
+    });
   }
 
-  /** Instantiate the DOM element for the given screen. */
-  private buildScreenElement(screen: AppScreen): HTMLElement {
+  /** Instantiate the mount object for the given screen. */
+  private buildScreenMount(screen: AppScreen): ScreenMount {
     if (screen.id === 'main-menu') {
       return this.renderMainMenu();
 
@@ -177,7 +177,7 @@ export class App {
       );
 
     } else if (screen.id === 'level') {
-      const { el, cleanup } = renderLevelScreen(
+      return renderLevelScreen(
         this.profile.team,
         screen.number,
         this.profile.difficulty,
@@ -186,8 +186,6 @@ export class App {
         () => this.navigate({ id: 'level-select', attempted: screen.number }),
         () => this.navigate({ id: 'main-menu' }),
       );
-      this.levelCleanup = cleanup;
-      return el;
 
     } else if (screen.id === 'level-complete') {
       return renderLevelComplete(
@@ -205,12 +203,13 @@ export class App {
       return this.renderSettings();
     }
 
-    return document.createElement('div');
+    const el = document.createElement('div');
+    return { el, cleanup: () => {} };
   }
 
   // ─── Stub screen renderers (placeholders until dedicated screen files exist) ──
 
-  private renderMainMenu(): HTMLElement {
+  private renderMainMenu(): ScreenMount {
     const el = document.createElement('div');
     el.className = 'screen main-menu-screen';
 
@@ -233,7 +232,7 @@ export class App {
       </div>
     `;
 
-    el.addEventListener('click', (e) => {
+    const clickHandler = (e: Event) => {
       const btn = (e.target as HTMLElement).closest('[data-action]') as HTMLElement | null;
       if (!btn) return;
       const action = btn.dataset['action'];
@@ -245,12 +244,18 @@ export class App {
       } else if (action === 'settings') {
         this.navigate({ id: 'settings' });
       }
-    });
+    };
+    el.addEventListener('click', clickHandler);
 
-    return el;
+    return {
+      el,
+      cleanup: () => {
+        el.removeEventListener('click', clickHandler);
+      },
+    };
   }
 
-  private renderSettings(): HTMLElement {
+  private renderSettings(): ScreenMount {
     const el = document.createElement('div');
     el.className = 'screen settings-screen';
 
@@ -264,14 +269,20 @@ export class App {
       </div>
     `;
 
-    el.addEventListener('click', (e) => {
+    const clickHandler = (e: Event) => {
       const btn = (e.target as HTMLElement).closest('[data-action]') as HTMLElement | null;
       if (btn?.dataset['action'] === 'back') {
         this.navigate({ id: 'main-menu' });
       }
-    });
+    };
+    el.addEventListener('click', clickHandler);
 
-    return el;
+    return {
+      el,
+      cleanup: () => {
+        el.removeEventListener('click', clickHandler);
+      },
+    };
   }
 
   // ─── Event handlers ─────────────────────────────────────────────────────────

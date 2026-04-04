@@ -46,31 +46,55 @@ export function renderCutscene(
 
   // Art reveal animation trigger (slight delay)
   const art = screen.querySelector('.cs-art') as HTMLElement;
-  setTimeout(() => art?.classList.add('cs-art-revealed'), 800);
+  let artRevealTimer: number | null = window.setTimeout(() => art?.classList.add('cs-art-revealed'), 800);
+  let keyBindingTimer: number | null = null;
+  let exitTimer: number | null = null;
+  let advanced = false;
 
   // Next button
   const nextBtn = screen.querySelector('#cs-next') as HTMLButtonElement;
   const go = () => {
+    if (advanced) {
+      return;
+    }
+    advanced = true;
     console.log(`[transition] fade out ← cutscene ${cutsceneIndex}`);
     screen.classList.add('screen-exit');
-    setTimeout(onNext, 350);
+    document.removeEventListener('keydown', keyHandler);
+    exitTimer = window.setTimeout(onNext, 350);
   };
   nextBtn.addEventListener('click', go);
 
   // Enter key
   const keyHandler = (e: KeyboardEvent) => {
-    if (!screen.isConnected) {
-      document.removeEventListener('keydown', keyHandler);
-      return;
-    }
     if (e.key === 'Enter' || e.key === ' ') {
-      document.removeEventListener('keydown', keyHandler);
       go();
     }
   };
-  setTimeout(() => document.addEventListener('keydown', keyHandler), 500);
+  keyBindingTimer = window.setTimeout(() => {
+    document.addEventListener('keydown', keyHandler);
+    keyBindingTimer = null;
+  }, 500);
 
-  return screen;
+  return {
+    el: screen,
+    cleanup: () => {
+      nextBtn.removeEventListener('click', go);
+      document.removeEventListener('keydown', keyHandler);
+      if (artRevealTimer !== null) {
+        window.clearTimeout(artRevealTimer);
+        artRevealTimer = null;
+      }
+      if (keyBindingTimer !== null) {
+        window.clearTimeout(keyBindingTimer);
+        keyBindingTimer = null;
+      }
+      if (exitTimer !== null) {
+        window.clearTimeout(exitTimer);
+        exitTimer = null;
+      }
+    },
+  };
 }
 
 // ─── Inline CSS art placeholders ─────────────────────────────────────────────

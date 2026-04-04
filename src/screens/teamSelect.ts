@@ -1,13 +1,14 @@
 import './teamSelect.css';
-import type { Team } from "../types";
+import type { ScreenMount, Team } from "../types";
 import { CHARACTER_PORTRAITS } from "../assets/characters";
 
 export function renderTeamSelect(
   onSelect: (team: Team) => void,
   existingTeam?: Team,
-): HTMLElement {
+): ScreenMount {
   const screen = document.createElement("div");
   screen.className = "screen team-select-screen";
+  let selectTimer: number | null = null;
 
   screen.innerHTML = `
     <div class="ts-header">
@@ -89,31 +90,73 @@ export function renderTeamSelect(
     }
   `;
 
-  screen.querySelectorAll(".ts-panel").forEach((panel) => {
-    panel.addEventListener("click", () => {
+  const panels = Array.from(screen.querySelectorAll<HTMLElement>(".ts-panel"));
+  const panelClickHandlers = new Map<HTMLElement, EventListener>();
+  const panelMouseEnterHandlers = new Map<HTMLElement, EventListener>();
+  const panelMouseLeaveHandlers = new Map<HTMLElement, EventListener>();
+
+  panels.forEach((panel) => {
+    const clickHandler: EventListener = () => {
       const team = (panel as HTMLElement).dataset.team as Team;
       panel.classList.add("ts-panel-selected");
-      setTimeout(() => onSelect(team), 350);
-    });
-
-    panel.addEventListener("mouseenter", () => {
+      if (selectTimer !== null) {
+        window.clearTimeout(selectTimer);
+      }
+      selectTimer = window.setTimeout(() => onSelect(team), 350);
+    };
+    const mouseEnterHandler: EventListener = () => {
       screen
         .querySelectorAll(".ts-panel")
         .forEach((p) => p.removeAttribute("data-hovered"));
       (panel as HTMLElement).dataset.hovered = "true";
-    });
-    panel.addEventListener("mouseleave", () => {
+    };
+    const mouseLeaveHandler: EventListener = () => {
       (panel as HTMLElement).removeAttribute("data-hovered");
-    });
+    };
+
+    panelClickHandlers.set(panel, clickHandler);
+    panelMouseEnterHandlers.set(panel, mouseEnterHandler);
+    panelMouseLeaveHandlers.set(panel, mouseLeaveHandler);
+    panel.addEventListener("click", clickHandler);
+    panel.addEventListener("mouseenter", mouseEnterHandler);
+    panel.addEventListener("mouseleave", mouseLeaveHandler);
   });
 
   const continueBtn = screen.querySelector("#ts-continue");
+  const continueHandler = (e: Event) => {
+    e.stopPropagation();
+    onSelect(existingTeam as Team);
+  };
   if (continueBtn && existingTeam) {
-    continueBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      onSelect(existingTeam);
-    });
+    continueBtn.addEventListener("click", continueHandler);
   }
 
-  return screen;
+  return {
+    el: screen,
+    cleanup: () => {
+      if (selectTimer !== null) {
+        window.clearTimeout(selectTimer);
+        selectTimer = null;
+      }
+
+      panels.forEach((panel) => {
+        const clickHandler = panelClickHandlers.get(panel);
+        const mouseEnterHandler = panelMouseEnterHandlers.get(panel);
+        const mouseLeaveHandler = panelMouseLeaveHandlers.get(panel);
+        if (clickHandler) {
+          panel.removeEventListener("click", clickHandler);
+        }
+        if (mouseEnterHandler) {
+          panel.removeEventListener("mouseenter", mouseEnterHandler);
+        }
+        if (mouseLeaveHandler) {
+          panel.removeEventListener("mouseleave", mouseLeaveHandler);
+        }
+      });
+
+      if (continueBtn && existingTeam) {
+        continueBtn.removeEventListener("click", continueHandler);
+      }
+    },
+  };
 }

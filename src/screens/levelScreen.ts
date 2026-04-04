@@ -1,5 +1,5 @@
 import './levelScreen.css';
-import type { Difficulty, LevelStats, Team } from '../types';
+import type { Difficulty, LevelStats, ScreenMount, Team } from '../types';
 import { DIFFICULTY_THRESHOLDS } from '../types';
 import { getLevelText } from '../data/wordLists';
 import { getLevelDef, ARC_ENVIRONMENTS } from '../data/levels';
@@ -221,7 +221,7 @@ export function renderLevelScreen(
   onRetry: () => void,
   onLevelSelect: () => void,
   onQuit: () => void,
-): { el: HTMLElement; cleanup: () => void } {
+): ScreenMount {
   const def = getLevelDef(levelNumber);
   const env = ARC_ENVIRONMENTS[def.arc];
   const levelText = getLevelText(levelNumber);
@@ -300,6 +300,8 @@ export function renderLevelScreen(
   let isPaused = false;
   let isTransitioningLine = false;
   let lineTransitionTimer: number | null = null;
+  let completeTimer: number | null = null;
+  let initialPositionTimer: number | null = null;
 
   function updateCharacterPosition(reset = false): void {
     if (reset) {
@@ -417,7 +419,7 @@ export function renderLevelScreen(
     screen.classList.add('level-complete-flash');
     document.removeEventListener('keydown', keyHandler);
 
-    window.setTimeout(() => onComplete(finalStats), 800);
+    completeTimer = window.setTimeout(() => onComplete(finalStats), 800);
   };
 
   const statsInterval = window.setInterval(() => {
@@ -456,14 +458,31 @@ export function renderLevelScreen(
   pauseLevelSelect.addEventListener('click', onLevelSelect);
   pauseQuit.addEventListener('click', onQuit);
   document.addEventListener('keydown', keyHandler);
-  window.setTimeout(() => updateCharacterPosition(), 60);
+  initialPositionTimer = window.setTimeout(() => {
+    updateCharacterPosition();
+    initialPositionTimer = null;
+  }, 60);
 
   const cleanup = () => {
     window.clearInterval(statsInterval);
     document.removeEventListener('keydown', keyHandler);
     if (lineTransitionTimer !== null) {
-      clearTimeout(lineTransitionTimer);
+      window.clearTimeout(lineTransitionTimer);
+      lineTransitionTimer = null;
     }
+    if (completeTimer !== null) {
+      window.clearTimeout(completeTimer);
+      completeTimer = null;
+    }
+    if (initialPositionTimer !== null) {
+      window.clearTimeout(initialPositionTimer);
+      initialPositionTimer = null;
+    }
+    pauseBtn.removeEventListener('click', openPause);
+    pauseResume.removeEventListener('click', closePause);
+    pauseRetry.removeEventListener('click', onRetry);
+    pauseLevelSelect.removeEventListener('click', onLevelSelect);
+    pauseQuit.removeEventListener('click', onQuit);
     character.destroy();
   };
 

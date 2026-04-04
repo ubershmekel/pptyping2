@@ -1,5 +1,5 @@
 import "./levelSelect.css";
-import type { LevelDefinition, PlayerProfile } from "../types";
+import type { LevelDefinition, PlayerProfile, ScreenMount } from "../types";
 import { LEVELS, ARC_ENVIRONMENTS } from "../data/levels";
 
 const ARC_ICONS: Record<number, string> = {
@@ -28,9 +28,10 @@ export function renderLevelSelect(
   onCutscene: (index: number) => void,
   onBack: () => void,
   attempted?: number,
-): HTMLElement {
+): ScreenMount {
   const screen = document.createElement("div");
   screen.className = `screen level-select-screen team-${profile.team}`;
+  let entranceFrame: number | null = null;
 
   const arcMap: Record<number, LevelDefinition[]> = {
     1: [],
@@ -64,7 +65,7 @@ export function renderLevelSelect(
   `;
 
   // Wire events
-  screen.addEventListener("click", (e) => {
+  const clickHandler = (e: Event) => {
     const t = e.target as HTMLElement;
 
     if (t.closest('[data-action="back"]')) {
@@ -99,10 +100,11 @@ export function renderLevelSelect(
     if (csNode && csNode.dataset["unlocked"] === "true") {
       onCutscene(parseInt(csNode.dataset["cutscene"]!, 10));
     }
-  });
+  };
+  screen.addEventListener("click", clickHandler);
 
   // Keyboard activation
-  screen.addEventListener("keydown", (e) => {
+  const keyHandler = (e: KeyboardEvent) => {
     if (e.key !== "Enter" && e.key !== " ") return;
     const el = (e.target as HTMLElement).closest<HTMLElement>(
       "[data-level], [data-cutscene]",
@@ -111,10 +113,11 @@ export function renderLevelSelect(
       e.preventDefault();
       el.click();
     }
-  });
+  };
+  screen.addEventListener("keydown", keyHandler);
 
   // Staggered entrance — after animation, lock opacity so shake can't steal it
-  requestAnimationFrame(() => {
+  entranceFrame = requestAnimationFrame(() => {
     const items = screen.querySelectorAll<HTMLElement>(
       ".ls-level-card, .ls-cs-node",
     );
@@ -132,7 +135,17 @@ export function renderLevelSelect(
     });
   });
 
-  return screen;
+  return {
+    el: screen,
+    cleanup: () => {
+      screen.removeEventListener("click", clickHandler);
+      screen.removeEventListener("keydown", keyHandler);
+      if (entranceFrame !== null) {
+        cancelAnimationFrame(entranceFrame);
+        entranceFrame = null;
+      }
+    },
+  };
 }
 
 function buildArc(

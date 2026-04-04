@@ -1,5 +1,5 @@
 import './levelComplete.css';
-import type { Difficulty, LevelStats, Team } from '../types';
+import type { Difficulty, LevelStats, ScreenMount, Team } from '../types';
 import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from '../types';
 
 export function renderLevelComplete(
@@ -11,7 +11,7 @@ export function renderLevelComplete(
   onRetry:            () => void,
   onLevelSelect:      () => void,
   onChangeDifficulty: (d: Difficulty) => void,
-): HTMLElement {
+): ScreenMount {
   const thresholds = DIFFICULTY_THRESHOLDS[difficulty];
   const diffName   = DIFFICULTY_DISPLAY[team][difficulty];
   const passed     = stats.passed;
@@ -114,31 +114,58 @@ export function renderLevelComplete(
   `;
 
   // Next / Retry buttons
-  screen.querySelector('#lc-next')?.addEventListener('click', onNext);
-  screen.querySelector('#lc-retry')?.addEventListener('click', onRetry);
-  screen.querySelector('#lc-next-anyway')?.addEventListener('click', onNext);
-  screen.querySelector('#lc-level-select')?.addEventListener('click', onLevelSelect);
+  const nextBtn = screen.querySelector('#lc-next');
+  const retryBtn = screen.querySelector('#lc-retry');
+  const nextAnywayBtn = screen.querySelector('#lc-next-anyway');
+  const levelSelectBtn = screen.querySelector('#lc-level-select');
+  nextBtn?.addEventListener('click', onNext);
+  retryBtn?.addEventListener('click', onRetry);
+  nextAnywayBtn?.addEventListener('click', onNext);
+  levelSelectBtn?.addEventListener('click', onLevelSelect);
 
   // Difficulty buttons
-  screen.querySelectorAll('.lc-diff-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+  const difficultyButtons = Array.from(screen.querySelectorAll<HTMLButtonElement>('.lc-diff-btn'));
+  const difficultyHandlers = new Map<HTMLButtonElement, EventListener>();
+  difficultyButtons.forEach(btn => {
+    const clickHandler: EventListener = () => {
       const d = (btn as HTMLElement).dataset.diff as Difficulty;
       screen.querySelectorAll('.lc-diff-btn').forEach(b => {
         b.classList.toggle('lc-diff-active', b === btn);
         (b as HTMLButtonElement).setAttribute('aria-pressed', String(b === btn));
       });
       onChangeDifficulty(d);
-    });
+    };
+    difficultyHandlers.set(btn, clickHandler);
+    btn.addEventListener('click', clickHandler);
   });
 
   // Animate stat bars in
-  setTimeout(() => {
+  let barAnimationTimer: number | null = window.setTimeout(() => {
     screen.querySelectorAll('.lc-stat-bar').forEach(bar => {
       (bar as HTMLElement).classList.add('lc-bar-animated');
     });
+    barAnimationTimer = null;
   }, 200);
 
-  return screen;
+  return {
+    el: screen,
+    cleanup: () => {
+      nextBtn?.removeEventListener('click', onNext);
+      retryBtn?.removeEventListener('click', onRetry);
+      nextAnywayBtn?.removeEventListener('click', onNext);
+      levelSelectBtn?.removeEventListener('click', onLevelSelect);
+      difficultyButtons.forEach(btn => {
+        const clickHandler = difficultyHandlers.get(btn);
+        if (clickHandler) {
+          btn.removeEventListener('click', clickHandler);
+        }
+      });
+      if (barAnimationTimer !== null) {
+        window.clearTimeout(barAnimationTimer);
+        barAnimationTimer = null;
+      }
+    },
+  };
 }
 
 function formatTime(seconds: number): string {

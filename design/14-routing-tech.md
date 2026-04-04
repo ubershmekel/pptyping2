@@ -33,13 +33,13 @@ level.
 - **Continue**: Reads `currentPosition` from `PlayerProfile` and navigates to
   that URL via `pushState`.
 - **Back button**: The `popstate` event re-renders the screen corresponding to
-  the browser's current URL. All screen renders are idempotent — calling "render
-  level 3" twice is safe.
+  the browser's current URL. All screen renders are idempotent - calling
+  "render level 3" twice is safe.
 
 ## Screen Manager
 
-The router delegates actual rendering to the Screen Manager, which owns the
-single root DOM container. Navigating to a new screen:
+The router delegates actual rendering to `app.ts`, which owns the single root
+DOM container and the active `ScreenMount`. Navigating to a new screen:
 
 1. Calls the teardown method of the current screen (removes event listeners,
    stops particles/audio if needed)
@@ -50,8 +50,7 @@ single root DOM container. Navigating to a new screen:
 
 ## Key Files
 
-- `src/router.ts` — parses `window.location.pathname`, maps to a
-  `ScreenPosition`, enforces guards, calls the screen manager
-- `src/screens/screenManager.ts` — owns the root `#app` DOM element; mounts and
-  unmounts screens; exposes `navigateTo(position: ScreenPosition)` which both
-  updates the URL and renders the correct screen
+- `src/router.ts` - parses `window.location.pathname`, maps to a
+  `ScreenPosition`, enforces guards, and dispatches the route to `app.ts`
+- `src/app.ts` - owns the root `#app` DOM element, tears down the current
+  `ScreenMount`, mounts the next one, and coordinates URL-driven navigation
