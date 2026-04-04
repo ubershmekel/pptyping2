@@ -16,11 +16,11 @@ const ARC_OUTRO_CS: Record<number, number> = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 };
 
 // Which level's completion unlocks each arc's outro cutscene
 const CS_TRIGGER_LEVEL: Record<number, number> = {
-  1: 2,
-  2: 5,
-  3: 9,
-  4: 13,
-  5: 19,
+  1: 4,
+  2: 8,
+  3: 12,
+  4: 16,
+  5: 20,
 };
 
 export function renderLevelSelect(
@@ -53,7 +53,7 @@ export function renderLevelSelect(
       <h2 class="ls-title">Choose Level</h2>
       <div class="ls-progress-pill">
         <span class="ls-prog-count">${totalCompleted}</span>
-        <span class="ls-prog-denom"> / 19</span>
+        <span class="ls-prog-denom"> / 20</span>
       </div>
     </div>
     ${attempted ? `<div class="ls-notice">Level ${attempted} is locked - complete earlier levels first.</div>` : ""}
@@ -61,7 +61,7 @@ export function renderLevelSelect(
       ${([1, 2, 3, 4, 5] as const).map((a) => buildArc(a, arcMap[a], profile, attempted)).join("")}
     </div>
     <div class="ls-particles" aria-hidden="true">
-      ${Array.from({ length: 19 }, () => '<span class="ls-particle"></span>').join("")}
+      ${Array.from({ length: 20 }, () => '<span class="ls-particle"></span>').join("")}
     </div>
   `;
 
