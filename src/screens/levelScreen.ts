@@ -1,5 +1,6 @@
 import './levelScreen.css';
 import type { Difficulty, LevelStats, ScreenMount, Team } from '../types';
+import { createScreenMount } from '../screenMount';
 import { DIFFICULTY_THRESHOLDS } from '../types';
 import { getLevelText } from '../data/wordLists';
 import { getLevelDef, ARC_ENVIRONMENTS } from '../data/levels';
@@ -228,6 +229,7 @@ export function renderLevelScreen(
   const thresholds = DIFFICULTY_THRESHOLDS[difficulty];
 
   const screen = document.createElement('div');
+  const mount = createScreenMount(screen);
   screen.className = `screen level-screen team-${team} ${env.cssClass}`;
 
   screen.innerHTML = `
@@ -293,15 +295,15 @@ export function renderLevelScreen(
 
   const character = new CharacterCompanion(team);
   character.mount(charTrack);
+  mount.defer(() => character.destroy());
   engine.renderCurrentLine(textDisplay);
   pauseBtn.setAttribute('aria-expanded', 'false');
 
   let comboCount = 0;
   let isPaused = false;
   let isTransitioningLine = false;
-  let lineTransitionTimer: number | null = null;
-  let completeTimer: number | null = null;
-  let initialPositionTimer: number | null = null;
+  let cancelLineTransition: (() => void) | null = null;
+  let cancelComplete: (() => void) | null = null;
 
   function updateCharacterPosition(reset = false): void {
     if (reset) {
@@ -365,7 +367,8 @@ export function renderLevelScreen(
     span.classList.remove('letter-hit', 'letter-error');
     void span.offsetWidth;
     span.classList.add(type === 'correct' ? 'letter-hit' : 'letter-error');
-    span.addEventListener(
+    mount.listen(
+      span,
       'animationend',
       () => {
         span.classList.remove('letter-hit', 'letter-error', 'error-flash');
@@ -397,11 +400,12 @@ export function renderLevelScreen(
     textDisplay.classList.add('line-exit');
     updateCharacterPosition(true);
 
-    if (lineTransitionTimer !== null) {
-      clearTimeout(lineTransitionTimer);
+    if (cancelLineTransition !== null) {
+      cancelLineTransition();
     }
 
-    lineTransitionTimer = window.setTimeout(() => {
+    cancelLineTransition = mount.timeout(() => {
+      cancelLineTransition = null;
       engine.advanceLine(textDisplay);
       textDisplay.classList.remove('line-exit');
       textDisplay.classList.add('line-enter');
@@ -417,12 +421,15 @@ export function renderLevelScreen(
     syncStats();
     character.celebrate();
     screen.classList.add('level-complete-flash');
-    document.removeEventListener('keydown', keyHandler);
+    stopKeyHandler();
 
-    completeTimer = window.setTimeout(() => onComplete(finalStats), 800);
+    cancelComplete = mount.timeout(() => {
+      cancelComplete = null;
+      onComplete(finalStats);
+    }, 800);
   };
 
-  const statsInterval = window.setInterval(() => {
+  mount.interval(() => {
     syncStats();
     if (!isPaused) {
       updateCharacterPosition();
@@ -452,39 +459,13 @@ export function renderLevelScreen(
     engine.handleKey(e.key, textDisplay);
   };
 
-  pauseBtn.addEventListener('click', openPause);
-  pauseResume.addEventListener('click', closePause);
-  pauseRetry.addEventListener('click', onRetry);
-  pauseLevelSelect.addEventListener('click', onLevelSelect);
-  pauseQuit.addEventListener('click', onQuit);
-  document.addEventListener('keydown', keyHandler);
-  initialPositionTimer = window.setTimeout(() => {
-    updateCharacterPosition();
-    initialPositionTimer = null;
-  }, 60);
+  mount.listen(pauseBtn, 'click', openPause);
+  mount.listen(pauseResume, 'click', closePause);
+  mount.listen(pauseRetry, 'click', onRetry);
+  mount.listen(pauseLevelSelect, 'click', onLevelSelect);
+  mount.listen(pauseQuit, 'click', onQuit);
+  const stopKeyHandler = mount.listen(document, 'keydown', keyHandler);
+  mount.timeout(() => updateCharacterPosition(), 60);
 
-  const cleanup = () => {
-    window.clearInterval(statsInterval);
-    document.removeEventListener('keydown', keyHandler);
-    if (lineTransitionTimer !== null) {
-      window.clearTimeout(lineTransitionTimer);
-      lineTransitionTimer = null;
-    }
-    if (completeTimer !== null) {
-      window.clearTimeout(completeTimer);
-      completeTimer = null;
-    }
-    if (initialPositionTimer !== null) {
-      window.clearTimeout(initialPositionTimer);
-      initialPositionTimer = null;
-    }
-    pauseBtn.removeEventListener('click', openPause);
-    pauseResume.removeEventListener('click', closePause);
-    pauseRetry.removeEventListener('click', onRetry);
-    pauseLevelSelect.removeEventListener('click', onLevelSelect);
-    pauseQuit.removeEventListener('click', onQuit);
-    character.destroy();
-  };
-
-  return { el: screen, cleanup };
+  return mount;
 }

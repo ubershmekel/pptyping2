@@ -1,5 +1,6 @@
 import './cutscene.css';
 import type { ScreenMount, Team } from '../types';
+import { createScreenMount } from '../screenMount';
 import { CUTSCENE_STORIES } from '../data/stories';
 
 export function renderCutscene(
@@ -9,6 +10,7 @@ export function renderCutscene(
 ): ScreenMount {
   const story = CUTSCENE_STORIES[team][cutsceneIndex];
   const screen = document.createElement('div');
+  const mount = createScreenMount(screen);
   screen.className = `screen cutscene-screen team-${team}`;
 
   screen.innerHTML = `
@@ -46,10 +48,8 @@ export function renderCutscene(
 
   // Art reveal animation trigger (slight delay)
   const art = screen.querySelector('.cs-art') as HTMLElement;
-  let artRevealTimer: number | null = window.setTimeout(() => art?.classList.add('cs-art-revealed'), 800);
-  let keyBindingTimer: number | null = null;
-  let exitTimer: number | null = null;
   let advanced = false;
+  let stopKeyHandler: (() => void) | null = null;
 
   // Next button
   const nextBtn = screen.querySelector('#cs-next') as HTMLButtonElement;
@@ -60,10 +60,11 @@ export function renderCutscene(
     advanced = true;
     console.log(`[transition] fade out ← cutscene ${cutsceneIndex}`);
     screen.classList.add('screen-exit');
-    document.removeEventListener('keydown', keyHandler);
-    exitTimer = window.setTimeout(onNext, 350);
+    stopKeyHandler?.();
+    stopKeyHandler = null;
+    mount.timeout(onNext, 350);
   };
-  nextBtn.addEventListener('click', go);
+  mount.listen(nextBtn, 'click', go);
 
   // Enter key
   const keyHandler = (e: KeyboardEvent) => {
@@ -71,30 +72,12 @@ export function renderCutscene(
       go();
     }
   };
-  keyBindingTimer = window.setTimeout(() => {
-    document.addEventListener('keydown', keyHandler);
-    keyBindingTimer = null;
+  mount.timeout(() => {
+    stopKeyHandler = mount.listen(document, 'keydown', keyHandler);
   }, 500);
+  mount.timeout(() => art?.classList.add('cs-art-revealed'), 800);
 
-  return {
-    el: screen,
-    cleanup: () => {
-      nextBtn.removeEventListener('click', go);
-      document.removeEventListener('keydown', keyHandler);
-      if (artRevealTimer !== null) {
-        window.clearTimeout(artRevealTimer);
-        artRevealTimer = null;
-      }
-      if (keyBindingTimer !== null) {
-        window.clearTimeout(keyBindingTimer);
-        keyBindingTimer = null;
-      }
-      if (exitTimer !== null) {
-        window.clearTimeout(exitTimer);
-        exitTimer = null;
-      }
-    },
-  };
+  return mount;
 }
 
 // ─── Inline CSS art placeholders ─────────────────────────────────────────────

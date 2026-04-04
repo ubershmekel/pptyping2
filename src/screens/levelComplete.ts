@@ -1,5 +1,6 @@
 import './levelComplete.css';
 import type { Difficulty, LevelStats, ScreenMount, Team } from '../types';
+import { createScreenMount } from '../screenMount';
 import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from '../types';
 
 export function renderLevelComplete(
@@ -17,6 +18,7 @@ export function renderLevelComplete(
   const passed     = stats.passed;
 
   const screen = document.createElement('div');
+  const mount = createScreenMount(screen);
   screen.className = `screen level-complete-screen team-${team} ${passed ? 'lc-passed' : 'lc-failed'}`;
 
   const wpmBar  = Math.min(100, Math.round((stats.wpm  / Math.max(thresholds.wpm, 1)) * 100));
@@ -118,54 +120,31 @@ export function renderLevelComplete(
   const retryBtn = screen.querySelector('#lc-retry');
   const nextAnywayBtn = screen.querySelector('#lc-next-anyway');
   const levelSelectBtn = screen.querySelector('#lc-level-select');
-  nextBtn?.addEventListener('click', onNext);
-  retryBtn?.addEventListener('click', onRetry);
-  nextAnywayBtn?.addEventListener('click', onNext);
-  levelSelectBtn?.addEventListener('click', onLevelSelect);
+  if (nextBtn) mount.listen(nextBtn, 'click', onNext);
+  if (retryBtn) mount.listen(retryBtn, 'click', onRetry);
+  if (nextAnywayBtn) mount.listen(nextAnywayBtn, 'click', onNext);
+  if (levelSelectBtn) mount.listen(levelSelectBtn, 'click', onLevelSelect);
 
   // Difficulty buttons
-  const difficultyButtons = Array.from(screen.querySelectorAll<HTMLButtonElement>('.lc-diff-btn'));
-  const difficultyHandlers = new Map<HTMLButtonElement, EventListener>();
-  difficultyButtons.forEach(btn => {
-    const clickHandler: EventListener = () => {
+  screen.querySelectorAll<HTMLButtonElement>('.lc-diff-btn').forEach(btn => {
+    mount.listen(btn, 'click', () => {
       const d = (btn as HTMLElement).dataset.diff as Difficulty;
       screen.querySelectorAll('.lc-diff-btn').forEach(b => {
         b.classList.toggle('lc-diff-active', b === btn);
         (b as HTMLButtonElement).setAttribute('aria-pressed', String(b === btn));
       });
       onChangeDifficulty(d);
-    };
-    difficultyHandlers.set(btn, clickHandler);
-    btn.addEventListener('click', clickHandler);
+    });
   });
 
   // Animate stat bars in
-  let barAnimationTimer: number | null = window.setTimeout(() => {
+  mount.timeout(() => {
     screen.querySelectorAll('.lc-stat-bar').forEach(bar => {
       (bar as HTMLElement).classList.add('lc-bar-animated');
     });
-    barAnimationTimer = null;
   }, 200);
 
-  return {
-    el: screen,
-    cleanup: () => {
-      nextBtn?.removeEventListener('click', onNext);
-      retryBtn?.removeEventListener('click', onRetry);
-      nextAnywayBtn?.removeEventListener('click', onNext);
-      levelSelectBtn?.removeEventListener('click', onLevelSelect);
-      difficultyButtons.forEach(btn => {
-        const clickHandler = difficultyHandlers.get(btn);
-        if (clickHandler) {
-          btn.removeEventListener('click', clickHandler);
-        }
-      });
-      if (barAnimationTimer !== null) {
-        window.clearTimeout(barAnimationTimer);
-        barAnimationTimer = null;
-      }
-    },
-  };
+  return mount;
 }
 
 function formatTime(seconds: number): string {

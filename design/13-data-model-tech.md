@@ -101,29 +101,64 @@ The required return type of every screen render function:
 interface ScreenMount {
   el: HTMLElement;
   cleanup: () => void;
+  defer: (cleanup: () => void) => () => void;
+  listen: (...) => () => void;
+  timeout: (callback: () => void, ms: number) => () => void;
+  interval: (callback: () => void, ms: number) => () => void;
+  frame: (callback: FrameRequestCallback) => () => void;
 }
 ```
 
 **Contract**: `app.ts` calls `cleanup()` on the previous screen's mount before
-calling `replaceChildren` with the new one. This guarantees that
-document-level event listeners, `setInterval` handles, `setTimeout` handles,
-and any other resources are released at the moment of navigation - not lazily,
-and not relying on GC or DOM events.
+calling `replaceChildren` with the new one. This guarantees that document-level
+event listeners, `setInterval` handles, `setTimeout` handles, and any other
+resources are released at the moment of navigation - not lazily, and not relying
+on GC or DOM events.
 
 **Rule**: Every screen render function must return `ScreenMount`, including
 temporary render helpers that still live in `app.ts`. Screens that have no
-resources to release return `{ el, cleanup: () => {} }`. This makes the
-absence of cleanup explicit rather than implicit, and prevents future authors
-from accidentally adding a `document.addEventListener` without a matching
-removal.
+resources to release still return a real mount object so future listeners,
+timers, intervals, frames, and custom teardown can be registered through the
+same lifecycle owner.
 
-**Why not MutationObserver / `'remove'` events?**
-`'remove'` is not a real DOM event (it never fires). `MutationObserver` is
-asynchronous. Both are weaker than a synchronous, caller-driven cleanup.
+**Lifecycle registration rule**: Screen code must not call `addEventListener`,
+`removeEventListener`, `setTimeout`, `clearTimeout`, `setInterval`,
+`clearInterval`, `requestAnimationFrame`, or `cancelAnimationFrame` directly.
+Instead it must use `ScreenMount.listen()`, `timeout()`, `interval()`,
+`frame()`, and `defer()`. The helper returns a disposer function when a screen
+needs to cancel work before the final `cleanup()`.
+
+**Why put these methods on `ScreenMount`?** The intent is to make lifecycle
+ownership explicit. A screen that creates long-lived work should register that
+work on the same object that will later be cleaned up. This has three benefits:
+
+- **Single owner**: The DOM element and all of its long-lived side effects are
+  owned by one lifecycle object.
+- **Fewer paired APIs in screen code**: Authors write "register this listener"
+  instead of manually writing both `addEventListener(...)` and
+  `removeEventListener(...)`, or `setTimeout(...)` and `clearTimeout(...)`, in
+  separate parts of the file.
+- **Enforceability**: Once registration goes through `ScreenMount`, the codebase
+  can reject raw listener/timer APIs in `src/screens/` and keep one consistent
+  lifecycle pattern.
+
+This is intentionally narrow in scope. `ScreenMount` is not a general-purpose
+utility bag. It only owns teardown-sensitive work: listeners, timers, animation
+frames, intervals, and custom disposers.
+
+**Why not MutationObserver / `'remove'` events?** `'remove'` is not a real DOM
+event (it never fires). `MutationObserver` is asynchronous. Both are weaker than
+a synchronous, caller-driven cleanup.
 
 ## Key Files
 
 - `src/types.ts` - the canonical shared type declarations, including
   `ScreenMount`
+- `src/screenMount.ts` - factory that creates a `ScreenMount` and tracks all
+  lifecycle registrations
 - `src/app.ts` - owns the root container and enforces `cleanup()` before each
   screen replacement
+- `scripts/check-screen-lifecycle.ts` - rejects raw listener/timer APIs inside
+  `src/screens/` so the `ScreenMount` contract stays enforced
+- `test/screenMount.test.ts` - covers the `ScreenMount` cleanup contract and
+  disposer semantics in TypeScript

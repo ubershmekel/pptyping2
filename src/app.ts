@@ -6,6 +6,7 @@ import { renderLevelSelect }   from './screens/levelSelect';
 import { renderCutscene }      from './screens/cutscene';
 import { renderLevelScreen }   from './screens/levelScreen';
 import { renderLevelComplete }  from './screens/levelComplete';
+import { createScreenMount }   from './screenMount';
 import { Router }              from './router';
 import type { Route }          from './router';
 
@@ -203,20 +204,20 @@ export class App {
       return this.renderSettings();
     }
 
-    const el = document.createElement('div');
-    return { el, cleanup: () => {} };
+    return createScreenMount(document.createElement('div'));
   }
 
   // ─── Stub screen renderers (placeholders until dedicated screen files exist) ──
 
   private renderMainMenu(): ScreenMount {
-    const el = document.createElement('div');
-    el.className = 'screen main-menu-screen';
+    const screen = document.createElement('div');
+    const mount = createScreenMount(screen);
+    screen.className = 'screen main-menu-screen';
 
     const hasSave = this.profile.teamSelected &&
       (this.profile.highestUnlockedLevel > 1 || this.profile.levelRecords[1]?.completed);
 
-    el.innerHTML = `
+    screen.innerHTML = `
       <div class="main-menu-content">
         <h1 class="game-title">PPTyping</h1>
         <p class="game-subtitle">Type Your Way to Victory!</p>
@@ -232,7 +233,7 @@ export class App {
       </div>
     `;
 
-    const clickHandler = (e: Event) => {
+    mount.listen(screen, 'click', (e: Event) => {
       const btn = (e.target as HTMLElement).closest('[data-action]') as HTMLElement | null;
       if (!btn) return;
       const action = btn.dataset['action'];
@@ -244,22 +245,17 @@ export class App {
       } else if (action === 'settings') {
         this.navigate({ id: 'settings' });
       }
-    };
-    el.addEventListener('click', clickHandler);
+    });
 
-    return {
-      el,
-      cleanup: () => {
-        el.removeEventListener('click', clickHandler);
-      },
-    };
+    return mount;
   }
 
   private renderSettings(): ScreenMount {
-    const el = document.createElement('div');
-    el.className = 'screen settings-screen';
+    const screen = document.createElement('div');
+    const mount = createScreenMount(screen);
+    screen.className = 'screen settings-screen';
 
-    el.innerHTML = `
+    screen.innerHTML = `
       <div class="screen-header">
         <button class="btn btn-ghost back-btn" data-action="back">← Back</button>
         <h2>Settings</h2>
@@ -269,20 +265,14 @@ export class App {
       </div>
     `;
 
-    const clickHandler = (e: Event) => {
+    mount.listen(screen, 'click', (e: Event) => {
       const btn = (e.target as HTMLElement).closest('[data-action]') as HTMLElement | null;
       if (btn?.dataset['action'] === 'back') {
         this.navigate({ id: 'main-menu' });
       }
-    };
-    el.addEventListener('click', clickHandler);
+    });
 
-    return {
-      el,
-      cleanup: () => {
-        el.removeEventListener('click', clickHandler);
-      },
-    };
+    return mount;
   }
 
   // ─── Event handlers ─────────────────────────────────────────────────────────

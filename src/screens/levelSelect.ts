@@ -1,5 +1,6 @@
 import "./levelSelect.css";
 import type { LevelDefinition, PlayerProfile, ScreenMount } from "../types";
+import { createScreenMount } from "../screenMount";
 import { LEVELS, ARC_ENVIRONMENTS } from "../data/levels";
 
 const ARC_ICONS: Record<number, string> = {
@@ -30,8 +31,8 @@ export function renderLevelSelect(
   attempted?: number,
 ): ScreenMount {
   const screen = document.createElement("div");
+  const mount = createScreenMount(screen);
   screen.className = `screen level-select-screen team-${profile.team}`;
-  let entranceFrame: number | null = null;
 
   const arcMap: Record<number, LevelDefinition[]> = {
     1: [],
@@ -55,7 +56,7 @@ export function renderLevelSelect(
         <span class="ls-prog-denom"> / 14</span>
       </div>
     </div>
-    ${attempted ? `<div class="ls-notice">Level ${attempted} is locked — complete earlier levels first.</div>` : ""}
+    ${attempted ? `<div class="ls-notice">Level ${attempted} is locked - complete earlier levels first.</div>` : ""}
     <div class="ls-map">
       ${([1, 2, 3, 4, 5] as const).map((a) => buildArc(a, arcMap[a], profile, attempted)).join("")}
     </div>
@@ -64,26 +65,26 @@ export function renderLevelSelect(
     </div>
   `;
 
-  // Wire events
-  const clickHandler = (e: Event) => {
-    const t = e.target as HTMLElement;
+  mount.listen(screen, "click", (e: Event) => {
+    const target = e.target as HTMLElement;
 
-    if (t.closest('[data-action="back"]')) {
+    if (target.closest('[data-action="back"]')) {
       onBack();
       return;
     }
 
-    const card = t.closest<HTMLElement>("[data-level]");
+    const card = target.closest<HTMLElement>("[data-level]");
     if (card) {
-      const n = parseInt(card.dataset["level"]!, 10);
-      if (n <= profile.highestUnlockedLevel) {
-        onLevel(n);
+      const level = parseInt(card.dataset["level"]!, 10);
+      if (level <= profile.highestUnlockedLevel) {
+        onLevel(level);
       } else {
-        // Shake on locked click — clean up so the card stays visible
+        // Shake on locked click, then restore the static transform/opacity.
         card.classList.remove("ls-shake");
-        void card.offsetWidth; // reflow to restart animation
+        void card.offsetWidth;
         card.classList.add("ls-shake");
-        card.addEventListener(
+        mount.listen(
+          card,
           "animationend",
           () => {
             card.classList.remove("ls-shake");
@@ -96,35 +97,37 @@ export function renderLevelSelect(
       return;
     }
 
-    const csNode = t.closest<HTMLElement>("[data-cutscene]");
-    if (csNode && csNode.dataset["unlocked"] === "true") {
-      onCutscene(parseInt(csNode.dataset["cutscene"]!, 10));
+    const cutsceneNode = target.closest<HTMLElement>("[data-cutscene]");
+    if (cutsceneNode?.dataset["unlocked"] === "true") {
+      onCutscene(parseInt(cutsceneNode.dataset["cutscene"]!, 10));
     }
-  };
-  screen.addEventListener("click", clickHandler);
+  });
 
-  // Keyboard activation
-  const keyHandler = (e: KeyboardEvent) => {
-    if (e.key !== "Enter" && e.key !== " ") return;
+  mount.listen(screen, "keydown", (e: KeyboardEvent) => {
+    if (e.key !== "Enter" && e.key !== " ") {
+      return;
+    }
+
     const el = (e.target as HTMLElement).closest<HTMLElement>(
       "[data-level], [data-cutscene]",
     );
-    if (el) {
-      e.preventDefault();
-      el.click();
+    if (!el) {
+      return;
     }
-  };
-  screen.addEventListener("keydown", keyHandler);
 
-  // Staggered entrance — after animation, lock opacity so shake can't steal it
-  entranceFrame = requestAnimationFrame(() => {
+    e.preventDefault();
+    el.click();
+  });
+
+  mount.frame(() => {
     const items = screen.querySelectorAll<HTMLElement>(
       ".ls-level-card, .ls-cs-node",
     );
-    items.forEach((el, i) => {
-      el.style.setProperty("--enter-delay", `${i * 40}ms`);
+    items.forEach((el, index) => {
+      el.style.setProperty("--enter-delay", `${index * 40}ms`);
       el.classList.add("ls-entering");
-      el.addEventListener(
+      mount.listen(
+        el,
         "animationend",
         () => {
           el.style.opacity = "1";
@@ -135,17 +138,7 @@ export function renderLevelSelect(
     });
   });
 
-  return {
-    el: screen,
-    cleanup: () => {
-      screen.removeEventListener("click", clickHandler);
-      screen.removeEventListener("keydown", keyHandler);
-      if (entranceFrame !== null) {
-        cancelAnimationFrame(entranceFrame);
-        entranceFrame = null;
-      }
-    },
-  };
+  return mount;
 }
 
 function buildArc(

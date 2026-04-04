@@ -62,6 +62,16 @@ export interface PlayerProfile {
 export interface ScreenMount {
   el: HTMLElement;
   cleanup: () => void;
+  defer: (cleanup: () => void) => () => void;
+  listen: <TEvent extends Event = Event>(
+    target: EventTarget,
+    type: string,
+    listener: (event: TEvent) => void,
+    options?: boolean | AddEventListenerOptions,
+  ) => () => void;
+  timeout: (callback: () => void, ms: number) => () => void;
+  interval: (callback: () => void, ms: number) => () => void;
+  frame: (callback: FrameRequestCallback) => () => void;
 }
 
 // ─── Screen navigation ──────────────────────────────────────────────────────
