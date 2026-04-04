@@ -57,22 +57,27 @@ their word lists and UI framing behave like review levels, not narrow drills.
 
 ## Level Breakdown
 
-| Level | Role              | Primary Emphasis             | Required Review Scope                             |
-| ----- | ----------------- | ---------------------------- | ------------------------------------------------- |
-| 1     | Speed test        | Full keyboard baseline       | None                                              |
-| 2     | Intro drill       | `f j`                        | `f j`                                             |
-| 3     | Focus drill       | `f j + e t`                  | `f j e t`                                         |
-| 4     | Focus drill       | `f j + o a`                  | `f j e t o a`                                     |
-| 5     | Arc finale review | `i n` emphasis inside review | `f j e t o a i n`                                 |
-| 6     | Focus drill       | `f j + h s`                  | `f j e t o a i n h s`                             |
-| 7     | Focus drill       | `f j + r l`                  | `f j e t o a i n h s r l`                         |
-| 8     | Arc finale review | `u d` emphasis inside review | `f j e t o a i n h s r l u d`                     |
-| 9     | Focus drill       | `f j + y w`                  | `f j e t o a i n h s r l u d y w`                 |
-| 10    | Focus drill       | `f j + m g`                  | `f j e t o a i n h s r l u d y w m g`             |
-| 11    | Arc finale review | `c p` emphasis inside review | `f j e t o a i n h s r l u d y w m g c p`         |
-| 12    | Focus drill       | `f j + k b`                  | `f j e t o a i n h s r l u d y w m g c p k b`     |
-| 13    | Focus drill       | `f j + v x`                  | `f j e t o a i n h s r l u d y w m g c p k b v x` |
-| 14    | Final arc review  | `q z` emphasis inside review | Full alphabet                                     |
+| Level | Role              | Primary Emphasis       |
+| ----- | ----------------- | ---------------------- |
+| 1     | Speed test        | Full keyboard baseline |
+| 2     | Learn             | `f j`                  |
+| 3     | Learn             | `f j e t`              |
+| 4     | Learn             | `f j o a`              |
+| 5     | Arc finale review | `f j e t o a`          |
+| 6     | Learn             | `f j i n`              |
+| 7     | Learn             | `f j h s`              |
+| 8     | Learn             | `f j r l`              |
+| 9     | Arc finale review | `f j i n h s r l`      |
+| 10    | Learn             | `f j u d`              |
+| 11    | Learn             | `f j y w`              |
+| 12    | Learn             | `f j m g`              |
+| 13    | Arc finale review | `f j u d y w m g`      |
+| 14    | Learn             | `f j c p`              |
+| 15    | Learn             | `f j k b`              |
+| 16    | Learn             | `f j v x`              |
+| 17    | Learn             | `f j q z`              |
+| 18    | Arc finale review | `f j c p k b v x q z`  |
+| 19    | Final review      | Full alphabet          |
 
 ## Pre-Level Finger Guide Screen
 
