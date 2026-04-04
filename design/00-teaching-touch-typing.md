@@ -57,27 +57,44 @@ their word lists and UI framing behave like review levels, not narrow drills.
 
 ## Level Breakdown
 
-| Level | Role              | Primary Emphasis       |
-| ----- | ----------------- | ---------------------- |
-| 1     | Speed test        | Full keyboard baseline |
-| 2     | Learn             | `f j`                  |
-| 3     | Learn             | `f j e t`              |
-| 4     | Learn             | `f j o a`              |
-| 5     | Arc finale review | `f j e t o a`          |
-| 6     | Learn             | `f j i n`              |
-| 7     | Learn             | `f j h s`              |
-| 8     | Learn             | `f j r l`              |
-| 9     | Arc finale review | `f j i n h s r l`      |
-| 10    | Learn             | `f j u d`              |
-| 11    | Learn             | `f j y w`              |
-| 12    | Learn             | `f j m g`              |
-| 13    | Arc finale review | `f j u d y w m g`      |
-| 14    | Learn             | `f j c p`              |
-| 15    | Learn             | `f j k b`              |
-| 16    | Learn             | `f j v x`              |
-| 17    | Learn             | `f j q z`              |
-| 18    | Arc finale review | `f j c p k b v x q z`  |
-| 19    | Final review      | Full alphabet          |
+The canonical level list lives in `src/data/levels.ts`. This section is the
+human-readable description of that same data. If they ever disagree, the code is
+correct and this document should be updated to match.
+
+**Arc 1 — The Digital Grove**
+
+1. Speed test — full keyboard baseline
+2. Learn `f j`
+3. Learn `f j e t`
+4. Arc finale review — `f j e t`
+
+**Arc 2 — The Thunder Shrine**
+
+5. Learn `f j o a`
+6. Learn `f j i n`
+7. Learn `f j h s`
+8. Arc finale review — `f j o a i n h s`
+
+**Arc 3 — The Crystal Cavern**
+
+9. Learn `f j r l`
+10. Learn `f j u d`
+11. Learn `f j y w`
+12. Arc finale review — `f j r l u d y w`
+
+**Arc 4 — The Stardrift Coast**
+
+13. Learn `f j m g`
+14. Learn `f j c p`
+15. Learn `f j k b`
+16. Arc finale review — `f j m g c p k b`
+
+**Arc 5 — The Apex Summit**
+
+17. Learn `f j v x`
+18. Learn `f j q z`
+19. Arc finale review — `f j v x q z`
+20. Final review — all letters full alphabet
 
 ## Pre-Level Finger Guide Screen
 
@@ -161,12 +178,7 @@ retention across the whole cumulative set.
 
 ## Finale Feedback Rule
 
-This applies to failed cumulative-review levels:
-
-- Level 5
-- Level 8
-- Level 11
-- Level 14
+This applies to failed cumulative-review levels.
 
 When the player fails one of those levels, the results screen should identify
 the character they missed most often and recommend a refresher level before
@@ -174,7 +186,7 @@ retrying the finale.
 
 Example:
 
-`You missed "n" most often. Replay Level 5 to refresh that key, then retry this review.`
+`You missed "n" most often. Replay Level 6 to refresh that key, then retry this review.`
 
 ### Tracking requirement
 
@@ -184,23 +196,7 @@ Example:
 
 ### Retry recommendation mapping
 
-Recommend the first level whose primary emphasis contains that character:
-
-| Character Pair | Refresher Level |
-| -------------- | --------------- |
-| `f j`          | 2               |
-| `e t`          | 3               |
-| `o a`          | 4               |
-| `i n`          | 5               |
-| `h s`          | 6               |
-| `r l`          | 7               |
-| `u d`          | 8               |
-| `y w`          | 9               |
-| `m g`          | 10              |
-| `c p`          | 11              |
-| `k b`          | 12              |
-| `v x`          | 13              |
-| `q z`          | 14              |
+Recommend the first level whose primary emphasis contains that character.
 
 If multiple characters tie for worst performance, prefer the latest character in
 the curriculum order

@@ -1,5 +1,6 @@
 import type { Difficulty, LevelRecord, LevelStats, PlayerProfile, Team } from '../types';
 import { DIFFICULTY_THRESHOLDS } from '../types';
+import { MAX_LEVEL } from '../data/levels';
 
 const STORAGE_KEY = 'pptyping_profile';
 
@@ -70,7 +71,7 @@ export function applyLevelResult(
   const newRecords = { ...profile.levelRecords, [levelNumber]: updated };
   let highestUnlocked = profile.highestUnlockedLevel;
 
-  if (passed && levelNumber === highestUnlocked && levelNumber < 14) {
+  if (passed && levelNumber === highestUnlocked && levelNumber < MAX_LEVEL) {
     highestUnlocked = levelNumber + 1;
     // Ensure the next level record exists
     if (!newRecords[highestUnlocked]) {

@@ -2,6 +2,7 @@ import './levelComplete.css';
 import type { Difficulty, LevelStats, ScreenMount, Team } from '../types';
 import { createScreenMount } from '../screenMount';
 import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from '../types';
+import { MAX_LEVEL } from '../data/levels';
 
 export function renderLevelComplete(
   team: Team,
@@ -80,7 +81,7 @@ export function renderLevelComplete(
       <div class="lc-actions">
         ${passed
           ? `<button class="lc-btn lc-btn-primary" id="lc-next">
-               ${levelNumber >= 14 ? '🏆 See Finale' : 'Next Level →'}
+               ${levelNumber >= MAX_LEVEL ? '🏆 See Finale' : 'Next Level →'}
              </button>`
           : `<button class="lc-btn lc-btn-primary" id="lc-retry">
                Try Again ↺

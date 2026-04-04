@@ -35,27 +35,27 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
         "'We\'re getting closer,' Pikachu said, which nobody understood because it was just 'Pika pika' — but the intent was clear.",
       ],
     },
-    // Cutscene 3 — after Level 8
+    // Cutscene 3 — after Level 9
     {
       title: 'HALFWAY HOME',
       artClass: 'art-pokemon-3',
       paragraphs: [
-        'Eight levels behind. Eight keys cleansed. Pikachu was typing faster now, each keystroke sending a ripple of golden light through the crystal cavern.',
+        'Nine levels behind. Nine keys cleansed. Pikachu was typing faster now, each keystroke sending a ripple of golden light through the crystal cavern.',
         "Through a gap in the corrupted keys, Pikachu glimpsed something: a round green shape, quietly hooting. Rowlet — just on the other side.",
         "'Almost there,' Pikachu whispered. 'Just a few more rows.'",
       ],
     },
-    // Cutscene 4 — after Level 11
+    // Cutscene 4 — after Level 13
     {
       title: 'THE HOME STRETCH',
       artClass: 'art-pokemon-4',
       paragraphs: [
-        'The keyboard shimmered and crackled. Eleven levels down. Only three corrupted keys remained — the rarest, the strangest, the ones nobody ever used.',
-        "Pikachu stood at the edge of the Apex Summit. The wind howled. Q, Z, and X waited in the distance, wrapped in dense rainbow fog.",
+        'The keyboard shimmered and crackled. Thirteen levels down. Only six levels of corrupted keys remained — the rarest, the strangest, the ones nobody ever used.',
+        "Pikachu stood at the edge of the Apex Summit. The wind howled. C, P, K, B, V, X, Q, and Z waited in the distance, wrapped in dense rainbow fog.",
         "'This is it,' Pikachu said. 'Pika. Pika pika pika.' Which meant: 'I trained for this. I was born for this. Let\'s GO.'",
       ],
     },
-    // Cutscene 5 — finale, after Level 14
+    // Cutscene 5 — finale, after Level 19
     {
       title: 'THE KEYBOARD IS SAVED!',
       artClass: 'art-pokemon-5',
@@ -98,27 +98,27 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
         "'Hey keys!' she called. 'I brought CAKE.' Nobody knows if that helped. It definitely didn\'t hurt.",
       ],
     },
-    // Cutscene 3 — after Level 8
+    // Cutscene 3 — after Level 9
     {
       title: 'MORE THAN HALFWAY THERE',
       artClass: 'art-mlp-3',
       paragraphs: [
-        'Eight keys restored. Pinkie had made a personal friend out of every single one, and she had names for all of them. The f key was named Franklin.',
+        'Nine keys restored. Pinkie had made a personal friend out of every single one, and she had names for all of them. The f key was named Franklin.',
         'Through the crystal cavern walls, she could hear strange sounds from the other side — something that sounded like an electric mouse humming the same theme song on loop.',
         "'They\'re not so different from us,' Pinkie decided. 'They just need the right introduction. And a party. Everyone needs a party.'",
       ],
     },
-    // Cutscene 4 — after Level 11
+    // Cutscene 4 — after Level 13
     {
       title: 'THE FINAL KEYS AWAIT',
       artClass: 'art-mlp-4',
       paragraphs: [
-        'The Apex Summit rose before Pinkie Pie — the keyboard\'s highest peak, where the rarest letters lived. Q, Z, and X waited in the mist, cold and forgotten.',
+        'The Apex Summit rose before Pinkie Pie — the keyboard\'s highest peak, where the rarest letters lived. C, P, K, B, V, X, Q, and Z waited in the mist, cold and forgotten.',
         "'Nobody ever types us,' X admitted quietly. 'We feel a bit left out, honestly.'",
         "Pinkie's eyes filled with tears. Of joy. 'That ends TODAY,' she declared, pulling a party cannon from absolutely nowhere.",
       ],
     },
-    // Cutscene 5 — finale, after Level 14
+    // Cutscene 5 — finale, after Level 19
     {
       title: 'EVERY KEY HAS A FRIEND!',
       artClass: 'art-mlp-5',
@@ -140,16 +140,21 @@ export const LEVEL_STORIES: Record<Team, Record<number, string>> = {
     2:  "The f and j keys — the anchors of all typing — pulse with corrupted energy. Pikachu plants both paws firmly. These are the keys that guide every typist home. Restore them first!",
     3:  "The e and t keys flicker weakly. Common letters, caught in the crossfire. Pikachu moves in carefully, ready to zap them clean.",
     4:  "O and A glow with a strange pastel shimmer. There is definitely pony magic at work here. Pikachu is unimpressed and also slightly allergic to glitter.",
-    5:  "I and N — two of the most-used letters in the whole language — have been completely corrupted. Without them, nothing makes sense. Pikachu surges forward.",
-    6:  "H and S flicker at the edge of the Thunder Shrine. The storm around them crackles with misdirected energy. Time to ground them both.",
-    7:  "R and L — the keys of movement and direction — have been tangled together by the corruption. Pikachu must type through the confusion.",
-    8:  "U and D. Deep in the cavern. The glow of corrupted letters reflects off the crystal walls. Pikachu's paws move steadily across the keys.",
-    9:  "Y and W wait at the coast. The waves carry the sound of corrupted static. Pikachu can see Rowlet's outline on the horizon. Almost there.",
-    10: "M and G — two letters of motion and growth — are still locked. Pikachu types with purpose, each correct keystroke a step closer to Rowlet.",
-    11: "C and P shimmer in the mountain air. Pikachu can feel the end approaching. Three more letters to go after this.",
-    12: "K and B. One of them makes a satisfying sound. Both are corrupted. Both need Pikachu right now.",
-    13: "V and X — rare, angular, full of potential — wait in the cold. Pikachu types carefully. Precision counts more than speed at this altitude.",
-    14: "The final push. Q and Z — the rarest letters in the language — stand between Pikachu and Rowlet. Every keystroke. Every key. Pika.",
+    5:  "The first arc is complete. Pikachu pauses to confirm mastery of everything restored so far: f, j, e, t, o, a. Six keys must work together before the next shrine can be entered.",
+    6:  "I and N — two of the most-used letters in the whole language — have been completely corrupted. Without them, nothing makes sense. Pikachu surges forward.",
+    7:  "H and S flicker at the edge of the Thunder Shrine. The storm around them crackles with misdirected energy. Time to ground them both.",
+    8:  "R and L — the keys of movement and direction — have been tangled together by the corruption. Pikachu must type through the confusion.",
+    9:  "The Thunder Shrine falls silent. Pikachu has cleansed i, n, h, s, r, and l. Now comes the real test: all six keys together, under pressure. The crystal cavern echoes with anticipation.",
+    10: "U and D. Deep in the cavern. The glow of corrupted letters reflects off the crystal walls. Pikachu's paws move steadily across the keys.",
+    11: "Y and W wait at the coast. The waves carry the sound of corrupted static. Pikachu can see Rowlet's outline on the horizon. Almost there.",
+    12: "M and G — two letters of motion and growth — are still locked. Pikachu types with purpose, each correct keystroke a step closer to Rowlet.",
+    13: "The Stardrift Coast glimmers. Pikachu has unlocked u, d, y, w, m, and g. A cumulative review awaits — every key from this arc, tested together. Pikachu breathes steadily. Every keystroke counts.",
+    14: "C and P shimmer in the mountain air. Pikachu can feel the end approaching. Only the rarest letters remain.",
+    15: "K and B. One of them makes a satisfying sound. Both are corrupted. Both need Pikachu right now.",
+    16: "V and X — rare, angular, full of potential — wait in the cold. Pikachu types carefully. Precision counts more than speed at this altitude.",
+    17: "The final push. Q and Z — the rarest letters in the language — stand between Pikachu and Rowlet. Every keystroke. Every key. Pika.",
+    18: "Every rare key has been restored: c, p, k, b, v, x, q, z. Now Pikachu must type with the full alphabet — all twenty-six keys, clean and charged. Rowlet is almost free.",
+    19: "The final review. Every single key, restored and ready. Pikachu stands at the keyboard with quiet purpose. This is what all the training was for. One last run. Pika.",
   },
 
   mlp: {
@@ -157,15 +162,20 @@ export const LEVEL_STORIES: Record<Team, Record<number, string>> = {
     2:  "The f and j keys are shivering with corrupted energy! These are the home keys — where every good typist starts their journey. Pinkie gives them an encouraging smile. 'Don't worry, little keys.'",
     3:  "E and T are two of Equestria's most beloved letters. They show up in nearly every word, and right now they need a friend. Pinkie is on the case.",
     4:  "O and A are hiding under some very suspicious yellow static. Pinkie suspects Pokemon energy. She does not hold this against them personally.",
-    5:  "I and N — without these, you can't spell 'friend,' 'invite,' or 'pinkie' itself. This is a crisis. Pinkie handles it with a smile and excellent typing form.",
-    6:  "H and S wait in the Thunder Shrine, trembling slightly. Pinkie pats them reassuringly. 'You're doing great. You're both such good letters.'",
-    7:  "R and L — the letters of rolling laughter and leaping rainbows — have been tangled by the corruption. Pinkie untangles things by typing very fast and very happily.",
-    8:  "U and D glow in the crystal cavern. They look a little lonely. Pinkie already has names for them: Ulysses and Daffodil. It helps.",
-    9:  "Y and W sparkle at the Stardrift Coast. The sea air is nice. Pinkie has brought snacks. The keys are delighted.",
-    10: "M and G — for 'more' and 'good' — are still locked. Pinkie types them in order, whispering encouraging words with each keystroke.",
-    11: "C and P! 'C is for Cutie Mark,' Pinkie explains to no one in particular, 'and P is for Pinkie!' She types them with extra enthusiasm.",
-    12: "K and B look tough but Pinkie knows better. Every key has a soft center. She types them both with warmth.",
-    13: "V and X are rare visitors but Pinkie welcomes everyone. 'The rarer the letter, the more special the friendship!' she announces proudly.",
-    14: "Q and Z! The rarest, most mysterious letters on the whole keyboard. Pinkie has saved the very best for last. She types their names and feels something wonderful click into place.",
+    5:  "The first arc is complete! Pinkie takes a moment to celebrate f, j, e, t, o, a — six beloved keys, gleaming with friendship. Before moving on, she must prove she can use them all at once.",
+    6:  "I and N — without these, you can't spell 'friend,' 'invite,' or 'pinkie' itself. This is a crisis. Pinkie handles it with a smile and excellent typing form.",
+    7:  "H and S wait in the Thunder Shrine, trembling slightly. Pinkie pats them reassuringly. 'You're doing great. You're both such good letters.'",
+    8:  "R and L — the letters of rolling laughter and leaping rainbows — have been tangled by the corruption. Pinkie untangles things by typing very fast and very happily.",
+    9:  "The Thunder Shrine sparkles! Pinkie has befriended i, n, h, s, r, and l. Now she must type them all together in one grand review. She stretches her hooves and grins. She was born ready.",
+    10: "U and D glow in the crystal cavern. They look a little lonely. Pinkie already has names for them: Ulysses and Daffodil. It helps.",
+    11: "Y and W sparkle at the Stardrift Coast. The sea air is nice. Pinkie has brought snacks. The keys are delighted.",
+    12: "M and G — for 'more' and 'good' — are still locked. Pinkie types them in order, whispering encouraging words with each keystroke.",
+    13: "The Stardrift Coast is sparkling with restored letters! Pinkie has befriended u, d, y, w, m, and g. Now she must type them all together. She grins. This is what she was made for.",
+    14: "C and P! 'C is for Cutie Mark,' Pinkie explains to no one in particular, 'and P is for Pinkie!' She types them with extra enthusiasm.",
+    15: "K and B look tough but Pinkie knows better. Every key has a soft center. She types them both with warmth.",
+    16: "V and X are rare visitors but Pinkie welcomes everyone. 'The rarer the letter, the more special the friendship!' she announces proudly.",
+    17: "Q and Z! The rarest, most mysterious letters on the whole keyboard. Pinkie has saved the very best for last. She types their names and feels something wonderful click into place.",
+    18: "The Apex Summit blazes with rainbow light! Pinkie has befriended c, p, k, b, v, x, q, and z — every rare and unusual letter. Now she must type them all together. She has prepared for this her whole life.",
+    19: "The grand finale! Every key on the keyboard is Pinkie's friend now. She takes a deep breath, smiles the biggest smile, and prepares to type the entire alphabet with love and speed.",
   },
 };

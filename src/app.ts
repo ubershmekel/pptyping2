@@ -1,6 +1,6 @@
 import type { AppScreen, Difficulty, LevelStats, ScreenMount, Team } from './types';
 import { loadProfile, saveProfile, applyLevelResult, selectTeam, switchTeam, setDifficulty } from './state/gameState';
-import { cutsceneAfterLevel, levelAfterCutscene } from './data/levels';
+import { cutsceneAfterLevel, levelAfterCutscene, MAX_LEVEL } from './data/levels';
 import { renderTeamSelect }    from './screens/teamSelect';
 import { renderLevelSelect }   from './screens/levelSelect';
 import { renderCutscene }      from './screens/cutscene';
@@ -306,7 +306,7 @@ export class App {
     const cutscene = cutsceneAfterLevel(levelNumber);
     if (cutscene !== null) {
       this.navigate({ id: 'cutscene', index: cutscene });
-    } else if (levelNumber < 14) {
+    } else if (levelNumber < MAX_LEVEL) {
       this.navigate({ id: 'level', number: levelNumber + 1 });
     } else {
       this.navigate({ id: 'cutscene', index: 5 }); // finale

@@ -18,9 +18,9 @@ const ARC_OUTRO_CS: Record<number, number> = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 };
 const CS_TRIGGER_LEVEL: Record<number, number> = {
   1: 2,
   2: 5,
-  3: 8,
-  4: 11,
-  5: 14,
+  3: 9,
+  4: 13,
+  5: 19,
 };
 
 export function renderLevelSelect(
@@ -53,7 +53,7 @@ export function renderLevelSelect(
       <h2 class="ls-title">Choose Level</h2>
       <div class="ls-progress-pill">
         <span class="ls-prog-count">${totalCompleted}</span>
-        <span class="ls-prog-denom"> / 14</span>
+        <span class="ls-prog-denom"> / 19</span>
       </div>
     </div>
     ${attempted ? `<div class="ls-notice">Level ${attempted} is locked - complete earlier levels first.</div>` : ""}
@@ -61,7 +61,7 @@ export function renderLevelSelect(
       ${([1, 2, 3, 4, 5] as const).map((a) => buildArc(a, arcMap[a], profile, attempted)).join("")}
     </div>
     <div class="ls-particles" aria-hidden="true">
-      ${Array.from({ length: 14 }, () => '<span class="ls-particle"></span>').join("")}
+      ${Array.from({ length: 19 }, () => '<span class="ls-particle"></span>').join("")}
     </div>
   `;
 

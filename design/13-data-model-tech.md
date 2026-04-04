@@ -44,8 +44,8 @@ Per-level best performance:
 
 Static data describing a single typing level:
 
-- `levelNumber: number` (1-14)
-- `arcNumber: number` (1-5)
+- `levelNumber: number`
+- `arcNumber: number`
 - `availableLetters: string[]` - the full set of letters the word pool may use
   at this level
 - `newLetters: string[]` - letters being introduced this level (shown as

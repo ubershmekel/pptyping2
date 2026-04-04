@@ -19,7 +19,7 @@ level.
 | `/`                                 | Main Menu                     |
 | `/team-select`                      | Team Select (first-time only) |
 | `/level-select`                     | Level Select                  |
-| `/level/1` through `/level/14`      | Level Screen (typing UI)      |
+| `/level/1` through `/level/19`      | Level Screen (typing UI)      |
 | `/cutscene/1` through `/cutscene/6` | Cutscene Screen               |
 | `/settings`                         | Settings Screen               |
 

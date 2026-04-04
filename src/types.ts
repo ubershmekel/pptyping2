@@ -91,6 +91,7 @@ export interface LevelDefinition {
   number: number;
   arc: number;             // 1–5
   isSpeedTest: boolean;
+  isFinale: boolean;       // arc finale or final review — triggers cumulative-review feedback
   availableLetters: string;
 }
 

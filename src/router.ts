@@ -14,6 +14,8 @@ export type Route =
   | { screen: 'settings' }
   | { screen: 'not-found' };
 
+import { MAX_LEVEL } from './data/levels';
+
 // ─── URL ↔ Route mapping ─────────────────────────────────────────────────────
 
 /** Parse a pathname string into a Route. */
@@ -28,7 +30,7 @@ export function parseRoute(pathname: string): Route {
   const levelMatch = path.match(/^\/level\/(\d+)$/);
   if (levelMatch) {
     const n = parseInt(levelMatch[1], 10);
-    if (n >= 1 && n <= 14) return { screen: 'level', number: n };
+    if (n >= 1 && n <= MAX_LEVEL) return { screen: 'level', number: n };
   }
 
   const cutsceneMatch = path.match(/^\/cutscene\/(\d+)$/);
