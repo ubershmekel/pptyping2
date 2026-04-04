@@ -52,6 +52,18 @@ export interface PlayerProfile {
   highestUnlockedLevel: number;
 }
 
+// ─── Screen lifecycle ───────────────────────────────────────────────────────
+
+/**
+ * Every screen render function must return this. `app.ts` calls `cleanup()`
+ * before mounting the next screen, so document-level listeners, intervals, and
+ * timers can never outlive the screen that created them.
+ */
+export interface ScreenMount {
+  el: HTMLElement;
+  cleanup: () => void;
+}
+
 // ─── Screen navigation ──────────────────────────────────────────────────────
 
 export type AppScreen =

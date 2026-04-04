@@ -139,7 +139,10 @@ export class App {
 
     this.mountTimer = window.setTimeout(() => {
       this.container.replaceChildren(el);
-      requestAnimationFrame(() => el.classList.remove('screen-enter'));
+      requestAnimationFrame(() => {
+        console.log(`[transition] fade in → ${screen.id}`);
+        el.classList.remove('screen-enter');
+      });
       this.mountTimer = null;
     }, 0);
   }

@@ -1,12 +1,12 @@
 import './cutscene.css';
-import type { Team } from '../types';
+import type { ScreenMount, Team } from '../types';
 import { CUTSCENE_STORIES } from '../data/stories';
 
 export function renderCutscene(
   team: Team,
   cutsceneIndex: number,
   onNext: () => void,
-): HTMLElement {
+): ScreenMount {
   const story = CUTSCENE_STORIES[team][cutsceneIndex];
   const screen = document.createElement('div');
   screen.className = `screen cutscene-screen team-${team}`;
@@ -51,6 +51,7 @@ export function renderCutscene(
   // Next button
   const nextBtn = screen.querySelector('#cs-next') as HTMLButtonElement;
   const go = () => {
+    console.log(`[transition] fade out ← cutscene ${cutsceneIndex}`);
     screen.classList.add('screen-exit');
     setTimeout(onNext, 350);
   };
@@ -58,17 +59,16 @@ export function renderCutscene(
 
   // Enter key
   const keyHandler = (e: KeyboardEvent) => {
+    if (!screen.isConnected) {
+      document.removeEventListener('keydown', keyHandler);
+      return;
+    }
     if (e.key === 'Enter' || e.key === ' ') {
       document.removeEventListener('keydown', keyHandler);
       go();
     }
   };
   setTimeout(() => document.addEventListener('keydown', keyHandler), 500);
-
-  // Cleanup on exit
-  screen.addEventListener('remove', () => {
-    document.removeEventListener('keydown', keyHandler);
-  });
 
   return screen;
 }

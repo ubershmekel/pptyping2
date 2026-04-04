@@ -93,6 +93,33 @@ Represents where a player currently is:
 - `levelNumber?: number`
 - `cutsceneNumber?: number`
 
+### `ScreenMount`
+
+The required return type of every screen render function:
+
+```ts
+interface ScreenMount {
+  el: HTMLElement;
+  cleanup: () => void;
+}
+```
+
+**Contract**: `app.ts` calls `cleanup()` on the previous screen's mount before
+calling `replaceChildren` with the new one. This guarantees that
+document-level event listeners, `setInterval` handles, `setTimeout` handles,
+and any other resources are released at the moment of navigation — not
+lazily, and not relying on GC or DOM events.
+
+**Rule**: Every `render*` function in `src/screens/` must return `ScreenMount`.
+Screens that have no resources to release return `{ el, cleanup: () => {} }`.
+This makes the absence of cleanup explicit rather than implicit, and prevents
+future authors from accidentally adding a `document.addEventListener` without
+a matching removal.
+
+**Why not MutationObserver / `'remove'` events?**
+`'remove'` is not a real DOM event (it never fires). `MutationObserver` is
+asynchronous. Both are weaker than a synchronous, caller-driven cleanup.
+
 ## Key Files
 
 - `src/types/index.ts` — all types and enums exported from a single barrel file;
