@@ -47,8 +47,7 @@ animation without changing the component contract.
 - Pokemon: Pikachu SVG poses/frames
 - MLP: Pinkie Pie SVG poses/frames
 
-Naming convention: `src/assets/characters/{team}/{state-or-frame}.svg`
-Examples:
+Naming convention: `src/assets/characters/{team}/{state-or-frame}.svg` Examples:
 
 - `src/assets/characters/pokemon/pikachu.svg`
 - `src/assets/characters/mlp/pinkie-pie.svg`
@@ -58,6 +57,26 @@ State selection happens through `src/assets/characters/index.ts`, which maps a
 team and companion state to an ordered list of SVG frame files. Today each state
 can point at the same base SVG; later, walking/celebrating/flinch can point at
 multiple frames for timed animation.
+
+### Keyboard SVG
+
+The finger guide uses a source-controlled keyboard SVG so individual letter keys
+can be highlighted and tinted without depending on editor-generated element ids.
+
+Naming convention: `src/assets/keyboard/{layout-name}.svg`
+
+Example:
+
+- `src/assets/keyboard/KB_United_States.svg`
+- `src/assets/keyboard/KB_United_States.demo.html` for local visual iteration
+
+Contract for letter keys:
+
+- keycap paths use `class="kb-keycap"`
+- label paths use `class="kb-keylabel"`
+- both carry `data-key="{letter}"`, `data-finger="{finger-name}"`, and
+  `data-row="{top|home|bottom}"`
+- runtime code must target those semantic classes and `data-*` attributes
 
 ## Audio
 
