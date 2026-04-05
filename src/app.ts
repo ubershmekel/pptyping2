@@ -1,6 +1,7 @@
 import type { AppScreen, Difficulty, LevelStats, ScreenMount, Team } from './types';
 import { loadProfile, saveProfile, applyLevelResult, activeProgress, selectTeam, setDifficulty } from './state/gameState';
 import { cutsceneAfterLevel, levelAfterCutscene, MAX_LEVEL } from './data/levels';
+import { renderMainMenu }      from './screens/mainMenu';
 import { renderTeamSelect }    from './screens/teamSelect';
 import { renderLevelSelect }   from './screens/levelSelect';
 import { renderCutscene }      from './screens/cutscene';
@@ -152,7 +153,12 @@ export class App {
   /** Instantiate the mount object for the given screen. */
   private buildScreenMount(screen: AppScreen): ScreenMount {
     if (screen.id === 'main-menu') {
-      return this.renderMainMenu();
+      return renderMainMenu(
+        this.profile,
+        () => this.navigate({ id: 'level-select' }),
+        () => this.navigate({ id: 'team-select' }),
+        () => this.navigate({ id: 'settings' }),
+      );
 
     } else if (screen.id === 'team-select') {
       const hasSave = this.profile.teamSelected &&
@@ -217,44 +223,6 @@ export class App {
   }
 
   // ─── Stub screen renderers (placeholders until dedicated screen files exist) ──
-
-  private renderMainMenu(): ScreenMount {
-    const screen = document.createElement('div');
-    const mount = createScreenMount(screen);
-    screen.className = 'screen main-menu-screen';
-
-    const hasSave = this.profile.teamSelected &&
-      (activeProgress(this.profile).highestUnlockedLevel > 1 || activeProgress(this.profile).levelRecords[1]?.completed);
-
-    screen.innerHTML = `
-      <div class="main-menu-content">
-        <h1 class="game-title">PPTyping</h1>
-        <p class="game-subtitle">Type Your Way to Victory!</p>
-        <nav class="main-menu-nav">
-          ${hasSave
-            ? `<button class="btn btn-primary" data-action="continue">Continue</button>
-          <button class="btn btn-secondary" data-action="switch-teams">Switch Teams</button>`
-            : `<button class="btn btn-primary" data-action="switch-teams">Start Game</button>`}
-          <button class="btn btn-secondary" data-action="settings">Settings</button>
-        </nav>
-      </div>
-    `;
-
-    mount.listen(screen, 'click', (e: Event) => {
-      const btn = (e.target as HTMLElement).closest('[data-action]') as HTMLElement | null;
-      if (!btn) return;
-      const action = btn.dataset['action'];
-      if (action === 'continue') {
-        this.navigate({ id: 'level-select' });
-      } else if (action === 'switch-teams') {
-        this.navigate({ id: 'team-select' });
-      } else if (action === 'settings') {
-        this.navigate({ id: 'settings' });
-      }
-    });
-
-    return mount;
-  }
 
   private renderSettings(): ScreenMount {
     const screen = document.createElement('div');
