@@ -37,6 +37,7 @@ const KEY_DATA: Record<string, KeyMeta> = {
   b: { capId: 'rect2336', labelId: 'text5695', finger: 'left-index'   },
   n: { capId: 'rect2338', labelId: 'text5699', finger: 'right-index'  },
   m: { capId: 'rect2340', labelId: 'text5703', finger: 'right-index'  },
+  ' ': { capId: 'key-space', labelId: '', finger: 'thumb' },
 };
 
 export const FINGER_COLORS: Record<string, string> = {
@@ -208,8 +209,13 @@ export function renderFingerGuide(
   const usedFingers = new Set<string>();
 
   for (const [key, meta] of Object.entries(KEY_DATA)) {
-    const cap   = kbSvg.querySelector(`#${meta.capId}`)   as SVGElement | null;
-    const label = kbSvg.querySelector(`#${meta.labelId}`) as SVGElement | null;
+    const cap   = kbSvg.querySelector(`#${meta.capId}`)                           as SVGElement | null;
+    const label = meta.labelId ? kbSvg.querySelector(`#${meta.labelId}`) as SVGElement | null : null;
+
+    if (key === ' ') {
+      if (cap) { cap.style.fill = '#d8d4ce'; cap.style.opacity = '1'; }
+      continue;
+    }
 
     if (!available.has(key)) {
       [cap, label].forEach(el => {
@@ -257,6 +263,110 @@ export function renderFingerGuide(
         <span class="fg-legend-label">${FINGER_LABELS[f]}</span>
       </div>
     `).join('');
+
+  // ── Interactive key highlighting ──────────────────────────────────────────────
+
+  // Reverse map: capId → key letter (for click detection)
+  const capIdToKey: Record<string, string> = {};
+  for (const [key, meta] of Object.entries(KEY_DATA)) {
+    capIdToKey[meta.capId] = key;
+  }
+
+  function getFingerEl(activeFinger: string): SVGElement | null {
+    const side = activeFinger.startsWith('left') ? 'left' : 'right';
+    const wrap = side === 'left' ? leftHandSvgWrap : rightHandSvgWrap;
+    const svg  = wrap.querySelector('svg');
+    if (!svg) return null;
+    const entry = HAND_FINGER_IDS.find(({ right, left }) =>
+      (side === 'right' ? right : left) === activeFinger
+    );
+    return entry ? svg.querySelector(`#${entry.svgId}`) as SVGElement | null : null;
+  }
+
+  function highlightActiveFinger(activeFinger: string): void {
+    if (activeFinger === 'thumb') {
+      for (const wrap of [leftHandSvgWrap, rightHandSvgWrap]) {
+        const el = wrap.querySelector('#Thumb') as SVGElement | null;
+        if (el) { el.style.fill = '#222222'; el.style.filter = 'drop-shadow(0 0 6px #d8d4ce) drop-shadow(0 0 3px #000)'; }
+      }
+      return;
+    }
+    const el = getFingerEl(activeFinger);
+    if (!el) return;
+    el.style.fill   = '#ffffff';
+    el.style.filter = `drop-shadow(0 0 6px ${FINGER_COLORS[activeFinger]}) drop-shadow(0 0 3px #000)`;
+  }
+
+  function restoreActiveFinger(activeFinger: string): void {
+    if (activeFinger === 'thumb') {
+      colorHandSvg(leftHandSvgWrap,  'left',  usedFingers);
+      colorHandSvg(rightHandSvgWrap, 'right', usedFingers);
+      return;
+    }
+    const el = getFingerEl(activeFinger);
+    if (!el) return;
+    el.style.fill   = '';
+    el.style.filter = '';
+    // re-run full colorHandSvg just for that hand to restore correct state
+    const side = activeFinger.startsWith('left') ? 'left' : 'right';
+    colorHandSvg(side === 'left' ? leftHandSvgWrap : rightHandSvgWrap, side, usedFingers);
+  }
+
+  let activeKey: string | null = null;
+
+  function pressKey(key: string): void {
+    if (activeKey === key) return;
+    if (activeKey) releaseKey(activeKey);
+    activeKey = key;
+
+    const meta = KEY_DATA[key];
+    const cap  = kbSvg.querySelector(`#${meta.capId}`) as SVGElement | null;
+    if (cap) {
+      cap.style.filter      = 'brightness(0.78)';
+      cap.style.stroke      = '#1a0a00';
+      cap.style.strokeWidth = '3';
+    }
+    highlightActiveFinger(meta.finger);
+  }
+
+  function releaseKey(key: string): void {
+    if (activeKey !== key) return;
+    activeKey = null;
+
+    const meta = KEY_DATA[key];
+    const cap  = kbSvg.querySelector(`#${meta.capId}`) as SVGElement | null;
+    if (cap) {
+      cap.style.filter      = '';
+      cap.style.stroke      = '';
+      cap.style.strokeWidth = '';
+      if (available.has(key)) {
+        const isAnchor = key === 'f' || key === 'j';
+        const isNew    = newSet.has(key) && !levelDef.isSpeedTest;
+        cap.style.stroke      = isAnchor || isNew ? '#4b2f18' : '#888';
+        cap.style.strokeWidth = isAnchor ? '2.8' : isNew ? '2.2' : '1';
+      }
+    }
+    restoreActiveFinger(meta.finger);
+  }
+
+  // Keyboard press/release
+  mount.listen(document, 'keydown', (e: KeyboardEvent) => {
+    const key = e.key.toLowerCase();
+    if (KEY_DATA[key]) pressKey(key);
+  });
+  mount.listen(document, 'keyup', (e: KeyboardEvent) => {
+    const key = e.key.toLowerCase();
+    if (KEY_DATA[key]) releaseKey(key);
+  });
+
+  // Mouse press/release on SVG key caps
+  mount.listen(kbSvg, 'mousedown', (e: MouseEvent) => {
+    const key = capIdToKey[(e.target as SVGElement).id];
+    if (key) pressKey(key);
+  });
+  mount.listen(document, 'mouseup', () => {
+    if (activeKey) releaseKey(activeKey);
+  });
 
   // ── Buttons & keyboard shortcut ──────────────────────────────────────────────
   const startBtn = screen.querySelector('#fg-start') as HTMLButtonElement;

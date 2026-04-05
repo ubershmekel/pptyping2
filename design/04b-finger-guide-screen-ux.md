@@ -122,6 +122,22 @@ The pill at the top of the header varies by level type:
   using the team primary color)
 - Finale / review: "Level N — Review"
 
+## Interactive key preview
+
+While on the finger guide screen the keyboard and hand diagram are interactive:
+
+- Pressing a key on the physical keyboard, or clicking a key cap in the SVG,
+  momentarily highlights that key and lights up the corresponding finger in the
+  hand diagram.
+- On press: the key cap darkens and the finger turns white with a colored glow.
+- On release: the key cap and finger return to their normal level-coloring state.
+- The space bar triggers both thumbs simultaneously.
+- Keys that are not yet unlocked for the current level still respond — showing
+  which finger owns them is the whole point of the screen.
+
+This lets players explore the finger map before typing begins without any
+consequence.
+
 ## Actions
 
 - **Start Level →** (primary, team-primary color) — proceeds to the level
