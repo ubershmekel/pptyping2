@@ -84,13 +84,24 @@
   padding-bottom: 1rem;
 }
 
+.mm-character-slot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
 .mm-character {
+  display: block;
   width: clamp(100px, 18vw, 180px);
   height: auto;
   filter:
     drop-shadow(0 0 24px var(--team-primary, #888))
     drop-shadow(0 6px 16px rgba(0, 0, 0, 0.6));
   animation: mm-char-float 3.5s ease-in-out infinite;
+}
+
+.mm-character[data-portrait-kind="sprite"] {
+  image-rendering: pixelated;
 }
 
 @keyframes mm-char-float {

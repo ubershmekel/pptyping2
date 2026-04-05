@@ -152,12 +152,23 @@
   padding-bottom: 1rem;
 }
 
+.ts-character-slot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
 .ts-character-art {
+  display: block;
   width: clamp(80px, 14vw, 140px);
   height: auto;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
   transition: transform 0.3s ease;
   animation: ts-char-float 3s ease-in-out infinite;
+}
+
+.ts-character-art[data-portrait-kind="sprite"] {
+  image-rendering: pixelated;
 }
 
 .ts-panel-pokemon .ts-character-art {

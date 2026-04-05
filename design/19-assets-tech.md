@@ -37,26 +37,37 @@ Naming convention: `public/images/environments/{arc-number}.webp` Examples:
 Target ~1920x1080px (or similar widescreen ratio) with compression. Referenced
 via the `EnvironmentConfig` in `src/content/arcs.ts`.
 
-### Character SVGs
+### Character Art
 
-Character art for the companion system (see `10-character-companion-ux.md`).
-These should live in source control as standalone SVG files so the build can
-import them directly and we can scale from a single pose to multi-frame
-animation without changing the component contract.
+Character art now has two runtime forms:
 
-- Pokemon: Pikachu SVG poses/frames
-- MLP: Pinkie Pie SVG poses/frames
+- Companion art: standalone SVG files used by the in-level companion system (see
+  `10-character-companion-ux.md`)
+- Menu portraits: static images or Aseprite-exported sprite sheets used by
+  screens like Team Select
 
-Naming convention: `src/assets/characters/{team}/{state-or-frame}.svg` Examples:
+Companion SVG naming convention:
+`src/assets/characters/{team}/{state-or-frame}.svg`
+
+Examples:
 
 - `src/assets/characters/pokemon/pikachu.svg`
 - `src/assets/characters/mlp/pinkie-pie.svg`
 - Future expansion: `src/assets/characters/pokemon/walk-01.svg`
 
-State selection happens through `src/assets/characters/index.ts`, which maps a
-team and companion state to an ordered list of SVG frame files. Today each state
-can point at the same base SVG; later, walking/celebrating/flinch can point at
-multiple frames for timed animation.
+Sprite portrait naming convention:
+`src/assets/{character}/{animation-name}.json` plus the referenced PNG sheet
+
+Examples:
+
+- `src/assets/pikachu/pikachu-stand.json`
+- `src/assets/pikachu/pikachu-stand.png`
+
+`src/assets/characters/index.ts` owns both manifests:
+
+- `CHARACTER_FRAMES` maps a team and companion state to ordered SVG frame files
+- `CHARACTER_PORTRAITS` maps a team to either a static portrait asset or sprite
+  sheet metadata parsed from the Aseprite JSON export
 
 ### Keyboard SVG
 
@@ -117,7 +128,7 @@ Naming convention: `public/audio/ambient/{key}.webm`
 - `public/` - static runtime assets copied as-is by Vite
 - `src/assets/characters/` - character SVG source files imported by the app
 - `src/assets/characters/index.ts` - character asset manifest used by the
-  companion component
+  companion component and menu portrait renderers
 - `src/audio/soundEffects.ts` - maps `SoundKey` enum values to file paths
   (references `public/audio/sfx/`)
 - `src/audio/audioManager.ts` - maps loop keys to file paths (references

@@ -1,7 +1,7 @@
 import './teamSelect.css';
 import type { ScreenMount, Team } from "../types";
 import { createScreenMount } from '../screenMount';
-import { CHARACTER_PORTRAITS } from "../assets/characters";
+import { CHARACTER_PORTRAITS, createCharacterPortraitElement } from "../assets/characters";
 
 export function renderTeamSelect(
   onSelect: (team: Team) => void,
@@ -27,7 +27,7 @@ export function renderTeamSelect(
         <div class="ts-panel-glow ts-panel-glow-pokemon"></div>
         <div class="ts-panel-content">
           <div class="ts-character ts-character-pokemon">
-            <img class="ts-character-art" src="${CHARACTER_PORTRAITS.pokemon}" alt="Pikachu companion preview" draggable="false">
+            <div class="ts-character-slot" data-portrait-slot="pokemon"></div>
           </div>
           <div class="ts-panel-text">
             <h2 class="ts-team-name">Team <span>Pokemon</span></h2>
@@ -59,7 +59,7 @@ export function renderTeamSelect(
         <div class="ts-panel-glow ts-panel-glow-mlp"></div>
         <div class="ts-panel-content">
           <div class="ts-character ts-character-mlp">
-            <img class="ts-character-art" src="${CHARACTER_PORTRAITS.mlp}" alt="Pinkie Pie companion preview" draggable="false">
+            <div class="ts-character-slot" data-portrait-slot="mlp"></div>
           </div>
           <div class="ts-panel-text">
             <h2 class="ts-team-name">Team <span>Ponies</span></h2>
@@ -91,6 +91,33 @@ export function renderTeamSelect(
         : ""
     }
   `;
+
+  const portraitConfig: Record<Team, { alt: string; animated: boolean }> = {
+    pokemon: {
+      alt: 'Pikachu companion preview',
+      animated: true,
+    },
+    mlp: {
+      alt: 'Pinkie Pie companion preview',
+      animated: false,
+    },
+  };
+
+  (Object.entries(portraitConfig) as Array<[Team, { alt: string; animated: boolean }]>).forEach(
+    ([team, config]) => {
+      const slot = screen.querySelector<HTMLElement>(`[data-portrait-slot="${team}"]`);
+      if (slot === null) {
+        return;
+      }
+
+      const portrait = createCharacterPortraitElement(CHARACTER_PORTRAITS[team], config.alt, {
+        animated: config.animated,
+        className: 'ts-character-art',
+      });
+      slot.appendChild(portrait.element);
+      mount.defer(portrait.cleanup);
+    },
+  );
 
   screen.querySelectorAll<HTMLElement>(".ts-panel").forEach((panel) => {
     mount.listen(panel, "click", () => {

@@ -2,7 +2,7 @@ import './mainMenu.css';
 import type { PlayerProfile, ScreenMount } from '../types';
 import { createScreenMount } from '../screenMount';
 import { activeProgress } from '../state/gameState';
-import { CHARACTER_PORTRAITS } from '../assets/characters';
+import { CHARACTER_PORTRAITS, createCharacterPortraitElement } from '../assets/characters';
 
 export function renderMainMenu(
   profile: PlayerProfile,
@@ -16,10 +16,6 @@ export function renderMainMenu(
 
   const hasSave = profile.teamSelected &&
     (activeProgress(profile).highestUnlockedLevel > 1 || activeProgress(profile).levelRecords[1]?.completed);
-
-  const characterImg = hasSave
-    ? `<img class="mm-character" src="${CHARACTER_PORTRAITS[profile.activeTeam]}" alt="" draggable="false">`
-    : '';
 
   screen.innerHTML = `
     <div class="mm-bg" aria-hidden="true">
@@ -41,7 +37,7 @@ export function renderMainMenu(
     </header>
 
     <div class="mm-hero">
-      ${characterImg}
+      <div class="mm-character-slot"></div>
     </div>
 
     <nav class="mm-nav">
@@ -52,6 +48,22 @@ export function renderMainMenu(
       <button class="mm-btn mm-btn-ghost mm-btn-settings" data-action="settings">⚙ Settings</button>
     </nav>
   `;
+
+  if (hasSave) {
+    const slot = screen.querySelector<HTMLElement>('.mm-character-slot');
+    if (slot !== null) {
+      const portrait = createCharacterPortraitElement(
+        CHARACTER_PORTRAITS[profile.activeTeam],
+        `${profile.activeTeam} companion`,
+        {
+          animated: false,
+          className: 'mm-character',
+        },
+      );
+      slot.appendChild(portrait.element);
+      mount.defer(portrait.cleanup);
+    }
+  }
 
   mount.listen(screen, 'click', (e: Event) => {
     const btn = (e.target as HTMLElement).closest('[data-action]') as HTMLElement | null;

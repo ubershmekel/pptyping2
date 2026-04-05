@@ -39,4 +39,6 @@ Downstream consumers of the team value:
 
 - `src/screens/teamSelect.ts` — renders the two-option UI, handles selection,
   writes to `gameState.ts`, triggers navigation
+- `src/assets/characters/index.ts` — provides the per-team portrait asset used
+  by the Team Select character preview, including animated sprite-sheet previews
 - `src/state/gameState.ts` — receives the team assignment and persists it
