@@ -1,5 +1,5 @@
 import type { AppScreen, Difficulty, LevelStats, ScreenMount, Team } from './types';
-import { loadProfile, saveProfile, applyLevelResult, selectTeam, switchTeam, setDifficulty } from './state/gameState';
+import { loadProfile, saveProfile, applyLevelResult, activeProgress, selectTeam, setDifficulty } from './state/gameState';
 import { cutsceneAfterLevel, levelAfterCutscene, MAX_LEVEL } from './data/levels';
 import { renderTeamSelect }    from './screens/teamSelect';
 import { renderLevelSelect }   from './screens/levelSelect';
@@ -61,7 +61,7 @@ export class App {
 
     // ── Guard: locked level → level-select with attempted indicator ──────────
     if (route.screen === 'level') {
-      if (route.number > this.profile.highestUnlockedLevel) {
+      if (route.number > activeProgress(this.profile).highestUnlockedLevel) {
         const redirect = { screen: 'level-select' as const };
         if (!fromPopState) {
           this.router.replace(redirect);
@@ -156,10 +156,10 @@ export class App {
 
     } else if (screen.id === 'team-select') {
       const hasSave = this.profile.teamSelected &&
-        (this.profile.highestUnlockedLevel > 1 || this.profile.levelRecords[1]?.completed);
+        (activeProgress(this.profile).highestUnlockedLevel > 1 || activeProgress(this.profile).levelRecords[1]?.completed);
       return renderTeamSelect(
         (team) => this.onTeamSelected(team),
-        hasSave ? this.profile.team : undefined,
+        hasSave ? this.profile.activeTeam : undefined,
       );
 
     } else if (screen.id === 'level-select') {
@@ -173,14 +173,14 @@ export class App {
 
     } else if (screen.id === 'cutscene') {
       return renderCutscene(
-        this.profile.team,
+        this.profile.activeTeam,
         screen.index,
         () => this.onCutsceneDone(screen.index),
       );
 
     } else if (screen.id === 'finger-guide') {
       return renderFingerGuide(
-        this.profile.team,
+        this.profile.activeTeam,
         screen.number,
         () => this.showScreen({ id: 'level', number: screen.number }),
         () => this.navigate({ id: 'level-select' }),
@@ -188,7 +188,7 @@ export class App {
 
     } else if (screen.id === 'level') {
       return renderLevelScreen(
-        this.profile.team,
+        this.profile.activeTeam,
         screen.number,
         this.profile.difficulty,
         (stats) => this.onLevelComplete(screen.number, stats),
@@ -199,7 +199,7 @@ export class App {
 
     } else if (screen.id === 'level-complete') {
       return renderLevelComplete(
-        this.profile.team,
+        this.profile.activeTeam,
         screen.number,
         screen.stats,
         this.profile.difficulty,
@@ -224,7 +224,7 @@ export class App {
     screen.className = 'screen main-menu-screen';
 
     const hasSave = this.profile.teamSelected &&
-      (this.profile.highestUnlockedLevel > 1 || this.profile.levelRecords[1]?.completed);
+      (activeProgress(this.profile).highestUnlockedLevel > 1 || activeProgress(this.profile).levelRecords[1]?.completed);
 
     screen.innerHTML = `
       <div class="main-menu-content">
@@ -232,11 +232,9 @@ export class App {
         <p class="game-subtitle">Type Your Way to Victory!</p>
         <nav class="main-menu-nav">
           ${hasSave
-            ? `<button class="btn btn-primary" data-action="continue">Continue</button>`
-            : ''}
-          <button class="btn ${hasSave ? 'btn-secondary' : 'btn-primary'}" data-action="new-game">
-            ${hasSave ? 'New Game' : 'Start Game'}
-          </button>
+            ? `<button class="btn btn-primary" data-action="continue">Continue</button>
+          <button class="btn btn-secondary" data-action="switch-teams">Switch Teams</button>`
+            : `<button class="btn btn-primary" data-action="switch-teams">Start Game</button>`}
           <button class="btn btn-secondary" data-action="settings">Settings</button>
         </nav>
       </div>
@@ -247,9 +245,8 @@ export class App {
       if (!btn) return;
       const action = btn.dataset['action'];
       if (action === 'continue') {
-        // Resume at highest unlocked level
-        this.navigate({ id: 'level', number: this.profile.highestUnlockedLevel });
-      } else if (action === 'new-game') {
+        this.navigate({ id: 'level-select' });
+      } else if (action === 'switch-teams') {
         this.navigate({ id: 'team-select' });
       } else if (action === 'settings') {
         this.navigate({ id: 'settings' });
@@ -288,9 +285,9 @@ export class App {
 
   private onTeamSelected(team: Team): void {
     this.profile = selectTeam(this.profile, team);
-    // If continuing existing game, jump to highest unlocked level
-    if (this.profile.highestUnlockedLevel > 1) {
-      this.navigate({ id: 'level', number: this.profile.highestUnlockedLevel });
+    // If this team already has progress, go to level select; otherwise start from the beginning.
+    if (activeProgress(this.profile).highestUnlockedLevel > 1) {
+      this.navigate({ id: 'level-select' });
     } else {
       this.navigate({ id: 'cutscene', index: 0 });
     }
@@ -335,7 +332,7 @@ export class App {
 
   private applyBodyClasses(): void {
     document.body.classList.remove('team-pokemon', 'team-mlp');
-    document.body.classList.add(`team-${this.profile.team}`);
+    document.body.classList.add(`team-${this.profile.activeTeam}`);
 
     document.body.classList.remove(
       'env-digital-grove', 'env-thunder-shrine', 'env-crystal-cavern',

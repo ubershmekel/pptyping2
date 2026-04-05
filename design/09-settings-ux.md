@@ -42,9 +42,11 @@ active at the time.
 ### Team
 
 - A read-only indicator showing the current active team
-- A "Start New Game" button that routes to team select — framed as "Try the
-  other team" rather than "reset everything". If both teams have been started,
-  both are shown with their progress intact.
+- A "New Game" button that routes to team select — framed as "Try the other
+  team" rather than "reset everything". If both teams have been started, both
+  are shown with their progress intact.
+- This is intentionally placed in Settings (not the main menu) to reduce the
+  risk of players accidentally wiping or abandoning their current run.
 
 ## Key Files
 

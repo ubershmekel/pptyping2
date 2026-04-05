@@ -11,25 +11,20 @@ rich with the team theme applied if a team is already chosen.
 
 The menu adapts to player state:
 
-- **No save data**: Only "New Game" and "Settings" are visible. "Continue" and
-  "Level Select" are hidden or grayed out.
-- **Team chosen, in progress**: All options are available. The current team's
-  colors and character are visible as ambient background/decoration.
-- **Both teams started**: Shows the active team prominently with a subtler
-  "Switch to [other team]" path that routes to team select for a new game on
-  that side.
+- **No save data**: Only "Start Game" and "Settings" are visible.
+- **Team chosen, in progress**: "Continue", "Switch Teams", and "Settings" are
+  shown. The current team's colors and character are visible as ambient
+  background/decoration.
 
 ## Menu Options
 
-1. **Continue** — navigates to `currentPosition` from `PlayerProfile`. Only
-   shown if the player has made progress.
-2. **Level Select** — navigates to `/level-select`.
-3. **Settings** — navigates to `/settings`.
-4. **Team indicator** — shows which team is active (Pokemon / MLP) with its
-   palette. Tapping it offers to start a new game on the other team (with a
-   confirmation, since it sets the opposite team — it does not erase existing
-   progress for either team if we store both, or at minimum it warns the
-   player).
+1. **Continue** — navigates to `/level-select`. Only shown if the player has
+   made progress. Players choose their specific level from there.
+2. **Switch Teams** — navigates to `/team-select`. Shown when a save exists;
+   replaces the destructive "New Game" option, which lives in Settings instead.
+   When no save exists, this button is labeled "Start Game".
+3. **Settings** — navigates to `/settings`. "New Game" (starting over) is found
+   here to reduce the risk of accidental progress loss.
 
 ## Visual Design Intent
 

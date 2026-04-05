@@ -1,6 +1,7 @@
 import "./levelSelect.css";
 import type { LevelDefinition, PlayerProfile, ScreenMount } from "../types";
 import { createScreenMount } from "../screenMount";
+import { activeProgress } from "../state/gameState";
 import { LEVELS, ARC_ENVIRONMENTS } from "../data/levels";
 
 const ARC_ICONS: Record<number, string> = {
@@ -32,7 +33,7 @@ export function renderLevelSelect(
 ): ScreenMount {
   const screen = document.createElement("div");
   const mount = createScreenMount(screen);
-  screen.className = `screen level-select-screen team-${profile.team}`;
+  screen.className = `screen level-select-screen team-${profile.activeTeam}`;
 
   const arcMap: Record<number, LevelDefinition[]> = {
     1: [],
@@ -43,7 +44,7 @@ export function renderLevelSelect(
   };
   for (const lvl of LEVELS) arcMap[lvl.arc].push(lvl);
 
-  const totalCompleted = Object.values(profile.levelRecords).filter(
+  const totalCompleted = Object.values(activeProgress(profile).levelRecords).filter(
     (r) => r.completed,
   ).length;
 
@@ -76,7 +77,7 @@ export function renderLevelSelect(
     const card = target.closest<HTMLElement>("[data-level]");
     if (card) {
       const level = parseInt(card.dataset["level"]!, 10);
-      if (level <= profile.highestUnlockedLevel) {
+      if (level <= activeProgress(profile).highestUnlockedLevel) {
         onLevel(level);
       } else {
         // Shake on locked click, then restore the static transform/opacity.
@@ -152,7 +153,7 @@ function buildArc(
 
   const csOutroIdx = ARC_OUTRO_CS[arcNum];
   const csTrigger = CS_TRIGGER_LEVEL[arcNum];
-  const csUnlocked = profile.levelRecords[csTrigger]?.completed ?? false;
+  const csUnlocked = activeProgress(profile).levelRecords[csTrigger]?.completed ?? false;
 
   const introCs = arcNum === 1 ? buildCutsceneNode(0, true) : "";
   const levelCards = levels
@@ -182,10 +183,11 @@ function buildLevelCard(
   attempted?: number,
 ): string {
   const n = lvl.number;
-  const unlocked = n <= profile.highestUnlockedLevel;
-  const record = profile.levelRecords[n];
+  const progress = activeProgress(profile);
+  const unlocked = n <= progress.highestUnlockedLevel;
+  const record = progress.levelRecords[n];
   const completed = record?.completed ?? false;
-  const isNext = unlocked && !completed && n === profile.highestUnlockedLevel;
+  const isNext = unlocked && !completed && n === progress.highestUnlockedLevel;
 
   const stateClass = completed
     ? "ls-card-done"

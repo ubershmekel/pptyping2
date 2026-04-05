@@ -44,12 +44,16 @@ export interface LevelRecord {
   completed: boolean;
 }
 
-export interface PlayerProfile {
-  team: Team;
-  teamSelected: boolean;   // true once the player has explicitly picked a team
-  difficulty: Difficulty;
+export interface TeamProgress {
   levelRecords: Record<number, LevelRecord>;
   highestUnlockedLevel: number;
+}
+
+export interface PlayerProfile {
+  activeTeam: Team;
+  teamSelected: boolean;   // true once the player has explicitly picked a team
+  difficulty: Difficulty;
+  teams: Record<Team, TeamProgress>;
 }
 
 // ─── Screen lifecycle ───────────────────────────────────────────────────────
