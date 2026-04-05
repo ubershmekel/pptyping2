@@ -5,3 +5,9 @@ declare module '*.css' {
   const css: string;
   export default css;
 }
+
+// Raw SVG imports via ?raw query
+declare module '*.svg?raw' {
+  const content: string;
+  export default content;
+}

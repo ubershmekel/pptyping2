@@ -1,0 +1,230 @@
+.finger-guide-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  background: linear-gradient(160deg, #0d1520 0%, #0a0f18 60%, #0d0d1a 100%);
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────────── */
+
+.fg-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 860px;
+  padding: 2rem 1.5rem;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+
+.fg-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.fg-level-tag {
+  display: inline-block;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #bbb;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+}
+
+.fg-level-tag kbd {
+  display: inline-block;
+  padding: 0 0.35em;
+  border-radius: 3px;
+  background: var(--team-primary, #ffd700);
+  color: #111;
+  font-size: 0.9em;
+  font-family: var(--font-ui);
+  font-weight: 800;
+  line-height: 1.6;
+  vertical-align: baseline;
+}
+
+.fg-title {
+  margin: 0;
+  font-family: var(--font-game);
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+/* ── Rules ──────────────────────────────────────────────────────────────────── */
+
+.fg-rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.fg-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ccc;
+  font-size: 0.88rem;
+}
+
+.fg-rule kbd {
+  display: inline-block;
+  padding: 0 0.4em;
+  border-radius: 4px;
+  background: var(--team-primary, #ffd700);
+  color: #111;
+  font-size: 0.85em;
+  font-family: var(--font-ui);
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.fg-rule-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* ── Keyboard + hands section ───────────────────────────────────────────────── */
+
+.fg-keyboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.fg-keyboard-wrap {
+  width: 100%;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  overflow: hidden;
+  background: #12181f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: none;
+  padding: 0.75rem 0.75rem 0.4rem;
+}
+
+.fg-keyboard-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Hands row ──────────────────────────────────────────────────────────────── */
+
+.fg-hands {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #12181f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 0.5rem 2rem 0.75rem;
+}
+
+.fg-hand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.fg-hand-left .fg-hand-svg {
+  transform: scaleX(-1);
+}
+
+.fg-hand-svg {
+  width: clamp(80px, 12vw, 130px);
+}
+
+.fg-hand-svg svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.fg-hand-label {
+  font-size: 0.7rem;
+  color: #666;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ── Legend ─────────────────────────────────────────────────────────────────── */
+
+.fg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.fg-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.fg-legend-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.fg-legend-label {
+  font-size: 0.78rem;
+  color: #aaa;
+}
+
+/* ── Actions ────────────────────────────────────────────────────────────────── */
+
+.fg-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.fg-btn-primary,
+.fg-btn-secondary {
+  padding: 0.65rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-xl);
+  font-family: var(--font-game);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.fg-btn-primary {
+  background: var(--team-primary, #ffd700);
+  color: #1a1a1a;
+  box-shadow: 0 4px 16px var(--team-glow, rgba(255, 215, 0, 0.3));
+}
+
+.fg-btn-primary:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px var(--team-glow, rgba(255, 215, 0, 0.45));
+}
+
+.fg-btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #888;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fg-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #bbb;
+}

@@ -81,6 +81,7 @@ export type AppScreen =
   | { id: 'team-select' }
   | { id: 'level-select'; attempted?: number }   // attempted = locked level the user tried to deep-link to
   | { id: 'cutscene'; index: number }
+  | { id: 'finger-guide'; number: number }        // pre-level finger explainer; no canonical URL, stays at /level/<N>
   | { id: 'level'; number: number }
   | { id: 'level-complete'; number: number; stats: LevelStats }
   | { id: 'settings' };

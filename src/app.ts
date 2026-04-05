@@ -4,6 +4,7 @@ import { cutsceneAfterLevel, levelAfterCutscene, MAX_LEVEL } from './data/levels
 import { renderTeamSelect }    from './screens/teamSelect';
 import { renderLevelSelect }   from './screens/levelSelect';
 import { renderCutscene }      from './screens/cutscene';
+import { renderFingerGuide }   from './screens/fingerGuide';
 import { renderLevelScreen }   from './screens/levelScreen';
 import { renderLevelComplete }  from './screens/levelComplete';
 import { createScreenMount }   from './screenMount';
@@ -79,7 +80,7 @@ export class App {
       case 'team-select':  screen = { id: 'team-select' };                             break;
       case 'level-select': screen = { id: 'level-select' };                            break;
       case 'settings':     screen = { id: 'settings' };                                break;
-      case 'level':        screen = { id: 'level', number: route.number };             break;
+      case 'level':        screen = { id: 'finger-guide', number: route.number };      break;
       case 'cutscene':     screen = { id: 'cutscene', index: route.index };            break;
     }
 
@@ -175,6 +176,14 @@ export class App {
         this.profile.team,
         screen.index,
         () => this.onCutsceneDone(screen.index),
+      );
+
+    } else if (screen.id === 'finger-guide') {
+      return renderFingerGuide(
+        this.profile.team,
+        screen.number,
+        () => this.showScreen({ id: 'level', number: screen.number }),
+        () => this.navigate({ id: 'level-select' }),
       );
 
     } else if (screen.id === 'level') {
