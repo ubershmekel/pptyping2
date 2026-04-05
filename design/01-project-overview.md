@@ -15,7 +15,14 @@ The two storylines are completely independent in content and tone:
 The universal mechanic: the opposing team has corrupted the keys of the
 keyboard. Your characters must restore them, one key at a time.
 
-## Tech Stack Intent
+## Design folder
+
+The md files in this file's folder capture intent and design decisions. Once in
+a while we need to make changes to the design, sometimes we need to fix the
+code. But any gap betweeen code and design is called "drift" and we'll need to
+seek it out and address it.
+
+## Tech Stack
 
 | Tool                       | Why                                                                                                                     |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
