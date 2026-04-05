@@ -100,6 +100,13 @@ function colorHandSvg(container: HTMLElement, side: 'left' | 'right', usedFinger
     }
   }
 
+  // Thumb → space-bar grey, always visible
+  const thumb = svg.querySelector('#Thumb') as SVGElement | null;
+  if (thumb) {
+    thumb.style.fill    = '#d8d4ce';
+    thumb.style.opacity = '0.85';
+  }
+
   // Dim the palm to match dimmed fingers when nothing is active on that hand
   const hasAnyActive = HAND_FINGER_IDS.some(({ right, left }) =>
     usedFingers.has(side === 'right' ? right : left)
@@ -159,6 +166,11 @@ export function renderFingerGuide(
           <span class="fg-rule-icon" aria-hidden="true">✋</span>
           <span>Use the highlighted finger for each key</span>
         </div>
+        ${levelNumber === 2 ? `
+        <div class="fg-rule fg-rule-thumb">
+          <span class="fg-rule-icon" aria-hidden="true">👍</span>
+          <span>Thumbs press <kbd>Space</kbd> between words</span>
+        </div>` : ''}
       </div>
 
       <div class="fg-keyboard-section">

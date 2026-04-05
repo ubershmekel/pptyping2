@@ -39,6 +39,11 @@ Three fixed rules, always shown regardless of level:
 - Always return to F and J
 - Use the highlighted finger for each key
 
+One conditional rule, shown only on level 2 (the first level that teaches home
+row):
+
+- Thumbs press Space between words
+
 ## Keyboard visual aid
 
 The full US keyboard SVG (`KB_United_States.svg`) is rendered inline and
@@ -82,6 +87,10 @@ screen background shows through.
 
 The palm path (`#Hand`) dims to 0.3 opacity when no fingers on that hand are
 active.
+
+`#Thumb` is always shown in neutral grey (`#d8d4ce`, 0.85 opacity) on both
+hands — it has no keyboard-finger color assignment because it is the space bar
+thumb, not a letter finger.
 
 ## Finger color palette
 

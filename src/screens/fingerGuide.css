@@ -94,6 +94,28 @@
   flex-shrink: 0;
 }
 
+.fg-rule-thumb {
+  border-color: rgba(216, 212, 206, 0.3);
+}
+
+.fg-rule kbd[data-key="space"],
+.fg-rule kbd {
+  display: inline-block;
+  padding: 0 0.4em;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-family: var(--font-ui);
+  font-weight: 800;
+  line-height: 1.7;
+  vertical-align: baseline;
+}
+
+/* Space key uses the neutral thumb grey instead of team primary */
+.fg-rule-thumb kbd {
+  background: #d8d4ce;
+  color: #2a2520;
+}
+
 /* ── Keyboard + hands section ───────────────────────────────────────────────── */
 
 .fg-keyboard-section {
