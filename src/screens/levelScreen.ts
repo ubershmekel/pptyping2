@@ -46,11 +46,36 @@ class TypingEngine {
       const globalIndex = line.start + i;
       span.className = 'char';
       span.dataset.state = globalIndex < this.index ? 'done' : globalIndex === this.index ? 'current' : 'pending';
+      const isTrailingSpace = line.text[i] === ' ' && i === line.text.length - 1;
       span.textContent = line.text[i] === ' ' ? '\u00A0' : line.text[i];
       if (line.text[i] === ' ') {
         span.classList.add('is-space');
       }
+      if (isTrailingSpace) {
+        span.classList.add('is-line-end-space');
+      }
       this.visibleSpans.push(span);
+      container.appendChild(span);
+    }
+  }
+
+  renderNextLine(container: HTMLElement): void {
+    const nextLine = this.lines[this.currentLineIndex + 1] ?? null;
+    if (!nextLine) return;
+
+    const sep = document.createElement('span');
+    sep.className = 'next-line-sep';
+    container.appendChild(sep);
+
+    const previewLength = Math.min(5, nextLine.text.length);
+    for (let i = 0; i < previewLength; i++) {
+      const span = document.createElement('span');
+      span.className = 'char next-preview';
+      span.dataset.state = 'pending';
+      span.textContent = nextLine.text[i] === ' ' ? '\u00A0' : nextLine.text[i];
+      if (nextLine.text[i] === ' ') {
+        span.classList.add('is-space');
+      }
       container.appendChild(span);
     }
   }
@@ -175,10 +200,12 @@ function buildLines(text: string, maxLength = 32): LineDef[] {
 
     if (lineWords.length > 0 && nextText.length > maxLength) {
       const textLine = lineWords.join(' ');
+      // Include the trailing space so the user presses Space to advance to the next line.
+      // That space exists in the global text at position lineStart + textLine.length.
       lines.push({
-        text: textLine,
+        text: textLine + ' ',
         start: lineStart,
-        end: lineStart + textLine.length,
+        end: lineStart + textLine.length + 1,
       });
       cursor += textLine.length + 1;
       lineStart = cursor;
@@ -297,6 +324,7 @@ export function renderLevelScreen(
   character.mount(charTrack);
   mount.defer(() => character.destroy());
   engine.renderCurrentLine(textDisplay);
+  engine.renderNextLine(textDisplay);
   pauseBtn.setAttribute('aria-expanded', 'false');
 
   let comboCount = 0;
@@ -396,7 +424,6 @@ export function renderLevelScreen(
 
   engine.onLineComplete = () => {
     isTransitioningLine = true;
-    textDisplay.classList.remove('line-enter');
     textDisplay.classList.add('line-exit');
     updateCharacterPosition(true);
 
@@ -407,6 +434,7 @@ export function renderLevelScreen(
     cancelLineTransition = mount.timeout(() => {
       cancelLineTransition = null;
       engine.advanceLine(textDisplay);
+      engine.renderNextLine(textDisplay);
       textDisplay.classList.remove('line-exit');
       textDisplay.classList.add('line-enter');
       isTransitioningLine = false;

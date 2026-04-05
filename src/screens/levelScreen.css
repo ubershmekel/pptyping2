@@ -108,12 +108,11 @@
 
 .text-display {
   display: flex;
+  width: min(78vw, 760px);
   align-items: center;
   justify-content: center;
-  width: min(78vw, 760px);
   min-height: 116px;
   padding: 1.6rem 2rem;
-  overflow: hidden;
   background: transparent;
   color: #f3efe4;
   font-family: var(--font-typing);
@@ -124,6 +123,24 @@
   cursor: text;
   user-select: none;
   outline: none;
+  overflow: hidden;
+}
+
+/* small gap between current line and next-line peek */
+.next-line-sep {
+  display: inline-block;
+  width: 1.2em;
+  flex-shrink: 0;
+}
+
+.next-preview {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* fade the preview out so it doesn't look abrupt when clipped */
+.next-preview:last-child {
+  opacity: 0.1;
 }
 
 .text-display.line-enter {
@@ -196,26 +213,27 @@
 @keyframes line-enter {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateX(40px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 
 @keyframes line-exit {
   from {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 
   to {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateX(-40px);
   }
 }
+
 
 @keyframes letter-hit {
   0% {
@@ -531,6 +549,7 @@
   }
 
   .text-display {
+    width: min(92vw, 760px);
     padding: 1.2rem 1.5rem;
     font-size: 1.1rem;
   }
