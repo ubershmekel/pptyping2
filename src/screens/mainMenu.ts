@@ -54,21 +54,19 @@ export function renderMainMenu(
     </nav>
   `;
 
-  if (hasSave) {
-    const slot = screen.querySelector<HTMLElement>(".mm-character-slot");
-    if (slot !== null) {
-      const portrait = createCharacterPortraitElement(
-        CHARACTER_PORTRAITS[profile.activeTeam],
-        `${profile.activeTeam} companion`,
-        {
-          // animated: false,
-          className: "mm-character",
-          loopTag: "stand",
-        },
-      );
-      slot.appendChild(portrait.element);
-      mount.defer(portrait.cleanup);
-    }
+  const slot = screen.querySelector<HTMLElement>(".mm-character-slot");
+  if (slot !== null) {
+    const portrait = createCharacterPortraitElement(
+      CHARACTER_PORTRAITS[profile.activeTeam],
+      `${profile.activeTeam} companion`,
+      {
+        // animated: false,
+        className: "mm-character",
+        loopTag: "stand",
+      },
+    );
+    slot.appendChild(portrait.element);
+    mount.defer(portrait.cleanup);
   }
 
   mount.listen(screen, "click", (e: Event) => {
