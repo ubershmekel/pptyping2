@@ -1,14 +1,12 @@
 import type { AsepriteSheetData, AsepriteSpriteSheet } from "../../aseprite";
 import { createAsepriteSpriteSheet } from "../../aseprite";
 import type { CharacterState, Team } from "../../types";
-import pinkiePieUrl from "./mlp/pinkie-pie.svg";
 import pinkyData from "../pinky/pinky.json";
 import pinkyUrl from "../pinky/pinky.png";
 import pikachuStandData from "../pikachu/pikachu-stand.json";
 import pikachuStandUrl from "../pikachu/pikachu-stand.png";
-import pikachuUrl from "./pokemon/pikachu.svg";
-
-export type CharacterFrameSet = Record<CharacterState, readonly string[]>;
+import pikachuRunData from "../pikachu/pikachu-run.json";
+import pikachuRunUrl from "../pikachu/pikachu-run.png";
 
 export interface StaticCharacterPortrait {
   kind: "static";
@@ -21,40 +19,56 @@ export interface SpriteCharacterPortrait {
   spriteSheet: AsepriteSpriteSheet;
 }
 
-export type CharacterPortrait =
-  | StaticCharacterPortrait
-  | SpriteCharacterPortrait;
+export type CharacterPortrait = StaticCharacterPortrait | SpriteCharacterPortrait;
 
-const pokemonFrames: CharacterFrameSet = {
-  idle: [pikachuUrl],
-  walking: [pikachuUrl],
-  celebrating: [pikachuUrl],
-  flinch: [pikachuUrl],
-};
+export interface CharacterAnimationSpec {
+  imageUrl: string;
+  sheet: AsepriteSpriteSheet;
+  tag?: string;
+}
 
-const mlpFrames: CharacterFrameSet = {
-  idle: [pinkiePieUrl],
-  walking: [pinkiePieUrl],
-  celebrating: [pinkiePieUrl],
-  flinch: [pinkiePieUrl],
-};
+export type CharacterAnimationSet = Record<CharacterState, CharacterAnimationSpec>;
 
-export const CHARACTER_FRAMES: Record<Team, CharacterFrameSet> = {
-  pokemon: pokemonFrames,
-  mlp: mlpFrames,
+const pikachuStandSheet = createAsepriteSpriteSheet(
+  pikachuStandData as AsepriteSheetData,
+);
+const pikachuRunSheet = createAsepriteSpriteSheet(
+  pikachuRunData as AsepriteSheetData,
+);
+const pinkySheet = createAsepriteSpriteSheet(pinkyData as AsepriteSheetData);
+
+export const CHARACTER_ANIMATIONS: Record<Team, CharacterAnimationSet> = {
+  pokemon: {
+    idle: { imageUrl: pikachuStandUrl, sheet: pikachuStandSheet, tag: "Stand" },
+    walking: { imageUrl: pikachuRunUrl, sheet: pikachuRunSheet, tag: "Run" },
+    celebrating: {
+      imageUrl: pikachuStandUrl,
+      sheet: pikachuStandSheet,
+      tag: "Peace",
+    },
+    flinch: {
+      imageUrl: pikachuStandUrl,
+      sheet: pikachuStandSheet,
+      tag: "Stand",
+    },
+  },
+  mlp: {
+    idle: { imageUrl: pinkyUrl, sheet: pinkySheet, tag: "Stand" },
+    walking: { imageUrl: pinkyUrl, sheet: pinkySheet, tag: "Right1" },
+    celebrating: { imageUrl: pinkyUrl, sheet: pinkySheet, tag: "Celebrate" },
+    flinch: { imageUrl: pinkyUrl, sheet: pinkySheet, tag: "Hit1" },
+  },
 };
 
 export const CHARACTER_PORTRAITS: Record<Team, CharacterPortrait> = {
   pokemon: {
     kind: "sprite",
     imageUrl: pikachuStandUrl,
-    spriteSheet: createAsepriteSpriteSheet(
-      pikachuStandData as AsepriteSheetData,
-    ),
+    spriteSheet: pikachuStandSheet,
   },
   mlp: {
     kind: "sprite",
     imageUrl: pinkyUrl,
-    spriteSheet: createAsepriteSpriteSheet(pinkyData as AsepriteSheetData),
+    spriteSheet: pinkySheet,
   },
 };

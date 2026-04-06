@@ -1,11 +1,19 @@
 import "./character.css";
-import { CHARACTER_FRAMES } from "../assets/characters";
+import { CHARACTER_ANIMATIONS } from "../assets/characters";
+import { selectAsepriteAnimation } from "../aseprite";
+import type { AsepriteFrameData } from "../aseprite";
 import type { CharacterState, Team } from "../types";
 
 export class CharacterCompanion {
   private el: HTMLElement;
   private svgWrapper: HTMLElement;
-  private imageEl: HTMLImageElement;
+  private canvas: HTMLCanvasElement;
+  private ctx: CanvasRenderingContext2D;
+  private spriteImg: HTMLImageElement;
+  private currentImageUrl = "";
+  private frames: readonly AsepriteFrameData[] = [];
+  private frameIndex = 0;
+  private frameTimerId: number | null = null;
   private currentX = 0;
   private targetX = 0;
   private state: CharacterState = "idle";
@@ -22,14 +30,27 @@ export class CharacterCompanion {
     this.svgWrapper = document.createElement("div");
     this.svgWrapper.className = "char-svg-wrapper";
 
-    this.imageEl = document.createElement("img");
-    this.imageEl.className = "char-svg";
-    this.imageEl.alt = `${team} companion`;
-    this.imageEl.draggable = false;
-    this.updateFrame();
+    this.canvas = document.createElement("canvas");
+    this.canvas.className = "char-svg";
+    this.canvas.setAttribute("role", "img");
+    this.canvas.setAttribute("aria-label", `${team} companion`);
 
-    this.svgWrapper.appendChild(this.imageEl);
+    const ctx = this.canvas.getContext("2d");
+    if (ctx === null) throw new Error("Could not get 2D canvas context");
+    this.ctx = ctx;
+
+    this.spriteImg = new Image();
+    this.spriteImg.addEventListener("load", () => {
+      this.drawFrame();
+      if (this.frames.length > 1) {
+        this.scheduleNextFrame();
+      }
+    });
+
+    this.svgWrapper.appendChild(this.canvas);
     this.el.appendChild(this.svgWrapper);
+
+    this.applyAnimation();
   }
 
   mount(parent: HTMLElement): void {
@@ -58,6 +79,7 @@ export class CharacterCompanion {
 
   destroy(): void {
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
+    this.stopFrameTimer();
     this.el.remove();
   }
 
@@ -65,12 +87,82 @@ export class CharacterCompanion {
     if (this.state === state) return;
     this.state = state;
     this.el.dataset.state = state;
-    this.updateFrame();
+    this.applyAnimation();
   }
 
-  private updateFrame(): void {
-    const frames = CHARACTER_FRAMES[this.team][this.state];
-    this.imageEl.src = frames[0];
+  private applyAnimation(): void {
+    const spec = CHARACTER_ANIMATIONS[this.team][this.state];
+    const { frames } = selectAsepriteAnimation(spec.sheet, spec.tag);
+    this.frames = frames;
+    this.frameIndex = 0;
+    this.stopFrameTimer();
+
+    if (frames.length > 0) {
+      const f = frames[0];
+      this.canvas.width = f.sourceSize.w;
+      this.canvas.height = f.sourceSize.h;
+    }
+
+    if (spec.imageUrl !== this.currentImageUrl) {
+      this.currentImageUrl = spec.imageUrl;
+      this.spriteImg.src = spec.imageUrl;
+      // drawFrame + scheduleNextFrame called by the load event
+    } else {
+      this.drawFrame();
+      if (frames.length > 1) {
+        this.scheduleNextFrame();
+      }
+    }
+  }
+
+  private drawFrame(): void {
+    const frame = this.frames[this.frameIndex];
+    if (
+      !frame ||
+      !this.spriteImg.complete ||
+      this.spriteImg.naturalWidth === 0
+    ) {
+      return;
+    }
+
+    if (
+      this.canvas.width !== frame.sourceSize.w ||
+      this.canvas.height !== frame.sourceSize.h
+    ) {
+      this.canvas.width = frame.sourceSize.w;
+      this.canvas.height = frame.sourceSize.h;
+    }
+
+    this.ctx.imageSmoothingEnabled = false;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.drawImage(
+      this.spriteImg,
+      frame.frame.x,
+      frame.frame.y,
+      frame.frame.w,
+      frame.frame.h,
+      frame.spriteSourceSize.x,
+      frame.spriteSourceSize.y,
+      frame.spriteSourceSize.w,
+      frame.spriteSourceSize.h,
+    );
+  }
+
+  private scheduleNextFrame(): void {
+    const frame = this.frames[this.frameIndex];
+    if (!frame) return;
+    this.frameTimerId = window.setTimeout(() => {
+      this.frameIndex = (this.frameIndex + 1) % this.frames.length;
+      this.drawFrame();
+      this.scheduleNextFrame();
+    }, frame.duration);
+  }
+
+  private stopFrameTimer(): void {
+    if (this.frameTimerId !== null) {
+      clearTimeout(this.frameTimerId);
+      this.frameTimerId = null;
+    }
   }
 
   private startLoop(): void {
