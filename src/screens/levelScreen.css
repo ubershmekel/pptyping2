@@ -102,8 +102,8 @@
 .char-track {
   position: relative;
   width: min(78vw, 760px);
-  height: 74px;
-  overflow: hidden;
+  height: 88px;
+  overflow: visible;
 }
 
 .text-display {

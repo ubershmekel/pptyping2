@@ -59,7 +59,7 @@ export class CharacterCompanion {
   }
 
   moveTo(x: number): void {
-    this.targetX = Math.max(0, x - 28);
+    this.targetX = Math.max(0, x - 40);
     if (Math.abs(this.targetX - this.currentX) > 2) {
       this.setState("walking");
     }
