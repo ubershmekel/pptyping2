@@ -209,8 +209,6 @@ export function renderFingerGuide(
         </div>
       </div>
 
-      <div class="fg-legend" id="fg-legend"></div>
-
       <div class="fg-actions">
         <button class="fg-btn-primary" id="fg-start">Start Level →</button>
         <button class="fg-btn-secondary" id="fg-back">← Level Select</button>
@@ -282,19 +280,6 @@ export function renderFingerGuide(
 
   colorHandSvg(leftHandSvgWrap, "left", usedFingers);
   colorHandSvg(rightHandSvgWrap, "right", usedFingers);
-
-  // ── Legend ────────────────────────────────────────────────────────────────────
-  const legend = screen.querySelector("#fg-legend") as HTMLElement;
-  legend.innerHTML = FINGER_ORDER.filter((f) => usedFingers.has(f))
-    .map(
-      (f) => `
-      <div class="fg-legend-item">
-        <span class="fg-legend-swatch" style="background:${FINGER_COLORS[f]}"></span>
-        <span class="fg-legend-label">${FINGER_LABELS[f]}</span>
-      </div>
-    `,
-    )
-    .join("");
 
   // ── Interactive key highlighting ──────────────────────────────────────────────
 
