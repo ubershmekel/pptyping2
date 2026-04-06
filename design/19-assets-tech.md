@@ -63,11 +63,19 @@ Examples:
 - `src/assets/pikachu/pikachu-stand.json`
 - `src/assets/pikachu/pikachu-stand.png`
 
-`src/assets/characters/index.ts` owns both manifests:
+`src/assets/characters/index.ts` owns the per-team asset manifest:
 
 - `CHARACTER_FRAMES` maps a team and companion state to ordered SVG frame files
-- `CHARACTER_PORTRAITS` maps a team to either a static portrait asset or sprite
-  sheet metadata parsed from the Aseprite JSON export
+- `CHARACTER_PORTRAITS` maps a team to either a static portrait asset or a
+  sprite-sheet source definition
+
+`src/aseprite.ts` is the generic Aseprite loader. It sorts exported frames,
+reads `meta.frameTags`, and resolves a named loop when a screen asks to present
+that character. If no tag is requested, it falls back to the first exported tag,
+or the full frame list when the sheet has no tags.
+
+`src/components/characterPortrait.ts` renders portrait assets for menus and can
+request a specific loop such as `stand` when building the element.
 
 ### Keyboard SVG
 
@@ -127,8 +135,10 @@ Naming convention: `public/audio/ambient/{key}.webm`
 
 - `public/` - static runtime assets copied as-is by Vite
 - `src/assets/characters/` - character SVG source files imported by the app
-- `src/assets/characters/index.ts` - character asset manifest used by the
-  companion component and menu portrait renderers
+- `src/assets/characters/index.ts` - character asset manifest used by the app
+- `src/aseprite.ts` - generic parser and tag selector for Aseprite JSON exports
+- `src/components/characterPortrait.ts` - menu portrait renderer for static and
+  sprite-sheet assets
 - `src/audio/soundEffects.ts` - maps `SoundKey` enum values to file paths
   (references `public/audio/sfx/`)
 - `src/audio/audioManager.ts` - maps loop keys to file paths (references

@@ -1,7 +1,8 @@
 import './teamSelect.css';
-import type { ScreenMount, Team } from "../types";
+import { createCharacterPortraitElement } from '../components/characterPortrait';
+import { CHARACTER_PORTRAITS } from '../assets/characters';
 import { createScreenMount } from '../screenMount';
-import { CHARACTER_PORTRAITS, createCharacterPortraitElement } from "../assets/characters";
+import type { ScreenMount, Team } from "../types";
 
 export function renderTeamSelect(
   onSelect: (team: Team) => void,
@@ -92,10 +93,11 @@ export function renderTeamSelect(
     }
   `;
 
-  const portraitConfig: Record<Team, { alt: string; animated: boolean }> = {
+  const portraitConfig: Record<Team, { alt: string; animated: boolean; loopTag?: string }> = {
     pokemon: {
       alt: 'Pikachu companion preview',
       animated: true,
+      loopTag: 'stand',
     },
     mlp: {
       alt: 'Pinkie Pie companion preview',
@@ -103,8 +105,8 @@ export function renderTeamSelect(
     },
   };
 
-  (Object.entries(portraitConfig) as Array<[Team, { alt: string; animated: boolean }]>).forEach(
-    ([team, config]) => {
+  (Object.entries(portraitConfig) as Array<[Team, { alt: string; animated: boolean; loopTag?: string }]>)
+    .forEach(([team, config]) => {
       const slot = screen.querySelector<HTMLElement>(`[data-portrait-slot="${team}"]`);
       if (slot === null) {
         return;
@@ -113,11 +115,11 @@ export function renderTeamSelect(
       const portrait = createCharacterPortraitElement(CHARACTER_PORTRAITS[team], config.alt, {
         animated: config.animated,
         className: 'ts-character-art',
+        loopTag: config.loopTag,
       });
       slot.appendChild(portrait.element);
       mount.defer(portrait.cleanup);
-    },
-  );
+    });
 
   screen.querySelectorAll<HTMLElement>(".ts-panel").forEach((panel) => {
     mount.listen(panel, "click", () => {

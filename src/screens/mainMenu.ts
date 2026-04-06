@@ -1,8 +1,9 @@
 import './mainMenu.css';
-import type { PlayerProfile, ScreenMount } from '../types';
+import { CHARACTER_PORTRAITS } from '../assets/characters';
+import { createCharacterPortraitElement } from '../components/characterPortrait';
 import { createScreenMount } from '../screenMount';
 import { activeProgress } from '../state/gameState';
-import { CHARACTER_PORTRAITS, createCharacterPortraitElement } from '../assets/characters';
+import type { PlayerProfile, ScreenMount } from '../types';
 
 export function renderMainMenu(
   profile: PlayerProfile,
@@ -58,6 +59,7 @@ export function renderMainMenu(
         {
           animated: false,
           className: 'mm-character',
+          loopTag: 'stand',
         },
       );
       slot.appendChild(portrait.element);
