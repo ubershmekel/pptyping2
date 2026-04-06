@@ -21,7 +21,7 @@ export interface AsepriteFrameTag {
   name: string;
   from: number;
   to: number;
-  direction: 'forward' | 'reverse' | 'pingpong' | 'pingpong_reverse' | string;
+  direction: "forward" | "reverse" | "pingpong" | "pingpong_reverse" | string;
   color?: string;
 }
 
@@ -70,27 +70,29 @@ function expandFrameTag(
   }
 
   switch (tag.direction) {
-    case 'reverse':
+    case "reverse":
       return [...range].reverse();
-    case 'pingpong':
+    case "pingpong":
       return [...range, ...range.slice(1, -1).reverse()];
-    case 'pingpong_reverse': {
+    case "pingpong_reverse": {
       const reversed = [...range].reverse();
       return [...reversed, ...reversed.slice(1, -1).reverse()];
     }
-    case 'forward':
+    case "forward":
     default:
       return range;
   }
 }
 
-export function createAsepriteSpriteSheet(data: AsepriteSheetData): AsepriteSpriteSheet {
+export function createAsepriteSpriteSheet(
+  data: AsepriteSheetData,
+): AsepriteSpriteSheet {
   const frames = Object.entries(data.frames)
     .sort(([left], [right]) => getFrameOrder(left) - getFrameOrder(right))
     .map(([, frame]) => frame);
 
   if (frames.length === 0) {
-    throw new Error('Aseprite sprite sheets must contain at least one frame.');
+    throw new Error("Aseprite sprite sheets must contain at least one frame.");
   }
 
   return {
@@ -104,9 +106,13 @@ export function selectAsepriteAnimation(
   sheet: AsepriteSpriteSheet,
   requestedTagName?: string,
 ): AsepriteAnimationSelection {
-  const requestedTag = requestedTagName === undefined
-    ? null
-    : sheet.frameTags.find((tag) => normalizeTagName(tag.name) === normalizeTagName(requestedTagName)) ?? null;
+  const requestedTag =
+    requestedTagName === undefined
+      ? null
+      : (sheet.frameTags.find(
+          (tag) =>
+            normalizeTagName(tag.name) === normalizeTagName(requestedTagName),
+        ) ?? null);
   const selectedTag = requestedTag ?? sheet.frameTags[0] ?? null;
 
   if (selectedTag === null) {

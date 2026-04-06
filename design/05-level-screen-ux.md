@@ -102,4 +102,4 @@ resume, everything continues from where it left off.
 - `src/screens/levelScreen.ts` — the orchestration layer; reads level
   definition, instantiates and connects the typing engine, character companion,
   stats display, and environment; handles the event glue between subsystems;
-  manages the lifecycle 
+  manages the lifecycle

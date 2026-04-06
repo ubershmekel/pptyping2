@@ -97,7 +97,12 @@
 }
 
 .ts-panel-bg-pokemon {
-  background: radial-gradient(ellipse at 50% 80%, #2a1f00 0%, #1a0f00 50%, #0d0d0d 100%);
+  background: radial-gradient(
+    ellipse at 50% 80%,
+    #2a1f00 0%,
+    #1a0f00 50%,
+    #0d0d0d 100%
+  );
   border: 2px solid rgba(255, 215, 0, 0.3);
   box-shadow:
     0 0 40px rgba(255, 215, 0, 0.1) inset,
@@ -105,7 +110,12 @@
 }
 
 .ts-panel-bg-mlp {
-  background: radial-gradient(ellipse at 50% 80%, #2a0020 0%, #1a0030 50%, #0d0d1a 100%);
+  background: radial-gradient(
+    ellipse at 50% 80%,
+    #2a0020 0%,
+    #1a0030 50%,
+    #0d0d1a 100%
+  );
   border: 2px solid rgba(255, 110, 180, 0.3);
   box-shadow:
     0 0 40px rgba(255, 110, 180, 0.1) inset,
@@ -122,11 +132,19 @@
 }
 
 .ts-panel-glow-pokemon {
-  background: radial-gradient(ellipse at 50% 100%, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(255, 215, 0, 0.15) 0%,
+    transparent 70%
+  );
 }
 
 .ts-panel-glow-mlp {
-  background: radial-gradient(ellipse at 50% 100%, rgba(255, 110, 180, 0.15) 0%, transparent 70%);
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(255, 110, 180, 0.15) 0%,
+    transparent 70%
+  );
 }
 
 .ts-panel:hover .ts-panel-glow,

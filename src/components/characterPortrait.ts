@@ -1,6 +1,6 @@
-import type { AsepriteFrameData } from '../aseprite';
-import { selectAsepriteAnimation } from '../aseprite';
-import type { CharacterPortrait } from '../assets/characters';
+import type { AsepriteFrameData } from "../aseprite";
+import { selectAsepriteAnimation } from "../aseprite";
+import type { CharacterPortrait } from "../assets/characters";
 
 export interface CharacterPortraitHandle {
   element: HTMLElement;
@@ -18,9 +18,9 @@ export function createCharacterPortraitElement(
   altText: string,
   options: CharacterPortraitRenderOptions = {},
 ): CharacterPortraitHandle {
-  if (portrait.kind === 'static') {
-    const image = document.createElement('img');
-    image.className = options.className ?? '';
+  if (portrait.kind === "static") {
+    const image = document.createElement("img");
+    image.className = options.className ?? "";
     image.src = portrait.src;
     image.alt = altText;
     image.draggable = false;
@@ -31,10 +31,13 @@ export function createCharacterPortraitElement(
     };
   }
 
-  const animation = selectAsepriteAnimation(portrait.spriteSheet, options.loopTag);
+  const animation = selectAsepriteAnimation(
+    portrait.spriteSheet,
+    options.loopTag,
+  );
   const firstFrame = animation.frames[0];
-  const canvas = document.createElement('canvas');
-  canvas.className = options.className ?? '';
+  const canvas = document.createElement("canvas");
+  canvas.className = options.className ?? "";
   canvas.width = firstFrame.sourceSize.w;
   canvas.height = firstFrame.sourceSize.h;
   canvas.draggable = false;
@@ -42,8 +45,8 @@ export function createCharacterPortraitElement(
   if (animation.tagName !== null) {
     canvas.dataset.portraitTag = animation.tagName;
   }
-  canvas.setAttribute('role', 'img');
-  canvas.setAttribute('aria-label', altText);
+  canvas.setAttribute("role", "img");
+  canvas.setAttribute("aria-label", altText);
 
   let timeoutId: number | null = null;
   let frameIndex = 0;
@@ -51,8 +54,14 @@ export function createCharacterPortraitElement(
 
   const spriteImage = new Image();
 
-  const drawFrame = (context: CanvasRenderingContext2D, frame: AsepriteFrameData): void => {
-    if (canvas.width !== frame.sourceSize.w || canvas.height !== frame.sourceSize.h) {
+  const drawFrame = (
+    context: CanvasRenderingContext2D,
+    frame: AsepriteFrameData,
+  ): void => {
+    if (
+      canvas.width !== frame.sourceSize.w ||
+      canvas.height !== frame.sourceSize.h
+    ) {
       canvas.width = frame.sourceSize.w;
       canvas.height = frame.sourceSize.h;
     }
@@ -77,7 +86,7 @@ export function createCharacterPortraitElement(
       return;
     }
 
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
     if (context === null) {
       return;
     }
@@ -100,10 +109,10 @@ export function createCharacterPortraitElement(
     step();
   };
 
-  spriteImage.addEventListener('load', handleImageLoad, { once: true });
+  spriteImage.addEventListener("load", handleImageLoad, { once: true });
   spriteImage.src = portrait.imageUrl;
   if (spriteImage.complete && spriteImage.naturalWidth > 0) {
-    spriteImage.removeEventListener('load', handleImageLoad);
+    spriteImage.removeEventListener("load", handleImageLoad);
     handleImageLoad();
   }
 

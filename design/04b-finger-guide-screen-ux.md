@@ -49,12 +49,12 @@ row):
 The full US keyboard SVG (`KB_United_States.svg`) is rendered inline and
 colored at runtime:
 
-| Key state                        | Cap fill            | Stroke        |
-| -------------------------------- | ------------------- | ------------- |
-| Not yet unlocked for this level  | `#e8e4de` dim       | —             |
-| Active — regular key             | finger color        | `#888` 1px    |
-| Active — new key this level      | finger color        | `#4b2f18` 2.2px |
-| Active — anchor (`F` or `J`)     | finger color        | `#4b2f18` 2.8px |
+| Key state                       | Cap fill      | Stroke          |
+| ------------------------------- | ------------- | --------------- |
+| Not yet unlocked for this level | `#e8e4de` dim | —               |
+| Active — regular key            | finger color  | `#888` 1px      |
+| Active — new key this level     | finger color  | `#4b2f18` 2.2px |
+| Active — anchor (`F` or `J`)    | finger color  | `#4b2f18` 2.8px |
 
 Finger colors are shared with the hand diagram (see below).
 
@@ -76,11 +76,11 @@ Two instances of `right-hand.svg` are rendered below the keyboard:
 Each SVG has named paths for `#Pinky`, `#Ring`, `#Middle`, `#Index`, and
 `#Thumb`. At render time each finger path is recolored:
 
-| Condition                          | Fill                   | Opacity |
-| ---------------------------------- | ---------------------- | ------- |
-| Finger has active keys this level  | `FINGER_COLORS[name]`  | 1       |
-| Finger has no active keys          | `#b0a898` (neutral)    | 0.3     |
-| Thumb (no keyboard assignment)     | neutral                | 0.3     |
+| Condition                         | Fill                  | Opacity |
+| --------------------------------- | --------------------- | ------- |
+| Finger has active keys this level | `FINGER_COLORS[name]` | 1       |
+| Finger has no active keys         | `#b0a898` (neutral)   | 0.3     |
+| Thumb (no keyboard assignment)    | neutral               | 0.3     |
 
 The background rect in the SVG (`<rect width="208">`) is hidden so the dark
 screen background shows through.
@@ -96,16 +96,16 @@ thumb, not a letter finger.
 
 These colors are shared between the keyboard keys and the hand finger paths:
 
-| Finger        | Color     |
-| ------------- | --------- |
-| Left pinky    | `#f3b6a5` |
-| Left ring     | `#f6c98f` |
-| Left middle   | `#f4de7f` |
-| Left index    | `#b8d98b` |
-| Right index   | `#8ed6b8` |
-| Right middle  | `#93c7ef` |
-| Right ring    | `#b6b7ef` |
-| Right pinky   | `#dbb0e8` |
+| Finger       | Color     |
+| ------------ | --------- |
+| Left pinky   | `#f3b6a5` |
+| Left ring    | `#f6c98f` |
+| Left middle  | `#f4de7f` |
+| Left index   | `#b8d98b` |
+| Right index  | `#8ed6b8` |
+| Right middle | `#93c7ef` |
+| Right ring   | `#b6b7ef` |
+| Right pinky  | `#dbb0e8` |
 
 ## Legend
 
@@ -148,11 +148,11 @@ skip through the screen on retries without reaching for the mouse.
 
 ## Implementation surface
 
-| File                              | Role                                   |
-| --------------------------------- | -------------------------------------- |
-| `src/screens/fingerGuide.ts`      | Screen renderer, SVG coloring logic    |
-| `src/screens/fingerGuide.css`     | Layout and visual styling              |
-| `src/assets/keyboard/KB_United_States.svg` | Keyboard source SVG           |
-| `src/assets/hand/right-hand.svg`  | Hand source SVG (used for both hands)  |
-| `src/types.ts`                    | `finger-guide` AppScreen variant       |
-| `src/app.ts`                      | Routes `/level/<N>` through this screen |
+| File                                       | Role                                    |
+| ------------------------------------------ | --------------------------------------- |
+| `src/screens/fingerGuide.ts`               | Screen renderer, SVG coloring logic     |
+| `src/screens/fingerGuide.css`              | Layout and visual styling               |
+| `src/assets/keyboard/KB_United_States.svg` | Keyboard source SVG                     |
+| `src/assets/hand/right-hand.svg`           | Hand source SVG (used for both hands)   |
+| `src/types.ts`                             | `finger-guide` AppScreen variant        |
+| `src/app.ts`                               | Routes `/level/<N>` through this screen |

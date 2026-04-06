@@ -1,4 +1,4 @@
-import type { ScreenMount } from './types';
+import type { ScreenMount } from "./types";
 
 type Cleanup = () => void;
 
@@ -44,7 +44,9 @@ export function createScreenMount(el: HTMLElement): ScreenMount {
     listen: (target, type, listener, options) => {
       const eventListener = listener as EventListener;
       target.addEventListener(type, eventListener, options);
-      return register(() => target.removeEventListener(type, eventListener, options));
+      return register(() =>
+        target.removeEventListener(type, eventListener, options),
+      );
     },
     timeout: (callback, ms) => {
       let cancel: Cleanup = () => {};

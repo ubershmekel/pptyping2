@@ -72,22 +72,22 @@ export function getLevelText(levelNumber: number): string {
 // Letters available at each level (cumulative, ordered by curriculum order fjetoainhsrludywmgcpkbvxqz)
 // Finale levels reuse the same cumulative set as the prior learning level.
 export const LEVEL_LETTERS: Record<number, string> = {
-  1:  "abcdefghijklmnopqrstuvwxyz", // speed test: full alphabet
-  2:  "fj",
-  3:  "fjet",
-  4:  "fjet",                       // arc 1 finale: reviews f j e t
-  5:  "fjetoa",
-  6:  "fjetoain",
-  7:  "fjetoainhs",
-  8:  "fjetoainhs",                 // arc 2 finale: reviews all unlocked so far
-  9:  "fjetoainhsrl",
+  1: "abcdefghijklmnopqrstuvwxyz", // speed test: full alphabet
+  2: "fj",
+  3: "fjet",
+  4: "fjet", // arc 1 finale: reviews f j e t
+  5: "fjetoa",
+  6: "fjetoain",
+  7: "fjetoainhs",
+  8: "fjetoainhs", // arc 2 finale: reviews all unlocked so far
+  9: "fjetoainhsrl",
   10: "fjetoainhsrlud",
   11: "fjetoainhsrludyw",
-  12: "fjetoainhsrludyw",           // arc 3 finale: reviews all unlocked so far
+  12: "fjetoainhsrludyw", // arc 3 finale: reviews all unlocked so far
   13: "fjetoainhsrludywmg",
   14: "fjetoainhsrludywmgcp",
   15: "fjetoainhsrludywmgcpkb",
-  16: "fjetoainhsrludywmgcpkb",     // arc 4 finale: reviews all unlocked so far
+  16: "fjetoainhsrludywmgcpkb", // arc 4 finale: reviews all unlocked so far
   17: "fjetoainhsrludywmgcpkbvx",
   18: "fjetoainhsrludywmgcpkbvxqz", // full alphabet
   19: "fjetoainhsrludywmgcpkbvxqz", // arc 5 finale: reviews all unlocked so far

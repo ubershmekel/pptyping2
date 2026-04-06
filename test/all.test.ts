@@ -1,2 +1,2 @@
-import './check-screen-lifecycle.test';
-import './screenMount.test';
+import "./check-screen-lifecycle.test";
+import "./screenMount.test";

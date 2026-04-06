@@ -1,7 +1,7 @@
-import assert from 'node:assert/strict';
-import test from 'node:test';
+import assert from "node:assert/strict";
+import test from "node:test";
 
-import { createScreenMount } from '../src/screenMount';
+import { createScreenMount } from "../src/screenMount";
 
 type TimerCallback = () => void;
 type FrameCallback = FrameRequestCallback;
@@ -61,7 +61,9 @@ class FakeWindow {
 
 function withFakeWindow(fn: (fakeWindow: FakeWindow) => void): void {
   const fakeWindow = new FakeWindow();
-  const globals = globalThis as typeof globalThis & { window?: Window & typeof globalThis };
+  const globals = globalThis as typeof globalThis & {
+    window?: Window & typeof globalThis;
+  };
   const previousWindow = globals.window;
   globals.window = fakeWindow as unknown as Window & typeof globalThis;
 
@@ -69,32 +71,32 @@ function withFakeWindow(fn: (fakeWindow: FakeWindow) => void): void {
     fn(fakeWindow);
   } finally {
     if (previousWindow === undefined) {
-      Reflect.deleteProperty(globals, 'window');
+      Reflect.deleteProperty(globals, "window");
     } else {
       globals.window = previousWindow;
     }
   }
 }
 
-test('ScreenMount listen disposer unregisters listeners immediately', () => {
+test("ScreenMount listen disposer unregisters listeners immediately", () => {
   withFakeWindow(() => {
     const mount = createScreenMount({} as HTMLElement);
     const target = new EventTarget();
     let calls = 0;
 
-    const stopListening = mount.listen<Event>(target, 'ping', () => {
+    const stopListening = mount.listen<Event>(target, "ping", () => {
       calls++;
     });
 
-    target.dispatchEvent(new Event('ping'));
+    target.dispatchEvent(new Event("ping"));
     stopListening();
-    target.dispatchEvent(new Event('ping'));
+    target.dispatchEvent(new Event("ping"));
 
     assert.equal(calls, 1);
   });
 });
 
-test('ScreenMount cleanup clears registered timers, frames, intervals, and deferred cleanup once', () => {
+test("ScreenMount cleanup clears registered timers, frames, intervals, and deferred cleanup once", () => {
   withFakeWindow((fakeWindow) => {
     const mount = createScreenMount({} as HTMLElement);
     let deferredCalls = 0;
@@ -132,4 +134,3 @@ test('ScreenMount cleanup clears registered timers, frames, intervals, and defer
     assert.equal(frameCalls, 0);
   });
 });
-

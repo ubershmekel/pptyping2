@@ -1,9 +1,9 @@
-import './mainMenu.css';
-import { CHARACTER_PORTRAITS } from '../assets/characters';
-import { createCharacterPortraitElement } from '../components/characterPortrait';
-import { createScreenMount } from '../screenMount';
-import { activeProgress } from '../state/gameState';
-import type { PlayerProfile, ScreenMount } from '../types';
+import "./mainMenu.css";
+import { CHARACTER_PORTRAITS } from "../assets/characters";
+import { createCharacterPortraitElement } from "../components/characterPortrait";
+import { createScreenMount } from "../screenMount";
+import { activeProgress } from "../state/gameState";
+import type { PlayerProfile, ScreenMount } from "../types";
 
 export function renderMainMenu(
   profile: PlayerProfile,
@@ -11,12 +11,14 @@ export function renderMainMenu(
   onSwitchTeams: () => void,
   onSettings: () => void,
 ): ScreenMount {
-  const screen = document.createElement('div');
+  const screen = document.createElement("div");
   const mount = createScreenMount(screen);
-  screen.className = 'screen main-menu-screen';
+  screen.className = "screen main-menu-screen";
 
-  const hasSave = profile.teamSelected &&
-    (activeProgress(profile).highestUnlockedLevel > 1 || activeProgress(profile).levelRecords[1]?.completed);
+  const hasSave =
+    profile.teamSelected &&
+    (activeProgress(profile).highestUnlockedLevel > 1 ||
+      activeProgress(profile).levelRecords[1]?.completed);
 
   screen.innerHTML = `
     <div class="mm-bg" aria-hidden="true">
@@ -42,24 +44,26 @@ export function renderMainMenu(
     </div>
 
     <nav class="mm-nav">
-      ${hasSave
-        ? `<button class="mm-btn mm-btn-primary" data-action="continue">▶ Continue</button>
+      ${
+        hasSave
+          ? `<button class="mm-btn mm-btn-primary" data-action="continue">▶ Continue</button>
            <button class="mm-btn mm-btn-ghost" data-action="switch-teams">Switch Teams</button>`
-        : `<button class="mm-btn mm-btn-primary" data-action="switch-teams">Start Game</button>`}
+          : `<button class="mm-btn mm-btn-primary" data-action="switch-teams">Start Game</button>`
+      }
       <button class="mm-btn mm-btn-ghost mm-btn-settings" data-action="settings">⚙ Settings</button>
     </nav>
   `;
 
   if (hasSave) {
-    const slot = screen.querySelector<HTMLElement>('.mm-character-slot');
+    const slot = screen.querySelector<HTMLElement>(".mm-character-slot");
     if (slot !== null) {
       const portrait = createCharacterPortraitElement(
         CHARACTER_PORTRAITS[profile.activeTeam],
         `${profile.activeTeam} companion`,
         {
-          animated: false,
-          className: 'mm-character',
-          loopTag: 'stand',
+          // animated: false,
+          className: "mm-character",
+          loopTag: "stand",
         },
       );
       slot.appendChild(portrait.element);
@@ -67,13 +71,15 @@ export function renderMainMenu(
     }
   }
 
-  mount.listen(screen, 'click', (e: Event) => {
-    const btn = (e.target as HTMLElement).closest('[data-action]') as HTMLElement | null;
+  mount.listen(screen, "click", (e: Event) => {
+    const btn = (e.target as HTMLElement).closest(
+      "[data-action]",
+    ) as HTMLElement | null;
     if (!btn) return;
-    const action = btn.dataset['action'];
-    if (action === 'continue') onContinue();
-    else if (action === 'switch-teams') onSwitchTeams();
-    else if (action === 'settings') onSettings();
+    const action = btn.dataset["action"];
+    if (action === "continue") onContinue();
+    else if (action === "switch-teams") onSwitchTeams();
+    else if (action === "settings") onSettings();
   });
 
   return mount;

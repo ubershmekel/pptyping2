@@ -26,8 +26,9 @@ how they're doing without requiring them to look away from the text.
 The companion's horizontal position maps directly to the cursor index in the
 current line. As the cursor advances right, the companion moves right
 proportionally across the text line's bounding box. The movement is not instant
+
 - it uses a CSS transition (ease-out) on the `transform: translateX` property so
-it smoothly glides to the new position rather than teleporting.
+  it smoothly glides to the new position rather than teleporting.
 
 The walking animation is currently faked with CSS: a slight up/down oscillation
 (translate Y) combined with a subtle lean (rotate) creates a bouncy walk feel.

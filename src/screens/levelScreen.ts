@@ -1,10 +1,10 @@
-import './levelScreen.css';
-import type { Difficulty, LevelStats, ScreenMount, Team } from '../types';
-import { createScreenMount } from '../screenMount';
-import { DIFFICULTY_THRESHOLDS } from '../types';
-import { getLevelText } from '../data/wordLists';
-import { getLevelDef, ARC_ENVIRONMENTS } from '../data/levels';
-import { CharacterCompanion } from '../components/character';
+import "./levelScreen.css";
+import type { Difficulty, LevelStats, ScreenMount, Team } from "../types";
+import { createScreenMount } from "../screenMount";
+import { DIFFICULTY_THRESHOLDS } from "../types";
+import { getLevelText } from "../data/wordLists";
+import { getLevelDef, ARC_ENVIRONMENTS } from "../data/levels";
+import { CharacterCompanion } from "../components/character";
 
 type LineDef = {
   text: string;
@@ -38,21 +38,27 @@ class TypingEngine {
 
   renderCurrentLine(container: HTMLElement): void {
     const line = this.lines[this.currentLineIndex];
-    container.innerHTML = '';
+    container.innerHTML = "";
     this.visibleSpans = [];
 
     for (let i = 0; i < line.text.length; i++) {
-      const span = document.createElement('span');
+      const span = document.createElement("span");
       const globalIndex = line.start + i;
-      span.className = 'char';
-      span.dataset.state = globalIndex < this.index ? 'done' : globalIndex === this.index ? 'current' : 'pending';
-      const isTrailingSpace = line.text[i] === ' ' && i === line.text.length - 1;
-      span.textContent = line.text[i] === ' ' ? '\u00A0' : line.text[i];
-      if (line.text[i] === ' ') {
-        span.classList.add('is-space');
+      span.className = "char";
+      span.dataset.state =
+        globalIndex < this.index
+          ? "done"
+          : globalIndex === this.index
+            ? "current"
+            : "pending";
+      const isTrailingSpace =
+        line.text[i] === " " && i === line.text.length - 1;
+      span.textContent = line.text[i] === " " ? "\u00A0" : line.text[i];
+      if (line.text[i] === " ") {
+        span.classList.add("is-space");
       }
       if (isTrailingSpace) {
-        span.classList.add('is-line-end-space');
+        span.classList.add("is-line-end-space");
       }
       this.visibleSpans.push(span);
       container.appendChild(span);
@@ -63,18 +69,18 @@ class TypingEngine {
     const nextLine = this.lines[this.currentLineIndex + 1] ?? null;
     if (!nextLine) return;
 
-    const sep = document.createElement('span');
-    sep.className = 'next-line-sep';
+    const sep = document.createElement("span");
+    sep.className = "next-line-sep";
     container.appendChild(sep);
 
     const previewLength = Math.min(5, nextLine.text.length);
     for (let i = 0; i < previewLength; i++) {
-      const span = document.createElement('span');
-      span.className = 'char next-preview';
-      span.dataset.state = 'pending';
-      span.textContent = nextLine.text[i] === ' ' ? '\u00A0' : nextLine.text[i];
-      if (nextLine.text[i] === ' ') {
-        span.classList.add('is-space');
+      const span = document.createElement("span");
+      span.className = "char next-preview";
+      span.dataset.state = "pending";
+      span.textContent = nextLine.text[i] === " " ? "\u00A0" : nextLine.text[i];
+      if (nextLine.text[i] === " ") {
+        span.classList.add("is-space");
       }
       container.appendChild(span);
     }
@@ -90,7 +96,11 @@ class TypingEngine {
   }
 
   handleKey(key: string, container: HTMLElement): void {
-    if (this.pausedAt !== null || this.index >= this.text.length || key.length !== 1) {
+    if (
+      this.pausedAt !== null ||
+      this.index >= this.text.length ||
+      key.length !== 1
+    ) {
       return;
     }
 
@@ -103,8 +113,15 @@ class TypingEngine {
     this.totalStrokes++;
 
     if (pressed !== expected) {
-      this.visibleSpans[this.index - this.lines[this.currentLineIndex].start]?.classList.add('error-flash');
-      this.onError?.(this.index, this.visibleSpans[this.index - this.lines[this.currentLineIndex].start] ?? null);
+      this.visibleSpans[
+        this.index - this.lines[this.currentLineIndex].start
+      ]?.classList.add("error-flash");
+      this.onError?.(
+        this.index,
+        this.visibleSpans[
+          this.index - this.lines[this.currentLineIndex].start
+        ] ?? null,
+      );
       return;
     }
 
@@ -113,7 +130,7 @@ class TypingEngine {
     const line = this.lines[this.currentLineIndex];
     const localIndex = this.index - line.start;
     const span = this.visibleSpans[localIndex];
-    setSpanState(span, 'done');
+    setSpanState(span, "done");
 
     this.index++;
     this.onCorrect?.(this.index - 1, span ?? null);
@@ -128,12 +145,16 @@ class TypingEngine {
     if (this.index >= line.end) {
       this.onLineComplete?.(this.currentLineIndex);
     } else {
-      setSpanState(this.visibleSpans[localIndex + 1], 'current');
+      setSpanState(this.visibleSpans[localIndex + 1], "current");
     }
   }
 
   pause(): void {
-    if (this.pausedAt !== null || this.startTime === null || this.endTime !== null) {
+    if (
+      this.pausedAt !== null ||
+      this.startTime === null ||
+      this.endTime !== null
+    ) {
       return;
     }
     this.pausedAt = Date.now();
@@ -147,11 +168,20 @@ class TypingEngine {
     this.pausedAt = null;
   }
 
-  getLiveStats(): { wpm: number; accuracy: number; progress: number; timeSeconds: number } {
+  getLiveStats(): {
+    wpm: number;
+    accuracy: number;
+    progress: number;
+    timeSeconds: number;
+  } {
     const elapsedMs = this.getElapsedMs();
     const elapsed = elapsedMs / 1000;
-    const wpm = elapsed > 3 ? Math.round((this.correctStrokes / 5) / (elapsed / 60)) : 0;
-    const accuracy = this.totalStrokes > 0 ? Math.round((this.correctStrokes / this.totalStrokes) * 100) : 100;
+    const wpm =
+      elapsed > 3 ? Math.round(this.correctStrokes / 5 / (elapsed / 60)) : 0;
+    const accuracy =
+      this.totalStrokes > 0
+        ? Math.round((this.correctStrokes / this.totalStrokes) * 100)
+        : 100;
     const progress = this.text.length > 0 ? this.index / this.text.length : 0;
 
     return { wpm, accuracy, progress, timeSeconds: elapsed };
@@ -173,8 +203,12 @@ class TypingEngine {
 
   private buildStats(): LevelStats {
     const elapsed = this.getElapsedMs() / 1000;
-    const wpm = elapsed > 0 ? Math.round((this.correctStrokes / 5) / (elapsed / 60)) : 0;
-    const accuracy = this.totalStrokes > 0 ? Math.round((this.correctStrokes / this.totalStrokes) * 100) : 100;
+    const wpm =
+      elapsed > 0 ? Math.round(this.correctStrokes / 5 / (elapsed / 60)) : 0;
+    const accuracy =
+      this.totalStrokes > 0
+        ? Math.round((this.correctStrokes / this.totalStrokes) * 100)
+        : 100;
 
     return {
       wpm,
@@ -196,14 +230,14 @@ function buildLines(text: string, maxLength = 32): LineDef[] {
 
   for (const word of words) {
     const nextWords = lineWords.length === 0 ? [word] : [...lineWords, word];
-    const nextText = nextWords.join(' ');
+    const nextText = nextWords.join(" ");
 
     if (lineWords.length > 0 && nextText.length > maxLength) {
-      const textLine = lineWords.join(' ');
+      const textLine = lineWords.join(" ");
       // Include the trailing space so the user presses Space to advance to the next line.
       // That space exists in the global text at position lineStart + textLine.length.
       lines.push({
-        text: textLine + ' ',
+        text: textLine + " ",
         start: lineStart,
         end: lineStart + textLine.length + 1,
       });
@@ -216,7 +250,7 @@ function buildLines(text: string, maxLength = 32): LineDef[] {
   }
 
   if (lineWords.length > 0) {
-    const textLine = lineWords.join(' ');
+    const textLine = lineWords.join(" ");
     lines.push({
       text: textLine,
       start: lineStart,
@@ -227,7 +261,10 @@ function buildLines(text: string, maxLength = 32): LineDef[] {
   return lines;
 }
 
-function setSpanState(span: HTMLSpanElement | undefined, state: 'done' | 'current' | 'pending'): void {
+function setSpanState(
+  span: HTMLSpanElement | undefined,
+  state: "done" | "current" | "pending",
+): void {
   if (!span) {
     return;
   }
@@ -238,7 +275,7 @@ function formatSeconds(timeSeconds: number): string {
   const whole = Math.max(0, Math.floor(timeSeconds));
   const minutes = Math.floor(whole / 60);
   const seconds = whole % 60;
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
 export function renderLevelScreen(
@@ -255,7 +292,7 @@ export function renderLevelScreen(
   const levelText = getLevelText(levelNumber);
   const thresholds = DIFFICULTY_THRESHOLDS[difficulty];
 
-  const screen = document.createElement('div');
+  const screen = document.createElement("div");
   const mount = createScreenMount(screen);
   screen.className = `screen level-screen team-${team} ${env.cssClass}`;
 
@@ -305,27 +342,31 @@ export function renderLevelScreen(
   `;
 
   const engine = new TypingEngine(levelText);
-  const textDisplay = screen.querySelector('#text-display') as HTMLElement;
-  const charTrack = screen.querySelector('#char-track') as HTMLElement;
-  const wpmVal = screen.querySelector('#stat-wpm-val') as HTMLElement;
-  const accVal = screen.querySelector('#stat-acc-val') as HTMLElement;
-  const pauseOverlay = screen.querySelector('#pause-overlay') as HTMLDivElement;
-  const pauseBtn = screen.querySelector('#pause-btn') as HTMLButtonElement;
-  const pauseWpm = screen.querySelector('#pause-wpm') as HTMLElement;
-  const pauseAcc = screen.querySelector('#pause-acc') as HTMLElement;
-  const pauseTime = screen.querySelector('#pause-time') as HTMLElement;
-  const pauseResume = screen.querySelector('#pause-resume') as HTMLButtonElement;
-  const pauseRetry = screen.querySelector('#pause-retry') as HTMLButtonElement;
-  const pauseLevelSelect = screen.querySelector('#pause-level-select') as HTMLButtonElement;
-  const pauseQuit = screen.querySelector('#pause-quit') as HTMLButtonElement;
-  const progressBeam = screen.querySelector('#progress-beam') as HTMLElement;
+  const textDisplay = screen.querySelector("#text-display") as HTMLElement;
+  const charTrack = screen.querySelector("#char-track") as HTMLElement;
+  const wpmVal = screen.querySelector("#stat-wpm-val") as HTMLElement;
+  const accVal = screen.querySelector("#stat-acc-val") as HTMLElement;
+  const pauseOverlay = screen.querySelector("#pause-overlay") as HTMLDivElement;
+  const pauseBtn = screen.querySelector("#pause-btn") as HTMLButtonElement;
+  const pauseWpm = screen.querySelector("#pause-wpm") as HTMLElement;
+  const pauseAcc = screen.querySelector("#pause-acc") as HTMLElement;
+  const pauseTime = screen.querySelector("#pause-time") as HTMLElement;
+  const pauseResume = screen.querySelector(
+    "#pause-resume",
+  ) as HTMLButtonElement;
+  const pauseRetry = screen.querySelector("#pause-retry") as HTMLButtonElement;
+  const pauseLevelSelect = screen.querySelector(
+    "#pause-level-select",
+  ) as HTMLButtonElement;
+  const pauseQuit = screen.querySelector("#pause-quit") as HTMLButtonElement;
+  const progressBeam = screen.querySelector("#progress-beam") as HTMLElement;
 
   const character = new CharacterCompanion(team);
   character.mount(charTrack);
   mount.defer(() => character.destroy());
   engine.renderCurrentLine(textDisplay);
   engine.renderNextLine(textDisplay);
-  pauseBtn.setAttribute('aria-expanded', 'false');
+  pauseBtn.setAttribute("aria-expanded", "false");
 
   let comboCount = 0;
   let isPaused = false;
@@ -368,9 +409,9 @@ export function renderLevelScreen(
     isPaused = true;
     engine.pause();
     syncStats();
-    screen.classList.add('level-paused');
+    screen.classList.add("level-paused");
     pauseOverlay.hidden = false;
-    pauseBtn.setAttribute('aria-expanded', 'true');
+    pauseBtn.setAttribute("aria-expanded", "true");
     pauseResume.focus();
   }
 
@@ -381,25 +422,28 @@ export function renderLevelScreen(
 
     isPaused = false;
     engine.resume();
-    screen.classList.remove('level-paused');
+    screen.classList.remove("level-paused");
     pauseOverlay.hidden = true;
-    pauseBtn.setAttribute('aria-expanded', 'false');
+    pauseBtn.setAttribute("aria-expanded", "false");
     textDisplay.focus();
   }
 
-  function spawnEffect(span: HTMLSpanElement | null, type: 'correct' | 'error'): void {
+  function spawnEffect(
+    span: HTMLSpanElement | null,
+    type: "correct" | "error",
+  ): void {
     if (!span) {
       return;
     }
 
-    span.classList.remove('letter-hit', 'letter-error');
+    span.classList.remove("letter-hit", "letter-error");
     void span.offsetWidth;
-    span.classList.add(type === 'correct' ? 'letter-hit' : 'letter-error');
+    span.classList.add(type === "correct" ? "letter-hit" : "letter-error");
     mount.listen(
       span,
-      'animationend',
+      "animationend",
       () => {
-        span.classList.remove('letter-hit', 'letter-error', 'error-flash');
+        span.classList.remove("letter-hit", "letter-error", "error-flash");
       },
       { once: true },
     );
@@ -407,7 +451,7 @@ export function renderLevelScreen(
 
   engine.onCorrect = (_charIndex, span) => {
     comboCount++;
-    spawnEffect(span, 'correct');
+    spawnEffect(span, "correct");
     if (comboCount > 0 && comboCount % 10 === 0) {
       character.celebrate();
     }
@@ -417,14 +461,14 @@ export function renderLevelScreen(
 
   engine.onError = (_charIndex, span) => {
     comboCount = 0;
-    spawnEffect(span ?? engine.getCurrentSpan(), 'error');
+    spawnEffect(span ?? engine.getCurrentSpan(), "error");
     character.flinch();
     syncStats();
   };
 
   engine.onLineComplete = () => {
     isTransitioningLine = true;
-    textDisplay.classList.add('line-exit');
+    textDisplay.classList.add("line-exit");
     updateCharacterPosition(true);
 
     if (cancelLineTransition !== null) {
@@ -435,20 +479,21 @@ export function renderLevelScreen(
       cancelLineTransition = null;
       engine.advanceLine(textDisplay);
       engine.renderNextLine(textDisplay);
-      textDisplay.classList.remove('line-exit');
-      textDisplay.classList.add('line-enter');
+      textDisplay.classList.remove("line-exit");
+      textDisplay.classList.add("line-enter");
       isTransitioningLine = false;
       updateCharacterPosition();
     }, 170);
   };
 
   engine.onComplete = (stats) => {
-    const passed = stats.accuracy >= thresholds.accuracy && stats.wpm >= thresholds.wpm;
+    const passed =
+      stats.accuracy >= thresholds.accuracy && stats.wpm >= thresholds.wpm;
     const finalStats: LevelStats = { ...stats, passed };
 
     syncStats();
     character.celebrate();
-    screen.classList.add('level-complete-flash');
+    screen.classList.add("level-complete-flash");
     stopKeyHandler();
 
     cancelComplete = mount.timeout(() => {
@@ -469,7 +514,7 @@ export function renderLevelScreen(
       return;
     }
 
-    if (e.key === 'Escape') {
+    if (e.key === "Escape") {
       e.preventDefault();
       if (isPaused) {
         closePause();
@@ -479,7 +524,7 @@ export function renderLevelScreen(
       return;
     }
 
-    if (isPaused || isTransitioningLine || e.key === 'Tab') {
+    if (isPaused || isTransitioningLine || e.key === "Tab") {
       e.preventDefault();
       return;
     }
@@ -487,12 +532,12 @@ export function renderLevelScreen(
     engine.handleKey(e.key, textDisplay);
   };
 
-  mount.listen(pauseBtn, 'click', openPause);
-  mount.listen(pauseResume, 'click', closePause);
-  mount.listen(pauseRetry, 'click', onRetry);
-  mount.listen(pauseLevelSelect, 'click', onLevelSelect);
-  mount.listen(pauseQuit, 'click', onQuit);
-  const stopKeyHandler = mount.listen(document, 'keydown', keyHandler);
+  mount.listen(pauseBtn, "click", openPause);
+  mount.listen(pauseResume, "click", closePause);
+  mount.listen(pauseRetry, "click", onRetry);
+  mount.listen(pauseLevelSelect, "click", onLevelSelect);
+  mount.listen(pauseQuit, "click", onQuit);
+  const stopKeyHandler = mount.listen(document, "keydown", keyHandler);
   mount.timeout(() => updateCharacterPosition(), 60);
 
   return mount;

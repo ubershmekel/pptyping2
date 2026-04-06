@@ -1,9 +1,24 @@
 /* ── Arc colour tokens ────────────────────────────────────────────────────── */
-.arc-1 { --arc-col: #4ade80; --arc-glow: rgba(74, 222, 128, 0.22); }
-.arc-2 { --arc-col: #facc15; --arc-glow: rgba(250, 204,  21, 0.22); }
-.arc-3 { --arc-col: #67e8f9; --arc-glow: rgba(103, 232, 249, 0.22); }
-.arc-4 { --arc-col: #60a5fa; --arc-glow: rgba( 96, 165, 250, 0.22); }
-.arc-5 { --arc-col: #e2e8f0; --arc-glow: rgba(226, 232, 240, 0.22); }
+.arc-1 {
+  --arc-col: #4ade80;
+  --arc-glow: rgba(74, 222, 128, 0.22);
+}
+.arc-2 {
+  --arc-col: #facc15;
+  --arc-glow: rgba(250, 204, 21, 0.22);
+}
+.arc-3 {
+  --arc-col: #67e8f9;
+  --arc-glow: rgba(103, 232, 249, 0.22);
+}
+.arc-4 {
+  --arc-col: #60a5fa;
+  --arc-glow: rgba(96, 165, 250, 0.22);
+}
+.arc-5 {
+  --arc-col: #e2e8f0;
+  --arc-glow: rgba(226, 232, 240, 0.22);
+}
 
 /* ── Screen shell ─────────────────────────────────────────────────────────── */
 .level-select-screen {
@@ -32,7 +47,9 @@
   border-radius: var(--radius-sm);
   font-size: 0.78rem;
   font-weight: 700;
-  transition: background var(--transition-fast), color var(--transition-fast);
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .ls-back-btn:hover {
@@ -137,8 +154,13 @@
 }
 
 @keyframes ls-icon-bob {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-3px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
 /* ── Connector track ──────────────────────────────────────────────────────── */
@@ -152,15 +174,17 @@
 }
 
 .ls-arc-nodes::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 3px;
   top: 16px;
   bottom: 16px;
   width: 2px;
-  background: linear-gradient(to bottom,
+  background: linear-gradient(
+    to bottom,
     var(--arc-col, #444) 0%,
-    rgba(255, 255, 255, 0.06) 100%);
+    rgba(255, 255, 255, 0.06) 100%
+  );
   border-radius: 1px;
 }
 
@@ -185,7 +209,7 @@
 
 /* Connector dot */
 .ls-level-card::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -11px;
   top: 50%;
@@ -202,14 +226,13 @@
   background: rgba(0, 0, 0, 0.35);
   border-color: rgba(255, 255, 255, 0.04);
   /* Diagonal hatch overlay */
-  background-image:
-    repeating-linear-gradient(
-      -45deg,
-      rgba(255, 255, 255, 0.015) 0px,
-      rgba(255, 255, 255, 0.015) 1px,
-      transparent 1px,
-      transparent 6px
-    );
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.015) 0px,
+    rgba(255, 255, 255, 0.015) 1px,
+    transparent 1px,
+    transparent 6px
+  );
 }
 
 .ls-card-locked::before {
@@ -220,8 +243,12 @@
 }
 
 /* Locked text + icons go very dim */
-.ls-card-locked .ls-lv-num { color: #383838; }
-.ls-card-locked .ls-stats-empty { color: #333; }
+.ls-card-locked .ls-lv-num {
+  color: #383838;
+}
+.ls-card-locked .ls-stats-empty {
+  color: #333;
+}
 .ls-card-locked .ls-chip {
   background: rgba(255, 255, 255, 0.02);
   border-color: rgba(255, 255, 255, 0.04);
@@ -230,8 +257,13 @@
 
 .ls-card-open {
   border-color: color-mix(in srgb, var(--arc-col, #fff) 28%, transparent);
-  border-left: 3px solid color-mix(in srgb, var(--arc-col, #aaa) 60%, transparent);
-  background: color-mix(in srgb, var(--arc-col, #fff) 4%, rgba(255,255,255,0.03));
+  border-left: 3px solid
+    color-mix(in srgb, var(--arc-col, #aaa) 60%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--arc-col, #fff) 4%,
+    rgba(255, 255, 255, 0.03)
+  );
 }
 
 .ls-card-open:hover,
@@ -239,19 +271,28 @@
   transform: translateY(-2px) scale(1.02);
   border-color: var(--arc-col, #ffd700);
   border-left-color: var(--arc-col, #ffd700);
-  background: color-mix(in srgb, var(--arc-col, #fff) 10%, rgba(255,255,255,0.04));
+  background: color-mix(
+    in srgb,
+    var(--arc-col, #fff) 10%,
+    rgba(255, 255, 255, 0.04)
+  );
   box-shadow: 0 4px 18px var(--arc-glow, transparent);
   outline: none;
 }
 
 /* Play icon gets arc color on open cards */
-.ls-card-open .ls-open { color: var(--arc-col, #aaa); opacity: 0.9; }
+.ls-card-open .ls-open {
+  color: var(--arc-col, #aaa);
+  opacity: 0.9;
+}
 
 .ls-card-done {
   border-color: color-mix(in srgb, var(--arc-col, #4ade80) 45%, transparent);
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(0, 0, 0, 0.3),
-    color-mix(in srgb, var(--arc-col, #4ade80) 8%, transparent));
+    color-mix(in srgb, var(--arc-col, #4ade80) 8%, transparent)
+  );
   box-shadow: 0 2px 10px var(--arc-glow, transparent);
 }
 
@@ -264,14 +305,24 @@
 
 /* Next level to play — subtle pulse to draw the eye */
 .ls-card-next {
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--arc-col, #aaa) 50%, transparent),
-              0 4px 16px var(--arc-glow, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--arc-col, #aaa) 50%, transparent),
+    0 4px 16px var(--arc-glow, transparent);
   animation: ls-next-pulse 2.4s ease-in-out infinite;
 }
 
 @keyframes ls-next-pulse {
-  0%, 100% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--arc-col, #aaa) 40%, transparent), 0 4px 14px var(--arc-glow, transparent); }
-  50%       { box-shadow: 0 0 0 2px color-mix(in srgb, var(--arc-col, #aaa) 70%, transparent), 0 6px 22px var(--arc-glow, transparent); }
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--arc-col, #aaa) 40%, transparent),
+      0 4px 14px var(--arc-glow, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--arc-col, #aaa) 70%, transparent),
+      0 6px 22px var(--arc-glow, transparent);
+  }
 }
 
 .ls-attempted {
@@ -312,9 +363,16 @@
   flex-shrink: 0;
 }
 
-.ls-done        { color: var(--arc-col, #4ade80); text-shadow: 0 0 8px var(--arc-col, transparent); }
-.ls-open        { color: #666; }
-.ls-locked-icon { color: #444; }
+.ls-done {
+  color: var(--arc-col, #4ade80);
+  text-shadow: 0 0 8px var(--arc-col, transparent);
+}
+.ls-open {
+  color: #666;
+}
+.ls-locked-icon {
+  color: #444;
+}
 
 .ls-card-stats {
   display: flex;
@@ -324,9 +382,15 @@
   font-weight: 800;
 }
 
-.ls-wpm  { color: var(--arc-col, #4ade80); }
-.ls-sep  { color: #444; }
-.ls-acc  { color: #aaa; }
+.ls-wpm {
+  color: var(--arc-col, #4ade80);
+}
+.ls-sep {
+  color: #444;
+}
+.ls-acc {
+  color: #aaa;
+}
 
 .ls-card-stats small {
   font-size: 0.55rem;
@@ -358,7 +422,9 @@
   font-size: 0.46rem;
   color: #aaa;
   line-height: 1.6;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .ls-card-done .ls-chip {
@@ -388,7 +454,7 @@
 
 /* Connector dot for cutscene nodes */
 .ls-cs-node::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -11px;
   top: 50%;
@@ -407,7 +473,10 @@
   pointer-events: none;
 }
 
-.ls-cs-locked::before { background: #333; box-shadow: none; }
+.ls-cs-locked::before {
+  background: #333;
+  box-shadow: none;
+}
 
 .ls-cs-open:hover,
 .ls-cs-open:focus-visible {
@@ -443,11 +512,15 @@
 }
 
 .ls-entering {
-  animation: ls-enter 0.38s cubic-bezier(0.2, 1, 0.3, 1) var(--enter-delay, 0ms) forwards;
+  animation: ls-enter 0.38s cubic-bezier(0.2, 1, 0.3, 1) var(--enter-delay, 0ms)
+    forwards;
 }
 
 @keyframes ls-enter {
-  to { opacity: 1; transform: translateY(0); }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ── Shake (locked click) ─────────────────────────────────────────────────── */
@@ -456,26 +529,53 @@
 }
 
 @keyframes ls-shake {
-  0%  { transform: translateX(0); }
-  15% { transform: translateX(-5px) rotate(-1deg); }
-  35% { transform: translateX(5px)  rotate( 1deg); }
-  55% { transform: translateX(-3px) rotate(-0.5deg); }
-  75% { transform: translateX(3px)  rotate( 0.5deg); }
-  100%{ transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(-5px) rotate(-1deg);
+  }
+  35% {
+    transform: translateX(5px) rotate(1deg);
+  }
+  55% {
+    transform: translateX(-3px) rotate(-0.5deg);
+  }
+  75% {
+    transform: translateX(3px) rotate(0.5deg);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 /* ── Attempted pulse ──────────────────────────────────────────────────────── */
 @keyframes ls-attempted-pulse {
-  0%, 100% { box-shadow: 0 0 12px rgba(220, 80, 80, 0.2); }
-  50%       { box-shadow: 0 0 22px rgba(220, 80, 80, 0.45); }
+  0%,
+  100% {
+    box-shadow: 0 0 12px rgba(220, 80, 80, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(220, 80, 80, 0.45);
+  }
 }
 
 /* ── Icon bob per-arc offset ─────────────────────────────────────────────── */
-.arc-1 .ls-arc-icon { animation-delay: 0s;    }
-.arc-2 .ls-arc-icon { animation-delay: 0.6s;  }
-.arc-3 .ls-arc-icon { animation-delay: 1.2s;  }
-.arc-4 .ls-arc-icon { animation-delay: 1.8s;  }
-.arc-5 .ls-arc-icon { animation-delay: 2.4s;  }
+.arc-1 .ls-arc-icon {
+  animation-delay: 0s;
+}
+.arc-2 .ls-arc-icon {
+  animation-delay: 0.6s;
+}
+.arc-3 .ls-arc-icon {
+  animation-delay: 1.2s;
+}
+.arc-4 .ls-arc-icon {
+  animation-delay: 1.8s;
+}
+.arc-5 .ls-arc-icon {
+  animation-delay: 2.4s;
+}
 
 /* ── Particles ────────────────────────────────────────────────────────────── */
 .ls-particles {
@@ -496,26 +596,80 @@
   animation: ls-particle-float 7s ease-in-out infinite;
 }
 
-.ls-particle:nth-child(1)  { left:  6%; animation-delay: 0s;    }
-.ls-particle:nth-child(2)  { left: 13%; animation-delay: 1.2s;  }
-.ls-particle:nth-child(3)  { left: 20%; animation-delay: 2.5s;  }
-.ls-particle:nth-child(4)  { left: 28%; animation-delay: 0.7s;  }
-.ls-particle:nth-child(5)  { left: 36%; animation-delay: 3.1s;  }
-.ls-particle:nth-child(6)  { left: 44%; animation-delay: 1.8s;  }
-.ls-particle:nth-child(7)  { left: 52%; animation-delay: 0.3s;  }
-.ls-particle:nth-child(8)  { left: 60%; animation-delay: 4.2s;  }
-.ls-particle:nth-child(9)  { left: 68%; animation-delay: 2.0s;  }
-.ls-particle:nth-child(10) { left: 75%; animation-delay: 0.9s;  }
-.ls-particle:nth-child(11) { left: 82%; animation-delay: 3.5s;  }
-.ls-particle:nth-child(12) { left: 88%; animation-delay: 1.5s;  }
-.ls-particle:nth-child(13) { left: 93%; animation-delay: 2.8s;  }
-.ls-particle:nth-child(14) { left: 98%; animation-delay: 5.0s;  }
+.ls-particle:nth-child(1) {
+  left: 6%;
+  animation-delay: 0s;
+}
+.ls-particle:nth-child(2) {
+  left: 13%;
+  animation-delay: 1.2s;
+}
+.ls-particle:nth-child(3) {
+  left: 20%;
+  animation-delay: 2.5s;
+}
+.ls-particle:nth-child(4) {
+  left: 28%;
+  animation-delay: 0.7s;
+}
+.ls-particle:nth-child(5) {
+  left: 36%;
+  animation-delay: 3.1s;
+}
+.ls-particle:nth-child(6) {
+  left: 44%;
+  animation-delay: 1.8s;
+}
+.ls-particle:nth-child(7) {
+  left: 52%;
+  animation-delay: 0.3s;
+}
+.ls-particle:nth-child(8) {
+  left: 60%;
+  animation-delay: 4.2s;
+}
+.ls-particle:nth-child(9) {
+  left: 68%;
+  animation-delay: 2s;
+}
+.ls-particle:nth-child(10) {
+  left: 75%;
+  animation-delay: 0.9s;
+}
+.ls-particle:nth-child(11) {
+  left: 82%;
+  animation-delay: 3.5s;
+}
+.ls-particle:nth-child(12) {
+  left: 88%;
+  animation-delay: 1.5s;
+}
+.ls-particle:nth-child(13) {
+  left: 93%;
+  animation-delay: 2.8s;
+}
+.ls-particle:nth-child(14) {
+  left: 98%;
+  animation-delay: 5s;
+}
 
 @keyframes ls-particle-float {
-  0%   { bottom: 2%;  opacity: 0;   transform: scale(0.8); }
-  10%  { opacity: 0.35; }
-  80%  { opacity: 0.15; }
-  100% { bottom: 92%; opacity: 0;   transform: scale(0.4) translateX(8px); }
+  0% {
+    bottom: 2%;
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  10% {
+    opacity: 0.35;
+  }
+  80% {
+    opacity: 0.15;
+  }
+  100% {
+    bottom: 92%;
+    opacity: 0;
+    transform: scale(0.4) translateX(8px);
+  }
 }
 
 /* ── Team theming ─────────────────────────────────────────────────────────── */

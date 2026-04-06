@@ -226,7 +226,10 @@
   font-family: var(--font-game);
   font-size: 0.7rem;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
 }
 
 .fg-btn-primary {

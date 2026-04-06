@@ -44,9 +44,9 @@ export function renderLevelSelect(
   };
   for (const lvl of LEVELS) arcMap[lvl.arc].push(lvl);
 
-  const totalCompleted = Object.values(activeProgress(profile).levelRecords).filter(
-    (r) => r.completed,
-  ).length;
+  const totalCompleted = Object.values(
+    activeProgress(profile).levelRecords,
+  ).filter((r) => r.completed).length;
 
   screen.innerHTML = `
     <div class="ls-header">
@@ -153,7 +153,8 @@ function buildArc(
 
   const csOutroIdx = ARC_OUTRO_CS[arcNum];
   const csTrigger = CS_TRIGGER_LEVEL[arcNum];
-  const csUnlocked = activeProgress(profile).levelRecords[csTrigger]?.completed ?? false;
+  const csUnlocked =
+    activeProgress(profile).levelRecords[csTrigger]?.completed ?? false;
 
   const introCs = arcNum === 1 ? buildCutsceneNode(0, true) : "";
   const levelCards = levels

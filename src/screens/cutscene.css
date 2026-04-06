@@ -135,7 +135,13 @@
 }
 
 .cs-sky-dawn {
-  background: linear-gradient(180deg, #0a0a30 0%, #4a2060 40%, #ff8c42 80%, #ffcc44 100%);
+  background: linear-gradient(
+    180deg,
+    #0a0a30 0%,
+    #4a2060 40%,
+    #ff8c42 80%,
+    #ffcc44 100%
+  );
 }
 
 .cs-sky-ponyville {
@@ -155,11 +161,24 @@
 }
 
 .cs-sky-victory {
-  background: linear-gradient(180deg, #fff8c0 0%, #ffdd44 30%, #ff8844 60%, #cc44aa 100%);
+  background: linear-gradient(
+    180deg,
+    #fff8c0 0%,
+    #ffdd44 30%,
+    #ff8844 60%,
+    #cc44aa 100%
+  );
 }
 
 .cs-sky-rainbow {
-  background: linear-gradient(135deg, #ff6b6b, #ffcc44, #44ffaa, #4499ff, #cc44ff);
+  background: linear-gradient(
+    135deg,
+    #ff6b6b,
+    #ffcc44,
+    #44ffaa,
+    #4499ff,
+    #cc44ff
+  );
   opacity: 0.9;
 }
 
@@ -521,7 +540,17 @@
   left: 0;
   height: 50%;
   background: linear-gradient(180deg, #2a3060 0%, #1a2040 100%);
-  clip-path: polygon(0 100%, 15% 30%, 30% 70%, 45% 10%, 60% 55%, 75% 20%, 90% 60%, 100% 40%, 100% 100%);
+  clip-path: polygon(
+    0 100%,
+    15% 30%,
+    30% 70%,
+    45% 10%,
+    60% 55%,
+    75% 20%,
+    90% 60%,
+    100% 40%,
+    100% 100%
+  );
 }
 
 .cs-mountains-pastel {
