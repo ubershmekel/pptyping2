@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join, relative, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 type LifecycleRule = {
@@ -65,12 +65,13 @@ export function findLifecycleViolations(rootDir: string, targets: LifecycleTarge
 
   for (const { file, rules, source } of targets) {
     const contents = source ?? readFileSync(file, 'utf8');
+    const displayPath = relative(rootDir, file).split(sep).join('/');
     const lines = contents.split(/\r?\n/);
 
     lines.forEach((line, index) => {
       for (const rule of rules) {
         if (rule.regex.test(line)) {
-          violations.push(`${relative(rootDir, file)}:${index + 1}: ${rule.message}`);
+          violations.push(`${displayPath}:${index + 1}: ${rule.message}`);
         }
       }
     });
@@ -100,3 +101,4 @@ if (invokedAsScript) {
   const rootDir = fileURLToPath(new URL('..', import.meta.url));
   process.exit(runLifecycleCheck(rootDir));
 }
+
