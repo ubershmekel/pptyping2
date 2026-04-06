@@ -1,7 +1,7 @@
-import './teamSelect.css';
-import { createCharacterPortraitElement } from '../components/characterPortrait';
-import { CHARACTER_PORTRAITS } from '../assets/characters';
-import { createScreenMount } from '../screenMount';
+import "./teamSelect.css";
+import { createCharacterPortraitElement } from "../components/characterPortrait";
+import { CHARACTER_PORTRAITS } from "../assets/characters";
+import { createScreenMount } from "../screenMount";
 import type { ScreenMount, Team } from "../types";
 
 export function renderTeamSelect(
@@ -93,33 +93,46 @@ export function renderTeamSelect(
     }
   `;
 
-  const portraitConfig: Record<Team, { alt: string; animated: boolean; loopTag?: string }> = {
+  const portraitConfig: Record<
+    Team,
+    { alt: string; animated: boolean; loopTag?: string }
+  > = {
     pokemon: {
-      alt: 'Pikachu companion preview',
+      alt: "Pikachu companion preview",
       animated: true,
-      loopTag: 'stand',
+      loopTag: "stand",
     },
     mlp: {
-      alt: 'Pinkie Pie companion preview',
-      animated: false,
+      alt: "Pinkie Pie companion preview",
+      animated: true,
+      loopTag: "Right1",
     },
   };
 
-  (Object.entries(portraitConfig) as Array<[Team, { alt: string; animated: boolean; loopTag?: string }]>)
-    .forEach(([team, config]) => {
-      const slot = screen.querySelector<HTMLElement>(`[data-portrait-slot="${team}"]`);
-      if (slot === null) {
-        return;
-      }
+  (
+    Object.entries(portraitConfig) as Array<
+      [Team, { alt: string; animated: boolean; loopTag?: string }]
+    >
+  ).forEach(([team, config]) => {
+    const slot = screen.querySelector<HTMLElement>(
+      `[data-portrait-slot="${team}"]`,
+    );
+    if (slot === null) {
+      return;
+    }
 
-      const portrait = createCharacterPortraitElement(CHARACTER_PORTRAITS[team], config.alt, {
+    const portrait = createCharacterPortraitElement(
+      CHARACTER_PORTRAITS[team],
+      config.alt,
+      {
         animated: config.animated,
-        className: 'ts-character-art',
+        className: "ts-character-art",
         loopTag: config.loopTag,
-      });
-      slot.appendChild(portrait.element);
-      mount.defer(portrait.cleanup);
-    });
+      },
+    );
+    slot.appendChild(portrait.element);
+    mount.defer(portrait.cleanup);
+  });
 
   screen.querySelectorAll<HTMLElement>(".ts-panel").forEach((panel) => {
     mount.listen(panel, "click", () => {

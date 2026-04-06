@@ -1,25 +1,29 @@
-import type { AsepriteSheetData, AsepriteSpriteSheet } from '../../aseprite';
-import { createAsepriteSpriteSheet } from '../../aseprite';
-import type { CharacterState, Team } from '../../types';
-import pinkiePieUrl from './mlp/pinkie-pie.svg';
-import pikachuStandData from '../pikachu/pikachu-stand.json';
-import pikachuStandUrl from '../pikachu/pikachu-stand.png';
-import pikachuUrl from './pokemon/pikachu.svg';
+import type { AsepriteSheetData, AsepriteSpriteSheet } from "../../aseprite";
+import { createAsepriteSpriteSheet } from "../../aseprite";
+import type { CharacterState, Team } from "../../types";
+import pinkiePieUrl from "./mlp/pinkie-pie.svg";
+import pinkyData from "../pinky/pinky.json";
+import pinkyUrl from "../pinky/pinky.png";
+import pikachuStandData from "../pikachu/pikachu-stand.json";
+import pikachuStandUrl from "../pikachu/pikachu-stand.png";
+import pikachuUrl from "./pokemon/pikachu.svg";
 
 export type CharacterFrameSet = Record<CharacterState, readonly string[]>;
 
 export interface StaticCharacterPortrait {
-  kind: 'static';
+  kind: "static";
   src: string;
 }
 
 export interface SpriteCharacterPortrait {
-  kind: 'sprite';
+  kind: "sprite";
   imageUrl: string;
   spriteSheet: AsepriteSpriteSheet;
 }
 
-export type CharacterPortrait = StaticCharacterPortrait | SpriteCharacterPortrait;
+export type CharacterPortrait =
+  | StaticCharacterPortrait
+  | SpriteCharacterPortrait;
 
 const pokemonFrames: CharacterFrameSet = {
   idle: [pikachuUrl],
@@ -42,12 +46,15 @@ export const CHARACTER_FRAMES: Record<Team, CharacterFrameSet> = {
 
 export const CHARACTER_PORTRAITS: Record<Team, CharacterPortrait> = {
   pokemon: {
-    kind: 'sprite',
+    kind: "sprite",
     imageUrl: pikachuStandUrl,
-    spriteSheet: createAsepriteSpriteSheet(pikachuStandData as AsepriteSheetData),
+    spriteSheet: createAsepriteSpriteSheet(
+      pikachuStandData as AsepriteSheetData,
+    ),
   },
   mlp: {
-    kind: 'static',
-    src: pinkiePieUrl,
+    kind: "sprite",
+    imageUrl: pinkyUrl,
+    spriteSheet: createAsepriteSpriteSheet(pinkyData as AsepriteSheetData),
   },
 };
