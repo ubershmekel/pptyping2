@@ -25,6 +25,7 @@ import { renderCutscene } from "./screens/cutscene";
 import { renderFingerGuide } from "./screens/fingerGuide";
 import { renderLevelScreen } from "./screens/levelScreen";
 import { renderLevelComplete } from "./screens/levelComplete";
+import { renderSettings } from "./screens/settings";
 import { createScreenMount } from "./screenMount";
 import { Router } from "./router";
 import type { Route } from "./router";
@@ -238,39 +239,10 @@ export class App {
         (d) => this.onDifficultyChange(d),
       );
     } else if (screen.id === "settings") {
-      return this.renderSettings();
+      return renderSettings(() => this.navigate({ id: "main-menu" }));
     }
 
     return createScreenMount(document.createElement("div"));
-  }
-
-  // ─── Stub screen renderers (placeholders until dedicated screen files exist) ──
-
-  private renderSettings(): ScreenMount {
-    const screen = document.createElement("div");
-    const mount = createScreenMount(screen);
-    screen.className = "screen settings-screen";
-
-    screen.innerHTML = `
-      <div class="screen-header">
-        <button class="btn btn-ghost back-btn" data-action="back">← Back</button>
-        <h2>Settings</h2>
-      </div>
-      <div class="settings-content">
-        <p class="settings-placeholder">Settings screen — coming soon.</p>
-      </div>
-    `;
-
-    mount.listen(screen, "click", (e: Event) => {
-      const btn = (e.target as HTMLElement).closest(
-        "[data-action]",
-      ) as HTMLElement | null;
-      if (btn?.dataset["action"] === "back") {
-        this.navigate({ id: "main-menu" });
-      }
-    });
-
-    return mount;
   }
 
   // ─── Event handlers ─────────────────────────────────────────────────────────
