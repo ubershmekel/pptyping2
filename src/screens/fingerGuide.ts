@@ -136,10 +136,6 @@ function colorHandSvg(
 
 const TEACHING_TIPS: { icon: string; html: string }[] = [
   { icon: "👁", html: "Eyes on the screen, not your fingers" },
-  {
-    icon: "🏠",
-    html: "Always return to <kbd>F</kbd> and <kbd>J</kbd>",
-  },
   { icon: "✋", html: "Use the highlighted finger for each key" },
 ];
 
@@ -180,7 +176,6 @@ export function renderFingerGuide(
     <div class="fg-layout">
       <div class="fg-header">
         <div class="fg-level-tag">${levelTag}</div>
-        <h2 class="fg-title">Before you type…</h2>
       </div>
 
       <div class="fg-tip">

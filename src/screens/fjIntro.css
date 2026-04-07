@@ -1,0 +1,104 @@
+/* ── F/J home-row intro screen — shown at level 3 ── */
+
+.fj-intro-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #050810 0%, #060a0f 50%, #08070f 100%);
+}
+
+.fji-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 2rem 2rem 3rem;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+/* ── Big key display ─────────────────────────────────────────────────────── */
+
+.fji-keys {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.fji-key {
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-game);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--team-primary, #ffd700);
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid color-mix(in srgb, var(--team-primary, #ffd700) 60%, transparent);
+  border-radius: 12px;
+  box-shadow:
+    0 0 24px color-mix(in srgb, var(--team-primary, #ffd700) 20%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  user-select: none;
+}
+
+.fji-and {
+  font-size: 1rem;
+  color: #666;
+  font-family: var(--font-ui);
+}
+
+/* ── Text ─────────────────────────────────────────────────────────────────── */
+
+.fji-title {
+  margin: 0;
+  font-family: var(--font-game);
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.fji-body {
+  margin: 0;
+  font-size: 1rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.fji-nub {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #888;
+  line-height: 1.6;
+}
+
+.fji-body kbd,
+.fji-nub kbd,
+.fji-prompt kbd {
+  display: inline-block;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ddd;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.92em;
+}
+
+/* ── Prompt ───────────────────────────────────────────────────────────────── */
+
+.fji-prompt {
+  font-size: 0.88rem;
+  color: #777;
+}
+
+/* ── Completion fade ─────────────────────────────────────────────────────── */
+
+.fji-complete .fji-layout {
+  transition: opacity 0.4s;
+  opacity: 0;
+}

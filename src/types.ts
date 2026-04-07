@@ -94,6 +94,7 @@ export type AppScreen =
   | { id: "cutscene"; index: number }
   | { id: "speed-test-intro"; number: number } // level 1 intro; no canonical URL, stays at /level/<N>
   | { id: "letter-intro"; number: number; letterIndex: number } // focused per-letter intro before finger-guide; no canonical URL
+  | { id: "fj-intro"; number: number } // F/J home-row reset screen shown at level 3; no canonical URL
   | { id: "finger-guide"; number: number; skipLetterIntro?: boolean } // pre-level finger explainer; no canonical URL, stays at /level/<N>
   | { id: "level"; number: number }
   | { id: "level-complete"; number: number; stats: LevelStats }

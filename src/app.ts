@@ -27,6 +27,7 @@ import { renderCutscene } from "./screens/cutscene";
 import { renderSpeedTestIntro } from "./screens/speedTestIntro";
 import { renderFingerGuide } from "./screens/fingerGuide";
 import { renderLetterIntro } from "./screens/letterIntro";
+import { renderFjIntro } from "./screens/fjIntro";
 import { renderLevelScreen } from "./screens/levelScreen";
 import { renderLevelComplete } from "./screens/levelComplete";
 import { renderSettings } from "./screens/settings";
@@ -240,14 +241,16 @@ export class App {
     } else if (screen.id === "letter-intro") {
       const letters = getLetterIntroLetters(screen.number);
       const letter = letters[screen.letterIndex] ?? letters[0] ?? "f";
-      const onDone =
-        screen.letterIndex + 1 < letters.length
-          ? () =>
-              this.showScreen({
-                id: "letter-intro",
-                number: screen.number,
-                letterIndex: screen.letterIndex + 1,
-              })
+      const isLastLetter = screen.letterIndex + 1 >= letters.length;
+      const onDone = !isLastLetter
+        ? () =>
+            this.showScreen({
+              id: "letter-intro",
+              number: screen.number,
+              letterIndex: screen.letterIndex + 1,
+            })
+        : screen.number === 3
+          ? () => this.showScreen({ id: "fj-intro", number: screen.number })
           : () =>
               this.showScreen({
                 id: "finger-guide",
@@ -259,6 +262,14 @@ export class App {
         screen.number,
         letter,
         onDone,
+      );
+    } else if (screen.id === "fj-intro") {
+      return renderFjIntro(this.profile.activeTeam, () =>
+        this.showScreen({
+          id: "finger-guide",
+          number: screen.number,
+          skipLetterIntro: true,
+        }),
       );
     } else if (screen.id === "finger-guide") {
       // Route through letter-intro screens first for levels that introduce new letters
