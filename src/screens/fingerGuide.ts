@@ -14,7 +14,7 @@ interface KeyMeta {
   finger: string;
 }
 
-const KEY_DATA: Record<string, KeyMeta> = {
+export const KEY_DATA: Record<string, KeyMeta> = {
   q: { capId: "rect2252", labelId: "text5474", finger: "left-pinky" },
   w: { capId: "rect2254", labelId: "text5482", finger: "left-ring" },
   e: { capId: "rect2256", labelId: "text5492", finger: "left-middle" },
@@ -55,15 +55,15 @@ export const FINGER_COLORS: Record<string, string> = {
   "right-pinky": "#dbb0e8",
 };
 
-const FINGER_LABELS: Record<string, string> = {
-  "left-pinky": "L. Pinky",
-  "left-ring": "L. Ring",
-  "left-middle": "L. Middle",
-  "left-index": "L. Index",
-  "right-index": "R. Index",
-  "right-middle": "R. Middle",
-  "right-ring": "R. Ring",
-  "right-pinky": "R. Pinky",
+export const FINGER_LABELS: Record<string, string> = {
+  "left-pinky": "Left pinky",
+  "left-ring": "Left ring",
+  "left-middle": "Left middle",
+  "left-index": "Left index",
+  "right-index": "Right index",
+  "right-middle": "Right middle",
+  "right-ring": "Right ring",
+  "right-pinky": "Right pinky",
 };
 
 const FINGER_ORDER = [
@@ -79,7 +79,7 @@ const FINGER_ORDER = [
 
 // SVG path IDs in right-hand.svg → the matching keyboard finger name.
 // The left hand is the same SVG flipped (scaleX(-1)), so Index→left-index etc.
-const HAND_FINGER_IDS: { svgId: string; right: string; left: string }[] = [
+export const HAND_FINGER_IDS: { svgId: string; right: string; left: string }[] = [
   { svgId: "Pinky", right: "right-pinky", left: "left-pinky" },
   { svgId: "Ring", right: "right-ring", left: "left-ring" },
   { svgId: "Middle", right: "right-middle", left: "left-middle" },

@@ -1,0 +1,207 @@
+/* ── Letter Intro screen — focused per-letter drill before the finger guide ── */
+
+.letter-intro-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+      ellipse 60% 50% at 50% 40%,
+      color-mix(in srgb, var(--li-color, #fff) 8%, transparent) 0%,
+      transparent 70%
+    ),
+    linear-gradient(160deg, #050810 0%, #060a0f 50%, #08070f 100%);
+  overflow: hidden;
+}
+
+/* ── Layout ───────────────────────────────────────────────────────────────── */
+
+.li-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 1.5rem 2rem;
+  width: 100%;
+  max-width: 440px;
+}
+
+/* ── Badge ────────────────────────────────────────────────────────────────── */
+
+.li-badge {
+  font-size: 1rem;
+  color: #ddd;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-md, 8px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.li-badge strong {
+  color: var(--li-color, #fff);
+  font-weight: 800;
+}
+
+/* ── Letter area ──────────────────────────────────────────────────────────── */
+
+.li-letter-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.li-letter {
+  font-family: var(--font-game);
+  font-size: clamp(7rem, 17vw, 13rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--li-color, #fff);
+  user-select: none;
+  cursor: default;
+  text-shadow: 0 0 60px color-mix(in srgb, var(--li-color) 30%, transparent);
+}
+
+/* ── Finger label ─────────────────────────────────────────────────────────── */
+
+.li-finger-label {
+  font-family: var(--font-game);
+  font-size: 0.8rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--li-color, #fff);
+  opacity: 0.75;
+  margin-top: -0.25rem;
+}
+
+/* ── Hand SVG ─────────────────────────────────────────────────────────────── */
+
+.li-hand-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* SVG finger animations — transform-box + origin so scale is from element center */
+.li-hand-svg svg {
+  overflow: visible;
+}
+
+.li-hand-svg svg path {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes li-finger-pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.1); }
+}
+
+@keyframes li-finger-tap {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.35); }
+  70%  { transform: scale(1.18); }
+  100% { transform: scale(1.1); }
+}
+
+.li-finger-pulse {
+  animation: li-finger-pulse 2s ease-in-out infinite;
+}
+
+.li-finger-tap {
+  animation: li-finger-tap 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.li-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.li-hand-svg {
+  width: clamp(130px, 22vw, 200px);
+}
+
+.li-hand-svg.li-hand-flip {
+  transform: scaleX(-1);
+}
+
+.li-hand-svg svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Progress dots ────────────────────────────────────────────────────────── */
+
+.li-progress {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.li-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  transition:
+    background 0.25s,
+    border-color 0.25s,
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+
+@keyframes li-dot-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.55);
+  }
+  100% {
+    transform: scale(1.22);
+  }
+}
+
+.li-dot.li-dot-filled {
+  background: var(--li-color, #fff);
+  border-color: var(--li-color, #fff);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--li-color) 70%, transparent);
+  animation: li-dot-pop 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── Prompt ───────────────────────────────────────────────────────────────── */
+
+.li-prompt {
+  font-size: 0.88rem;
+  color: #999;
+  text-align: center;
+  min-height: 1.4em;
+  transition: opacity 0.2s;
+}
+
+.li-prompt kbd {
+  display: inline-block;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ddd;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.92em;
+}
+
+/* ── Completion state ─────────────────────────────────────────────────────── */
+
+.li-complete .li-badge,
+.li-complete .li-finger-label,
+.li-complete .li-hand-wrap,
+.li-complete .li-progress,
+.li-complete .li-prompt {
+  transition: opacity 0.35s;
+  opacity: 0;
+}

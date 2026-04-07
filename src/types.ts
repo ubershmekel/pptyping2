@@ -93,7 +93,8 @@ export type AppScreen =
   | { id: "level-select"; attempted?: number } // attempted = locked level the user tried to deep-link to
   | { id: "cutscene"; index: number }
   | { id: "speed-test-intro"; number: number } // level 1 intro; no canonical URL, stays at /level/<N>
-  | { id: "finger-guide"; number: number } // pre-level finger explainer; no canonical URL, stays at /level/<N>
+  | { id: "letter-intro"; number: number; letterIndex: number } // focused per-letter intro before finger-guide; no canonical URL
+  | { id: "finger-guide"; number: number; skipLetterIntro?: boolean } // pre-level finger explainer; no canonical URL, stays at /level/<N>
   | { id: "level"; number: number }
   | { id: "level-complete"; number: number; stats: LevelStats }
   | { id: "settings" };

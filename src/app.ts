@@ -15,21 +15,37 @@ import {
 } from "./state/gameState";
 import {
   cutsceneAfterLevel,
+  getLevelDef,
   levelAfterCutscene,
   MAX_LEVEL,
 } from "./data/levels";
+import { LEVEL_LETTERS } from "./data/wordLists";
 import { renderMainMenu } from "./screens/mainMenu";
 import { renderTeamSelect } from "./screens/teamSelect";
 import { renderLevelSelect } from "./screens/levelSelect";
 import { renderCutscene } from "./screens/cutscene";
 import { renderSpeedTestIntro } from "./screens/speedTestIntro";
 import { renderFingerGuide } from "./screens/fingerGuide";
+import { renderLetterIntro } from "./screens/letterIntro";
 import { renderLevelScreen } from "./screens/levelScreen";
 import { renderLevelComplete } from "./screens/levelComplete";
 import { renderSettings } from "./screens/settings";
 import { createScreenMount } from "./screenMount";
 import { Router } from "./router";
 import type { Route } from "./router";
+
+// Returns the new letters introduced in this level for the letter-intro drill.
+// For the first learn level (level 2), the previous level is the speed test —
+// treat it as if nothing was learned yet (prev = "").
+function getLetterIntroLetters(levelNumber: number): string[] {
+  const levelDef = getLevelDef(levelNumber);
+  if (levelDef.isFinale || levelDef.isSpeedTest) return [];
+  const prevDef = levelNumber > 1 ? getLevelDef(levelNumber - 1) : null;
+  const prevLetters =
+    !prevDef || prevDef.isSpeedTest ? "" : (LEVEL_LETTERS[levelNumber - 1] ?? "");
+  const prevSet = new Set(prevLetters.split("").filter(Boolean));
+  return levelDef.availableLetters.split("").filter((l) => !prevSet.has(l));
+}
 
 export class App {
   private container: HTMLElement;
@@ -221,7 +237,41 @@ export class App {
         () => this.showScreen({ id: "level", number: screen.number }),
         () => this.navigate({ id: "level-select" }),
       );
+    } else if (screen.id === "letter-intro") {
+      const letters = getLetterIntroLetters(screen.number);
+      const letter = letters[screen.letterIndex] ?? letters[0] ?? "f";
+      const onDone =
+        screen.letterIndex + 1 < letters.length
+          ? () =>
+              this.showScreen({
+                id: "letter-intro",
+                number: screen.number,
+                letterIndex: screen.letterIndex + 1,
+              })
+          : () =>
+              this.showScreen({
+                id: "finger-guide",
+                number: screen.number,
+                skipLetterIntro: true,
+              });
+      return renderLetterIntro(
+        this.profile.activeTeam,
+        screen.number,
+        letter,
+        onDone,
+      );
     } else if (screen.id === "finger-guide") {
+      // Route through letter-intro screens first for levels that introduce new letters
+      if (!screen.skipLetterIntro) {
+        const letters = getLetterIntroLetters(screen.number);
+        if (letters.length > 0) {
+          return this.buildScreenMount({
+            id: "letter-intro",
+            number: screen.number,
+            letterIndex: 0,
+          });
+        }
+      }
       return renderFingerGuide(
         this.profile.activeTeam,
         screen.number,
