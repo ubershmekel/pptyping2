@@ -30,6 +30,8 @@ The persisted player state. Contains:
 - `currentPosition: ScreenPosition` - where the player is in the flow (so
   Continue works)
 - `levelRecords: Record<number, LevelRecord>` - keyed by level number
+- `speedTestHistory: SpeedTestEntry[]` - ordered log of every speed test run,
+  oldest first
 
 ### `LevelRecord`
 
@@ -39,6 +41,18 @@ Per-level best performance:
 - `bestWpm: number`
 - `bestAccuracy: number` (0-100)
 - `completed: boolean`
+
+### `SpeedTestEntry`
+
+One run of the speed test level (level 1):
+
+- `date: string` - ISO date string (YYYY-MM-DD) of when the run was taken
+- `wpm: number`
+- `accuracy: number` (0-100)
+
+All runs are stored, including multiple runs on the same day. The entries are
+never deduplicated or trimmed. The level complete screen for level 1 displays
+these in reverse chronological order.
 
 ### `LevelDefinition`
 

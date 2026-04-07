@@ -29,6 +29,10 @@ Every time the game teaches a new key or starts a cumulative review level, it
 must briefly remind the player where the relevant fingers belong before live
 typing starts.
 
+Teaching is front and center. Level 1 is positioned as the start of a personal
+improvement journey — the game tells the player upfront that this first result
+is their baseline, and future speed tests will show how far they've come.
+
 ## Curriculum Rules
 
 ### Core order
@@ -96,11 +100,30 @@ correct and this document should be updated to match.
 19. Arc finale review — `f j v x q z`
 20. Final review — all letters full alphabet
 
+## Speed Test Intro Screen (Level 1 Only)
+
+Level 1 does not use the finger guide screen. It has its own dedicated intro
+screen whose entire job is to frame the speed test as a starting point.
+
+The screen is large and simple. Its message is something like:
+
+> "Let's see how fast you type right now — no pressure. We'll come back to this
+> later and see how much you've improved."
+
+There is no keyboard diagram, no finger color legend, no tip. Just the framing
+text and a single "Start" button.
+
+Level 1 has **no pass/fail criteria**. Any result — 1 WPM, 100 WPM — is
+accepted. The player always proceeds to the next level regardless of speed or
+accuracy. The level complete screen for level 1 shows the results as a baseline
+snapshot, not a grade.
+
 ## Pre-Level Finger Guide Screen
 
 ### Placement in flow
 
-Every level starts with a dedicated explainer screen before gameplay begins.
+Every level from level 2 onward starts with a dedicated explainer screen before
+gameplay begins.
 
 Expected flow:
 
@@ -109,19 +132,42 @@ Expected flow:
 - retry -> finger guide -> level
 - continue from main menu -> finger guide -> level
 
+Level 1 uses the speed test intro screen instead (see above). The finger guide
+is not shown for level 1.
+
 The explainer is not optional on first implementation. The teaching reminder is
 part of the curriculum, not polish.
 
-### Core message
+### Teaching tip rotation
 
-The screen must explicitly say:
+The finger guide shows **one teaching tip per level**, not all three at once.
+Showing all three simultaneously every time creates noise that players learn to
+ignore. Surfacing one prominent tip at a time gives each rule a chance to land.
 
-- look at the screen, not your fingers
-- keep bringing your fingers back to `f` and `j`
-- use the highlighted finger for the highlighted key
+The three core tips are:
 
-The copy should be brief and direct, like instruction from a typing tutor, not
-story flavor.
+1. Eyes on the screen, not your fingers
+2. Always return to F and J
+3. Use the highlighted finger for each key
+
+These rotate across levels starting from level 2. Assign one tip per level in
+order, cycling back to tip 1 after tip 3:
+
+| Level | Tip shown |
+| ----- | --------- |
+| 2     | Eyes on the screen, not your fingers |
+| 3     | Always return to F and J |
+| 4     | Use the highlighted finger for each key |
+| 5     | Eyes on the screen, not your fingers |
+| 6     | Always return to F and J |
+| …     | (continues cycling) |
+
+Additionally, level 2 also shows "Thumbs press Space between words" as a
+one-time supplement — this is the only level where the space bar is first
+relevant.
+
+The tip should be visually prominent on the screen, not buried in a strip.
+Think of it as the headline of the pre-level screen, not a footnote.
 
 ### Required visual aid
 
@@ -160,6 +206,25 @@ The design intentionally ignores punctuation and number-row instruction for now.
 - Secondary action: back to level select
 
 Retrying a level should land on this screen again so the reminder is repeated.
+
+## Speed Test History Log
+
+Every time the player completes the speed test level (level 1), the result is
+appended to a date-stamped log stored in the player profile. This log is the
+basis for showing improvement over time.
+
+Each entry records:
+
+- the date the test was taken (YYYY-MM-DD)
+- the WPM achieved
+- the accuracy achieved (0–100)
+
+There is no limit on the number of entries. If the player takes the speed test
+multiple times on the same day, all runs are stored — not just the best.
+
+The level complete screen for level 1 shows the current result alongside a
+brief history so the player can see their trajectory. See
+`07-level-complete-ux.md` for how this is displayed.
 
 ## Word-List Contract
 

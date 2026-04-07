@@ -23,6 +23,7 @@ The game saves after every significant state change:
 - Team selection
 - Difficulty change
 - Level completion (best WPM/accuracy update)
+- Speed test completion (new `SpeedTestEntry` appended to `speedTestHistory`)
 - Screen navigation (updates `currentPosition` for the Continue button)
 
 Saves are synchronous and immediate — no debouncing needed given the

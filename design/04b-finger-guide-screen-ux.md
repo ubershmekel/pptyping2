@@ -2,20 +2,27 @@
 
 ## Intent
 
-Every level begins with a dedicated explainer screen. Its sole job is to tell
-the player which fingers to use before live typing starts. It is not optional.
-The teaching reminder is part of the curriculum, not polish.
+Every level from level 2 onward begins with a dedicated explainer screen. Its
+job is to show the player which fingers to use and deliver one focused teaching
+tip before live typing starts. It is not optional. The teaching reminder is
+part of the curriculum, not polish.
 
-See `00-teaching-touch-typing.md` for the curriculum contract this screen
+Level 1 (the speed test) uses a different intro screen — see
+`01b-teaching-touch-typing.md`. The finger guide is never shown for level 1.
+
+See `01b-teaching-touch-typing.md` for the curriculum contract this screen
 enforces.
 
 ## Placement in flow
 
 ```
-cutscene        → finger guide → level
-level select    → finger guide → level
-retry           → finger guide → level
-continue (menu) → finger guide → level
+cutscene        → finger guide → level   (levels 2+)
+level select    → finger guide → level   (levels 2+)
+retry           → finger guide → level   (levels 2+)
+continue (menu) → finger guide → level   (levels 2+)
+
+level select    → speed test intro → level 1
+retry           → speed test intro → level 1
 ```
 
 The finger guide sits at `/level/<N>` (no separate URL). The level screen
@@ -26,23 +33,22 @@ itself is reached only via the finger guide's Start button or Enter key.
 The screen has five stacked regions inside a centered column (max 860 px):
 
 1. **Header** — level number + role tag, title "Before you type…"
-2. **Rules strip** — three brief rules as pill chips
+2. **Teaching tip** — one prominent tip, large text, for this level
 3. **Keyboard + hands section** — the main visual aid
 4. **Legend** — color swatches for every finger active in this level
 5. **Actions** — primary "Start Level →" button, secondary "← Level Select"
 
-## Rules strip
+## Teaching tip
 
-Three fixed rules, always shown regardless of level:
+Each level shows exactly **one** teaching tip, displayed prominently (not as a
+small chip — this is the headline of the screen). The tip rotates across levels
+following the schedule in `01b-teaching-touch-typing.md`.
 
-- Eyes on the screen, not your fingers
-- Always return to F and J
-- Use the highlighted finger for each key
+Level 2 also shows a secondary note beneath the main tip:
 
-One conditional rule, shown only on level 2 (the first level that teaches home
-row):
+> Thumbs press Space between words
 
-- Thumbs press Space between words
+This supplement appears only on level 2 and is not part of the rotation.
 
 ## Keyboard visual aid
 
