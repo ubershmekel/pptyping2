@@ -3,6 +3,7 @@ import type {
   LevelRecord,
   LevelStats,
   PlayerProfile,
+  SpeedTestEntry,
   Team,
   TeamProgress,
 } from "../types";
@@ -32,6 +33,7 @@ export const DEFAULT_PROFILE: PlayerProfile = {
       highestUnlockedLevel: 1,
     },
   },
+  speedTestHistory: [],
 };
 
 // ─── Load / Save ─────────────────────────────────────────────────────────────
@@ -64,6 +66,7 @@ export function loadProfile(): PlayerProfile {
           },
           [otherTeam]: { ...DEFAULT_TEAM_PROGRESS },
         } as Record<Team, TeamProgress>,
+        speedTestHistory: [],
       };
       saveProfile(migrated);
       return migrated;
@@ -76,6 +79,9 @@ export function loadProfile(): PlayerProfile {
         pokemon: { ...DEFAULT_TEAM_PROGRESS, ...(parsed.teams?.pokemon ?? {}) },
         mlp: { ...DEFAULT_TEAM_PROGRESS, ...(parsed.teams?.mlp ?? {}) },
       },
+      speedTestHistory: Array.isArray(parsed.speedTestHistory)
+        ? parsed.speedTestHistory
+        : [],
     };
   } catch {
     return { ...DEFAULT_PROFILE, teams: { ...DEFAULT_PROFILE.teams } };
@@ -127,7 +133,9 @@ export function applyLevelResult(
   levelNumber: number,
   stats: LevelStats,
 ): PlayerProfile {
-  const passed = didPass(stats, profile.difficulty);
+  // Level 1 (speed test) always passes — no threshold, just record the run.
+  const isSpeedTest = levelNumber === 1;
+  const passed = isSpeedTest || didPass(stats, profile.difficulty);
   const progress = profile.teams[profile.activeTeam];
   const existing: LevelRecord = progress.levelRecords[levelNumber] ?? {
     bestWpm: 0,
@@ -156,7 +164,7 @@ export function applyLevelResult(
     }
   }
 
-  const next: PlayerProfile = {
+  let next: PlayerProfile = {
     ...profile,
     teams: {
       ...profile.teams,
@@ -166,6 +174,16 @@ export function applyLevelResult(
       },
     },
   };
+
+  if (isSpeedTest) {
+    const entry: SpeedTestEntry = {
+      date: new Date().toISOString().slice(0, 10),
+      wpm: stats.wpm,
+      accuracy: stats.accuracy,
+    };
+    next = { ...next, speedTestHistory: [...profile.speedTestHistory, entry] };
+  }
+
   saveProfile(next);
   return next;
 }

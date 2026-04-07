@@ -1,5 +1,11 @@
 import "./levelComplete.css";
-import type { Difficulty, LevelStats, ScreenMount, Team } from "../types";
+import type {
+  Difficulty,
+  LevelStats,
+  ScreenMount,
+  SpeedTestEntry,
+  Team,
+} from "../types";
 import { createScreenMount } from "../screenMount";
 import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from "../types";
 import { MAX_LEVEL } from "../data/levels";
@@ -13,122 +19,203 @@ export function renderLevelComplete(
   onRetry: () => void,
   onLevelSelect: () => void,
   onChangeDifficulty: (d: Difficulty) => void,
+  speedTestHistory?: SpeedTestEntry[],
 ): ScreenMount {
-  const thresholds = DIFFICULTY_THRESHOLDS[difficulty];
-  const diffName = DIFFICULTY_DISPLAY[team][difficulty];
-  const passed = stats.passed;
-
+  const isSpeedTest = levelNumber === 1;
   const screen = document.createElement("div");
   const mount = createScreenMount(screen);
-  screen.className = `screen level-complete-screen team-${team} ${passed ? "lc-passed" : "lc-failed"}`;
 
-  const wpmBar = Math.min(
-    100,
-    Math.round((stats.wpm / Math.max(thresholds.wpm, 1)) * 100),
-  );
-  const accBar = Math.min(100, stats.accuracy);
+  if (isSpeedTest) {
+    screen.className = `screen level-complete-screen team-${team} lc-passed`;
+    const history = speedTestHistory ?? [];
+    // All runs including this one are already in history (appended before navigate).
+    // Show all entries newest-first, skip none.
+    const historyRows =
+      history.length > 0
+        ? history
+            .slice()
+            .reverse()
+            .map(
+              (e, i) => `
+        <tr class="${i === 0 ? "lc-hist-latest" : ""}">
+          <td>${e.date}</td>
+          <td>${e.wpm} WPM</td>
+          <td>${e.accuracy}%</td>
+        </tr>`,
+            )
+            .join("")
+        : "";
 
-  const wpmColor =
-    stats.wpm >= thresholds.wpm ? "stat-bar-pass" : "stat-bar-fail";
-  const accColor =
-    stats.accuracy >= thresholds.accuracy ? "stat-bar-pass" : "stat-bar-fail";
-
-  const difficultyOptions: Difficulty[] = ["easy", "medium", "hard"];
-
-  screen.innerHTML = `
-    <div class="lc-content">
-      <!-- Header -->
-      <div class="lc-header">
-        <div class="lc-result-badge ${passed ? "badge-pass" : "badge-fail"}">
-          ${passed ? "✓ Level Complete!" : "✗ Not quite!"}
+    screen.innerHTML = `
+      <div class="lc-content">
+        <div class="lc-header">
+          <div class="lc-result-badge badge-pass">Speed Test Done</div>
+          <h2 class="lc-level-title">Level 1</h2>
         </div>
-        <h2 class="lc-level-title">Level ${levelNumber}</h2>
-        <p class="lc-difficulty-line">Playing as: <strong>${diffName}</strong></p>
-      </div>
 
-      <!-- Stats -->
-      <div class="lc-stats">
-        <div class="lc-stat-row">
-          <span class="lc-stat-label">Speed</span>
-          <div class="lc-stat-bar-track">
-            <div class="lc-stat-bar ${wpmColor}" style="width: ${wpmBar}%"></div>
-            <div class="lc-threshold-marker" style="left: ${Math.min(100, Math.round((thresholds.wpm / Math.max(stats.wpm, thresholds.wpm, 1)) * 100))}%"></div>
+        <div class="lc-stats">
+          <div class="lc-stat-row">
+            <span class="lc-stat-label">Speed</span>
+            <div class="lc-stat-bar-track">
+              <div class="lc-stat-bar stat-bar-pass lc-bar-animated" style="width: ${Math.min(100, stats.wpm)}%"></div>
+            </div>
+            <span class="lc-stat-val val-pass">${stats.wpm} WPM</span>
           </div>
-          <span class="lc-stat-val ${stats.wpm >= thresholds.wpm ? "val-pass" : "val-fail"}">
-            ${stats.wpm} WPM
-            <span class="lc-stat-goal">(need ${thresholds.wpm})</span>
-          </span>
-        </div>
-        <div class="lc-stat-row">
-          <span class="lc-stat-label">Accuracy</span>
-          <div class="lc-stat-bar-track">
-            <div class="lc-stat-bar ${accColor}" style="width: ${accBar}%"></div>
-            <div class="lc-threshold-marker" style="left: ${thresholds.accuracy}%"></div>
+          <div class="lc-stat-row">
+            <span class="lc-stat-label">Accuracy</span>
+            <div class="lc-stat-bar-track">
+              <div class="lc-stat-bar stat-bar-pass lc-bar-animated" style="width: ${Math.min(100, stats.accuracy)}%"></div>
+            </div>
+            <span class="lc-stat-val val-pass">${stats.accuracy}%</span>
           </div>
-          <span class="lc-stat-val ${stats.accuracy >= thresholds.accuracy ? "val-pass" : "val-fail"}">
-            ${stats.accuracy}%
-            <span class="lc-stat-goal">(need ${thresholds.accuracy}%)</span>
-          </span>
+          <div class="lc-stat-row lc-extras">
+            <span>Time: <strong>${formatTime(stats.timeSeconds)}</strong></span>
+            <span>Errors: <strong>${stats.errors}</strong></span>
+            <span>Keystrokes: <strong>${stats.totalKeystrokes}</strong></span>
+          </div>
         </div>
-        <div class="lc-stat-row lc-extras">
-          <span>Time: <strong>${formatTime(stats.timeSeconds)}</strong></span>
-          <span>Errors: <strong>${stats.errors}</strong></span>
-          <span>Keystrokes: <strong>${stats.totalKeystrokes}</strong></span>
+
+        <div class="lc-message lc-message-pass">
+          That's your starting point — keep playing and come back to see how much you've improved.
         </div>
-      </div>
 
-      <!-- Feedback message -->
-      <div class="lc-message ${passed ? "lc-message-pass" : "lc-message-fail"}">
-        ${getFeedbackMessage(team, passed, stats)}
-      </div>
-
-      <!-- Actions -->
-      <div class="lc-actions">
         ${
-          passed
-            ? `<button class="lc-btn lc-btn-primary" id="lc-next">
-               ${levelNumber >= MAX_LEVEL ? "🏆 See Finale" : "Next Level →"}
-             </button>`
-            : `<button class="lc-btn lc-btn-primary" id="lc-retry">
-               Try Again ↺
-             </button>`
-        }
-        ${
-          !passed
-            ? `<button class="lc-btn lc-btn-secondary" id="lc-next-anyway">
-          Skip ahead anyway →
-        </button>`
+          historyRows
+            ? `<div class="lc-history">
+            <div class="lc-history-label">Your speed test history</div>
+            <table class="lc-history-table">
+              <tbody>${historyRows}</tbody>
+            </table>
+          </div>`
             : ""
         }
-        <button class="lc-btn lc-btn-secondary" id="lc-level-select">Level Select</button>
-      </div>
 
-      <!-- Difficulty switcher -->
-      <div class="lc-difficulty-switcher">
-        <span class="lc-diff-label">Change difficulty:</span>
-        <div class="lc-diff-options">
-          ${difficultyOptions
-            .map(
-              (d) => `
-            <button
-              class="lc-diff-btn ${d === difficulty ? "lc-diff-active" : ""}"
-              data-diff="${d}"
-              aria-pressed="${d === difficulty}"
-            >
-              ${DIFFICULTY_DISPLAY[team][d]}
-            </button>
-          `,
-            )
-            .join("")}
+        <div class="lc-actions">
+          <button class="lc-btn lc-btn-primary" id="lc-next">Next Level →</button>
+          <button class="lc-btn lc-btn-secondary" id="lc-retry">Retry ↺</button>
+          <button class="lc-btn lc-btn-secondary" id="lc-level-select">Level Select</button>
         </div>
       </div>
-    </div>
 
-    <!-- Particles -->
-    <div class="lc-particles" aria-hidden="true">
-      ${Array.from({ length: 16 }, () => '<span class="lc-particle"></span>').join("")}
-    </div>
-  `;
+      <div class="lc-particles" aria-hidden="true">
+        ${Array.from({ length: 16 }, () => '<span class="lc-particle"></span>').join("")}
+      </div>
+    `;
+  } else {
+    const thresholds = DIFFICULTY_THRESHOLDS[difficulty];
+    const diffName = DIFFICULTY_DISPLAY[team][difficulty];
+    const passed = stats.passed;
+
+    screen.className = `screen level-complete-screen team-${team} ${passed ? "lc-passed" : "lc-failed"}`;
+
+    const wpmBar = Math.min(
+      100,
+      Math.round((stats.wpm / Math.max(thresholds.wpm, 1)) * 100),
+    );
+    const accBar = Math.min(100, stats.accuracy);
+
+    const wpmColor =
+      stats.wpm >= thresholds.wpm ? "stat-bar-pass" : "stat-bar-fail";
+    const accColor =
+      stats.accuracy >= thresholds.accuracy ? "stat-bar-pass" : "stat-bar-fail";
+
+    const difficultyOptions: Difficulty[] = ["easy", "medium", "hard"];
+
+    screen.innerHTML = `
+      <div class="lc-content">
+        <!-- Header -->
+        <div class="lc-header">
+          <div class="lc-result-badge ${passed ? "badge-pass" : "badge-fail"}">
+            ${passed ? "✓ Level Complete!" : "✗ Not quite!"}
+          </div>
+          <h2 class="lc-level-title">Level ${levelNumber}</h2>
+          <p class="lc-difficulty-line">Playing as: <strong>${diffName}</strong></p>
+        </div>
+
+        <!-- Stats -->
+        <div class="lc-stats">
+          <div class="lc-stat-row">
+            <span class="lc-stat-label">Speed</span>
+            <div class="lc-stat-bar-track">
+              <div class="lc-stat-bar ${wpmColor}" style="width: ${wpmBar}%"></div>
+              <div class="lc-threshold-marker" style="left: ${Math.min(100, Math.round((thresholds.wpm / Math.max(stats.wpm, thresholds.wpm, 1)) * 100))}%"></div>
+            </div>
+            <span class="lc-stat-val ${stats.wpm >= thresholds.wpm ? "val-pass" : "val-fail"}">
+              ${stats.wpm} WPM
+              <span class="lc-stat-goal">(need ${thresholds.wpm})</span>
+            </span>
+          </div>
+          <div class="lc-stat-row">
+            <span class="lc-stat-label">Accuracy</span>
+            <div class="lc-stat-bar-track">
+              <div class="lc-stat-bar ${accColor}" style="width: ${accBar}%"></div>
+              <div class="lc-threshold-marker" style="left: ${thresholds.accuracy}%"></div>
+            </div>
+            <span class="lc-stat-val ${stats.accuracy >= thresholds.accuracy ? "val-pass" : "val-fail"}">
+              ${stats.accuracy}%
+              <span class="lc-stat-goal">(need ${thresholds.accuracy}%)</span>
+            </span>
+          </div>
+          <div class="lc-stat-row lc-extras">
+            <span>Time: <strong>${formatTime(stats.timeSeconds)}</strong></span>
+            <span>Errors: <strong>${stats.errors}</strong></span>
+            <span>Keystrokes: <strong>${stats.totalKeystrokes}</strong></span>
+          </div>
+        </div>
+
+        <!-- Feedback message -->
+        <div class="lc-message ${passed ? "lc-message-pass" : "lc-message-fail"}">
+          ${getFeedbackMessage(team, passed, stats)}
+        </div>
+
+        <!-- Actions -->
+        <div class="lc-actions">
+          ${
+            passed
+              ? `<button class="lc-btn lc-btn-primary" id="lc-next">
+                 ${levelNumber >= MAX_LEVEL ? "🏆 See Finale" : "Next Level →"}
+               </button>`
+              : `<button class="lc-btn lc-btn-primary" id="lc-retry">
+                 Try Again ↺
+               </button>`
+          }
+          ${
+            !passed
+              ? `<button class="lc-btn lc-btn-secondary" id="lc-next-anyway">
+            Skip ahead anyway →
+          </button>`
+              : ""
+          }
+          <button class="lc-btn lc-btn-secondary" id="lc-level-select">Level Select</button>
+        </div>
+
+        <!-- Difficulty switcher -->
+        <div class="lc-difficulty-switcher">
+          <span class="lc-diff-label">Change difficulty:</span>
+          <div class="lc-diff-options">
+            ${difficultyOptions
+              .map(
+                (d) => `
+              <button
+                class="lc-diff-btn ${d === difficulty ? "lc-diff-active" : ""}"
+                data-diff="${d}"
+                aria-pressed="${d === difficulty}"
+              >
+                ${DIFFICULTY_DISPLAY[team][d]}
+              </button>
+            `,
+              )
+              .join("")}
+          </div>
+        </div>
+      </div>
+
+      <!-- Particles -->
+      <div class="lc-particles" aria-hidden="true">
+        ${Array.from({ length: 16 }, () => '<span class="lc-particle"></span>').join("")}
+      </div>
+    `;
+  }
 
   // Next / Retry buttons
   const nextBtn = screen.querySelector("#lc-next");

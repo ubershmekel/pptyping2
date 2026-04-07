@@ -199,6 +199,48 @@
   color: #ccc;
 }
 
+/* ── Speed test history ─────────────────────────────────────────────────────── */
+
+.lc-history {
+  padding-top: 0.5rem;
+}
+
+.lc-history-label {
+  margin-bottom: 0.5rem;
+  color: #777;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.lc-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.lc-history-table td {
+  padding: 0.35rem 0.6rem;
+  color: #aaa;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.lc-history-table td:first-child {
+  color: #666;
+  font-size: 0.75rem;
+  width: 6rem;
+}
+
+.lc-hist-latest td {
+  color: #ddd;
+  font-weight: 700;
+}
+
+.lc-hist-latest td:first-child {
+  color: #999;
+}
+
 .lc-difficulty-switcher {
   padding-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);

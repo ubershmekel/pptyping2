@@ -132,6 +132,17 @@ function colorHandSvg(
   }
 }
 
+// ─── Teaching tip rotation ────────────────────────────────────────────────────
+
+const TEACHING_TIPS: { icon: string; html: string }[] = [
+  { icon: "👁", html: "Eyes on the screen, not your fingers" },
+  {
+    icon: "🏠",
+    html: "Always return to <kbd>F</kbd> and <kbd>J</kbd>",
+  },
+  { icon: "✋", html: "Use the highlighted finger for each key" },
+];
+
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
 export function renderFingerGuide(
@@ -153,9 +164,7 @@ export function renderFingerGuide(
 
   // Level tag
   let levelTag = `Level ${levelNumber}`;
-  if (levelDef.isSpeedTest) {
-    levelTag += " — Speed Test";
-  } else if (levelDef.isFinale) {
+  if (levelDef.isFinale) {
     levelTag += " — Review";
   } else if (newSet.size > 0) {
     const newKeys = [...newSet]
@@ -164,6 +173,9 @@ export function renderFingerGuide(
     levelTag += ` — New keys: ${newKeys}`;
   }
 
+  // One tip per level, cycling through the three tips starting at level 2
+  const tip = TEACHING_TIPS[(levelNumber - 2) % TEACHING_TIPS.length];
+
   screen.innerHTML = `
     <div class="fg-layout">
       <div class="fg-header">
@@ -171,29 +183,18 @@ export function renderFingerGuide(
         <h2 class="fg-title">Before you type…</h2>
       </div>
 
-      <div class="fg-rules">
-        <div class="fg-rule">
-          <span class="fg-rule-icon" aria-hidden="true">👁</span>
-          <span>Eyes on the screen, not your fingers</span>
-        </div>
-        <div class="fg-rule">
-          <span class="fg-rule-icon" aria-hidden="true">🏠</span>
-          <span>Always return to <kbd>F</kbd> and <kbd>J</kbd></span>
-        </div>
-        <div class="fg-rule">
-          <span class="fg-rule-icon" aria-hidden="true">✋</span>
-          <span>Use the highlighted finger for each key</span>
-        </div>
-        ${
-          levelNumber === 2
-            ? `
-        <div class="fg-rule fg-rule-thumb">
-          <span class="fg-rule-icon" aria-hidden="true">👍</span>
+      <div class="fg-tip">
+        <span class="fg-tip-icon" aria-hidden="true">${tip.icon}</span>
+        <span class="fg-tip-text">${tip.html}</span>
+      </div>
+      ${
+        levelNumber === 2
+          ? `<div class="fg-tip-supplement">
+          <span class="fg-tip-icon" aria-hidden="true">👍</span>
           <span>Thumbs press <kbd>Space</kbd> between words</span>
         </div>`
-            : ""
-        }
-      </div>
+          : ""
+      }
 
       <div class="fg-keyboard-section">
         <div class="fg-keyboard-wrap"></div>

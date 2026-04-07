@@ -22,6 +22,7 @@ import { renderMainMenu } from "./screens/mainMenu";
 import { renderTeamSelect } from "./screens/teamSelect";
 import { renderLevelSelect } from "./screens/levelSelect";
 import { renderCutscene } from "./screens/cutscene";
+import { renderSpeedTestIntro } from "./screens/speedTestIntro";
 import { renderFingerGuide } from "./screens/fingerGuide";
 import { renderLevelScreen } from "./screens/levelScreen";
 import { renderLevelComplete } from "./screens/levelComplete";
@@ -108,7 +109,10 @@ export class App {
         screen = { id: "settings" };
         break;
       case "level":
-        screen = { id: "finger-guide", number: route.number };
+        screen =
+          route.number === 1
+            ? { id: "speed-test-intro", number: route.number }
+            : { id: "finger-guide", number: route.number };
         break;
       case "cutscene":
         screen = { id: "cutscene", index: route.index };
@@ -210,6 +214,13 @@ export class App {
       return renderCutscene(this.profile.activeTeam, screen.index, () =>
         this.onCutsceneDone(screen.index),
       );
+    } else if (screen.id === "speed-test-intro") {
+      return renderSpeedTestIntro(
+        this.profile.activeTeam,
+        screen.number,
+        () => this.showScreen({ id: "level", number: screen.number }),
+        () => this.navigate({ id: "level-select" }),
+      );
     } else if (screen.id === "finger-guide") {
       return renderFingerGuide(
         this.profile.activeTeam,
@@ -237,6 +248,7 @@ export class App {
         () => this.navigate({ id: "level", number: screen.number }),
         () => this.navigate({ id: "level-select", attempted: screen.number }),
         (d) => this.onDifficultyChange(d),
+        this.profile.speedTestHistory,
       );
     } else if (screen.id === "settings") {
       return renderSettings(() => this.navigate({ id: "main-menu" }));

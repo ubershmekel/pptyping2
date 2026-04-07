@@ -1,0 +1,99 @@
+.speed-test-intro-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #0d1520 0%, #0a0f18 60%, #0d0d1a 100%);
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────────── */
+
+.sti-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.75rem;
+  width: 100%;
+  max-width: 580px;
+  padding: 3rem 2rem;
+}
+
+/* ── Level tag ──────────────────────────────────────────────────────────────── */
+
+.sti-level-tag {
+  display: inline-block;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #bbb;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+}
+
+/* ── Headline ───────────────────────────────────────────────────────────────── */
+
+.sti-headline {
+  margin: 0;
+  font-family: var(--font-game);
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+
+/* ── Body text ──────────────────────────────────────────────────────────────── */
+
+.sti-body {
+  margin: 0;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: #aaa;
+  line-height: 1.75;
+  max-width: 460px;
+}
+
+/* ── Actions ────────────────────────────────────────────────────────────────── */
+
+.sti-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.sti-btn-primary,
+.sti-btn-secondary {
+  padding: 0.75rem 2.2rem;
+  border: none;
+  border-radius: var(--radius-xl);
+  font-family: var(--font-game);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
+}
+
+.sti-btn-primary {
+  background: var(--team-primary, #ffd700);
+  color: #1a1a1a;
+  box-shadow: 0 4px 20px var(--team-glow, rgba(255, 215, 0, 0.35));
+}
+
+.sti-btn-primary:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 28px var(--team-glow, rgba(255, 215, 0, 0.5));
+}
+
+.sti-btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #888;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sti-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #bbb;
+}

@@ -49,11 +49,18 @@ export interface TeamProgress {
   highestUnlockedLevel: number;
 }
 
+export interface SpeedTestEntry {
+  date: string; // YYYY-MM-DD
+  wpm: number;
+  accuracy: number; // 0-100
+}
+
 export interface PlayerProfile {
   activeTeam: Team;
   teamSelected: boolean; // true once the player has explicitly picked a team
   difficulty: Difficulty;
   teams: Record<Team, TeamProgress>;
+  speedTestHistory: SpeedTestEntry[];
 }
 
 // ─── Screen lifecycle ───────────────────────────────────────────────────────
@@ -85,6 +92,7 @@ export type AppScreen =
   | { id: "team-select" }
   | { id: "level-select"; attempted?: number } // attempted = locked level the user tried to deep-link to
   | { id: "cutscene"; index: number }
+  | { id: "speed-test-intro"; number: number } // level 1 intro; no canonical URL, stays at /level/<N>
   | { id: "finger-guide"; number: number } // pre-level finger explainer; no canonical URL, stays at /level/<N>
   | { id: "level"; number: number }
   | { id: "level-complete"; number: number; stats: LevelStats }
