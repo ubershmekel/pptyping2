@@ -37,7 +37,8 @@
   font-weight: 900;
   color: var(--team-primary, #ffd700);
   background: rgba(255, 255, 255, 0.06);
-  border: 2px solid color-mix(in srgb, var(--team-primary, #ffd700) 60%, transparent);
+  border: 2px solid
+    color-mix(in srgb, var(--team-primary, #ffd700) 60%, transparent);
   border-radius: 12px;
   box-shadow:
     0 0 24px color-mix(in srgb, var(--team-primary, #ffd700) 20%, transparent),

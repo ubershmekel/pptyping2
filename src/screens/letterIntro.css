@@ -4,7 +4,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       ellipse 60% 50% at 50% 40%,
       color-mix(in srgb, var(--li-color, #fff) 8%, transparent) 0%,
       transparent 70%
@@ -92,15 +93,28 @@
 }
 
 @keyframes li-finger-pulse {
-  0%, 100% { transform: scale(1); }
-  50%       { transform: scale(1.1); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 @keyframes li-finger-tap {
-  0%   { transform: scale(1); }
-  35%  { transform: scale(1.35); }
-  70%  { transform: scale(1.18); }
-  100% { transform: scale(1.1); }
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.35);
+  }
+  70% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1.1);
+  }
 }
 
 .li-finger-pulse {

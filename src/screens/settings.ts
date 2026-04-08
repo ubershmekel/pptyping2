@@ -55,7 +55,9 @@ export function renderSettings(onBack: () => void): ScreenMount {
   `;
 
   mount.listen(screen, "click", (e: Event) => {
-    const btn = (e.target as HTMLElement).closest("[data-action]") as HTMLElement | null;
+    const btn = (e.target as HTMLElement).closest(
+      "[data-action]",
+    ) as HTMLElement | null;
     if (btn?.dataset["action"] === "back") {
       onBack();
     }

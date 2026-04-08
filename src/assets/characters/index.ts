@@ -19,7 +19,9 @@ export interface SpriteCharacterPortrait {
   spriteSheet: AsepriteSpriteSheet;
 }
 
-export type CharacterPortrait = StaticCharacterPortrait | SpriteCharacterPortrait;
+export type CharacterPortrait =
+  | StaticCharacterPortrait
+  | SpriteCharacterPortrait;
 
 export interface CharacterAnimationSpec {
   imageUrl: string;
@@ -27,7 +29,10 @@ export interface CharacterAnimationSpec {
   tag?: string;
 }
 
-export type CharacterAnimationSet = Record<CharacterState, CharacterAnimationSpec>;
+export type CharacterAnimationSet = Record<
+  CharacterState,
+  CharacterAnimationSpec
+>;
 
 const pikachuStandSheet = createAsepriteSpriteSheet(
   pikachuStandData as AsepriteSheetData,

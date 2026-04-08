@@ -45,7 +45,9 @@ function getLetterIntroLetters(levelNumber: number): string[] {
   if (levelDef.isFinale || levelDef.isSpeedTest) return [];
   const prevDef = levelNumber > 1 ? getLevelDef(levelNumber - 1) : null;
   const prevLetters =
-    !prevDef || prevDef.isSpeedTest ? "" : (LEVEL_LETTERS[levelNumber - 1] ?? "");
+    !prevDef || prevDef.isSpeedTest
+      ? ""
+      : (LEVEL_LETTERS[levelNumber - 1] ?? "");
   const prevSet = new Set(prevLetters.split("").filter(Boolean));
   return levelDef.availableLetters.split("").filter((l) => !prevSet.has(l));
 }
