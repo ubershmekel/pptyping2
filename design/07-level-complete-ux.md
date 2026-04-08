@@ -24,6 +24,10 @@ Passing unlocks the next level in the `PlayerProfile` and saves via
 `persistence.ts`. Failing does not advance the unlock state, but does update the
 level record if it's a new personal best.
 
+Every attempt (pass or fail) appends an `ActivityLogEntry` to the player's
+activity log in `PlayerProfile`. The log entry records the date, level number,
+WPM, accuracy, and pass/fail result.
+
 ### Level 1 exception — no pass or fail
 
 Level 1 (the speed test) has no pass/fail criteria. Any result proceeds.
@@ -41,6 +45,9 @@ result is framed as a baseline, not a grade.
 - Short story blurb (2–3 sentences from `stories.ts`, team-specific) — even on
   failure the blurb can be shown (it's flavor, not a reward gate)
 - Difficulty label (so the player knows what thresholds they were held to)
+- **Reward image** — on pass, a level-specific illustration is shown alongside
+  the story blurb. On fail, no image is shown. See `19-assets-tech.md` for the
+  naming convention and asset list.
 
 ### Level 1 (speed test baseline)
 

@@ -140,14 +140,14 @@ The three core tips are:
 These rotate across levels starting from level 2. Assign one tip per level in
 order, cycling back to tip 1 after tip 3:
 
-| Level | Tip shown |
-| ----- | --------- |
-| 2     | Eyes on the screen, not your fingers |
-| 3     | Always return to F and J |
+| Level | Tip shown                               |
+| ----- | --------------------------------------- |
+| 2     | Eyes on the screen, not your fingers    |
+| 3     | Always return to F and J                |
 | 4     | Use the highlighted finger for each key |
-| 5     | Eyes on the screen, not your fingers |
-| 6     | Always return to F and J |
-| …     | (continues cycling) |
+| 5     | Eyes on the screen, not your fingers    |
+| 6     | Always return to F and J                |
+| …     | (continues cycling)                     |
 
 Additionally, level 2 also shows "Thumbs press Space between words" as a
 one-time supplement — this is the only level where the space bar is first

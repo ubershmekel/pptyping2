@@ -25,6 +25,23 @@ Examples:
 These are large, atmospheric illustrations. Target ~800x600px, compressed to
 keep load times reasonable.
 
+### Level Reward Images
+
+Reward illustrations shown on the level complete screen when the player passes a
+level. One image per level per team, for levels 2 and beyond (level 1 is the
+speed test and has no pass/fail so no reward image).
+
+That means 18 levels × 2 teams = **36 images** total.
+
+Naming convention: `public/images/rewards/{team}/{level-number}.webp` Examples:
+
+- `public/images/rewards/pokemon/02.webp`
+- `public/images/rewards/mlp/14.webp`
+
+These should feel celebratory and thematic — a vivid moment from that level's
+narrative, sized to ~600x400px. They supplement the story blurb on the level
+complete screen and are only shown on a passing attempt.
+
 ### Environment Backgrounds (5 total)
 
 Full-bleed atmospheric scene images, one per arc. Used behind the level screen,

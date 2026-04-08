@@ -24,6 +24,21 @@ Changing difficulty takes effect on the next level attempt. Completed level
 records are stored per-attempt and compared against whatever difficulty was
 active at the time.
 
+### Activity Log
+
+A scrollable table showing every level attempt (levels 2 and beyond), newest
+first. Each row shows:
+
+- Date
+- Level number
+- WPM
+- Accuracy
+- Pass or fail indicator
+
+This gives players a complete picture of their practice history and lets them
+spot which levels they struggle with. The log is read-only; it cannot be
+filtered or cleared from the UI (clearing requires an import).
+
 ### Audio
 
 - Master volume slider

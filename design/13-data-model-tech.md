@@ -32,6 +32,8 @@ The persisted player state. Contains:
 - `levelRecords: Record<number, LevelRecord>` - keyed by level number
 - `speedTestHistory: SpeedTestEntry[]` - ordered log of every speed test run,
   oldest first
+- `activityLog: ActivityLogEntry[]` - ordered log of every level 2+ completion
+  attempt, oldest first
 
 ### `LevelRecord`
 
@@ -53,6 +55,20 @@ One run of the speed test level (level 1):
 All runs are stored, including multiple runs on the same day. The entries are
 never deduplicated or trimmed. The level complete screen for level 1 displays
 these in reverse chronological order.
+
+### `ActivityLogEntry`
+
+One completed level attempt (levels 2 and beyond):
+
+- `date: string` - ISO date string (YYYY-MM-DD) of when the attempt was made
+- `levelNumber: number`
+- `wpm: number`
+- `accuracy: number` (0-100)
+- `passed: boolean` - whether the attempt met the active difficulty thresholds
+
+All attempts are stored regardless of pass/fail. Entries are never deduplicated
+or trimmed. The settings screen displays these in reverse chronological order so
+the player can see their full practice history across all levels.
 
 ### `LevelDefinition`
 
