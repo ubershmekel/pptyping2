@@ -18,32 +18,9 @@ is unused in testing.
 
 **Letter introduction order** follows the curriculum order
 `fjetoainhsrludywmgcpkbvxqz` so that real words are available as early as
-possible. Level 1 is a speed test using the full keyboard. Learn levels use
-only `f`, `j`, and the current pair. Arc finale levels review the cumulative set
-for their own arc. Level 20 is the full-alphabet final review.
+possible. Level 1 is a speed test using the full keyboard.
 
-| Level | Role         | New Letters     | Active Set                          |
-| ----- | ------------ | --------------- | ----------------------------------- |
-| 1     | Speed test   | (full keyboard) | all                                 |
-| 2     | Learn        | f, j            | f, j                                |
-| 3     | Learn        | e, t            | f, j, e, t                          |
-| 4     | Arc 1 finale | —               | f, j, e, t                          |
-| 5     | Learn        | o, a            | f, j, o, a                          |
-| 6     | Learn        | i, n            | f, j, i, n                          |
-| 7     | Learn        | h, s            | f, j, h, s                          |
-| 8     | Arc 2 finale | —               | f, j, o, a, i, n, h, s              |
-| 9     | Learn        | r, l            | f, j, r, l                          |
-| 10    | Learn        | u, d            | f, j, u, d                          |
-| 11    | Learn        | y, w            | f, j, y, w                          |
-| 12    | Arc 3 finale | —               | f, j, r, l, u, d, y, w              |
-| 13    | Learn        | m, g            | f, j, m, g                          |
-| 14    | Learn        | c, p            | f, j, c, p                          |
-| 15    | Learn        | k, b            | f, j, k, b                          |
-| 16    | Arc 4 finale | —               | f, j, m, g, c, p, k, b              |
-| 17    | Learn        | v, x            | f, j, v, x                          |
-| 18    | Learn        | q, z            | f, j, q, z                          |
-| 19    | Arc 5 finale | —               | f, j, v, x, q, z                    |
-| 20    | Final review | —               | all letters                         |
+See `01b-teaching-touch-typing.md` for the list of levels and focus letters.
 
 The word pool for each learn level is pre-filtered to only include words
 constructible from that level's focused letter set. Review levels widen to the
@@ -63,8 +40,8 @@ pair only. For arc finales, it becomes cumulative within that arc.
 
 ## Story Text
 
-All narrative content is inline TypeScript — no CMS, no external files. A
-single `stories.ts` file maps `(team, arcNumber)` to:
+All narrative content is inline TypeScript — no CMS, no external files. A single
+`stories.ts` file maps `(team, arcNumber)` to:
 
 - Cutscene narrative text (the full story passage shown on the cutscene screen)
 - Per-level story blurb (2–3 sentence reward text shown on the level complete
@@ -78,6 +55,6 @@ content for one team is never shown to a player on the other team.
 
 5 arcs group levels under one environment theme (4, 4, 4, 4, and 4 gameplay
 levels per arc). Arc definitions include the `EnvironmentConfig` (background
-image, CSS variables, particle preset, ambient sound key) and a reference to
-the cutscene that follows the arc. See `11-environments-ux.md` for how the
+image, CSS variables, particle preset, ambient sound key) and a reference to the
+cutscene that follows the arc. See `11-environments-ux.md` for how the
 environment presentation is applied on screen.
