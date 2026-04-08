@@ -3,19 +3,6 @@
 This document records the intended blind-typing curriculum and pre-level
 teaching flow for the PPTyping game.
 
-## Status
-
-As of 2026-04-03, the codebase does **not** yet implement:
-
-- a pre-level finger explainer screen
-- an explicit "look at the screen, not your fingers" teaching prompt
-- cumulative-review failure feedback that recommends a refresher level based on
-  the player's weakest character
-
-`src/data/wordLists.ts` already reflects the broad letter order below, but the
-full teaching contract described here is not yet enforced in UI or results
-logic.
-
 ## Intent
 
 PPTyping is not only a typing game. Its teaching goal is blind typing.
@@ -266,15 +253,19 @@ Recommend the first level whose primary emphasis contains that character.
 If multiple characters tie for worst performance, prefer the latest character in
 the curriculum order
 
-## Future Implementation Surface
+## Implementation Surface
 
-The eventual implementation will primarily affect:
+The current implementation primarily affects:
 
+- `src/app.ts`
 - `src/data/wordLists.ts`
 - `src/data/levels.ts`
 - `src/types.ts`
+- `src/screens/speedTestIntro.ts`
+- `src/screens/letterIntro.ts`
+- `src/screens/fjIntro.ts`
+- `src/screens/fingerGuide.ts`
 - `src/screens/levelScreen.ts`
 - `src/screens/levelComplete.ts`
-- a new dedicated pre-level explainer screen module
 
-This document should stay aligned with those files once implementation starts.
+This document should stay aligned with those files.
