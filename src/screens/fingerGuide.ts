@@ -249,7 +249,7 @@ export function renderFingerGuide(
 
     usedFingers.add(meta.finger);
     const isAnchor = key === "f" || key === "j";
-    const isNew = newSet.has(key) && !levelDef.isSpeedTest;
+    const isNew = newSet.has(key) && !levelDef.isSpeedTest && !levelDef.isFinale;
     const color = FINGER_COLORS[meta.finger];
 
     if (cap) {
@@ -365,7 +365,7 @@ export function renderFingerGuide(
       cap.style.strokeWidth = "";
       if (available.has(key)) {
         const isAnchor = key === "f" || key === "j";
-        const isNew = newSet.has(key) && !levelDef.isSpeedTest;
+        const isNew = newSet.has(key) && !levelDef.isSpeedTest && !levelDef.isFinale;
         cap.style.stroke = isAnchor || isNew ? "#4b2f18" : "#888";
         cap.style.strokeWidth = isAnchor ? "2.8" : isNew ? "2.2" : "1";
       }

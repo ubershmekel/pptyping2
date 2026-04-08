@@ -67,8 +67,11 @@ Finger colors are shared with the hand diagram (see below).
 For the speed-test level (level 1) all keys are active; "new key" emphasis is
 suppressed because every key is equally new.
 
-For finale / review levels the "new key" emphasis is also suppressed — all
-unlocked keys share the same weight.
+For learn levels, only `F`, `J`, and the active pair are colored. Earlier
+learn-level letters stay dim so the guide remains focused.
+
+For finale / review levels the "new key" emphasis is suppressed — all review
+keys share the same weight.
 
 ## Hand diagram
 
@@ -127,6 +130,9 @@ The pill at the top of the header varies by level type:
 - New-key level: "Level N — New keys: E T" (keys rendered as `<kbd>` chips
   using the team primary color)
 - Finale / review: "Level N — Review"
+
+On learn levels, those "new keys" are the active pair only. `F` and `J` stay
+present as anchors but are not listed as new.
 
 ## Interactive key preview
 

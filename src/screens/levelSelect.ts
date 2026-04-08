@@ -196,7 +196,7 @@ function buildLevelCard(
       ? `ls-card-open${isNext ? " ls-card-next" : ""}`
       : "ls-card-locked";
 
-  const newLetters = lvl.isSpeedTest ? "" : computeNewLetters(lvl);
+  const newLetters = lvl.isSpeedTest || lvl.isFinale ? "" : computeNewLetters(lvl);
   const letterChips = newLetters
     .split("")
     .map((c) => `<span class="ls-chip">${c.toUpperCase()}</span>`)

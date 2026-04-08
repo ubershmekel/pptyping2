@@ -32,7 +32,8 @@ Level cards show:
 - Completion status icon (✓ done, ▶ open, ⚿ locked)
 - Best WPM and best accuracy (if any record exists)
 - "Not played yet" hint on unlocked-but-unplayed cards
-- New letters introduced at that level (one chip per letter)
+- New letters introduced at that level (one chip per letter on learn levels;
+  review levels show no new-letter chips)
 
 Cutscene nodes show an icon (🎬 intro, ▶ chapter, 🏆 finale) and label when
 unlocked, or a 🔒 icon when locked.

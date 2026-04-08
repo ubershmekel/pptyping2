@@ -39,12 +39,14 @@ to the home row.
 - Level 2 introduces the home-row anchors `f` and `j`.
 - Later levels teach the alphabet in two-letter pairs.
 - `f` and `j` remain the visual anchors for all teaching content.
-- Arc finale levels are cumulative review levels. They must use all letters
-  unlocked so far, not only the newest pair.
+- Learn levels use only `f`, `j`, and that level's active pair. Earlier pairs
+  do not carry into learn-level word lists or the finger guide.
+- Arc finale levels are cumulative review levels, but only within their own
+  arc. They use the arc's learned letters plus `f` and `j`.
+- Level 20 is the only full-alphabet cumulative review.
 
-Because the campaign has 14 levels total, some finale levels both emphasize the
-arc's closing pair and serve as cumulative review. The important rule is that
-their word lists and UI framing behave like review levels, not narrow drills.
+The important rule is that learn levels behave like narrow drills, while finale
+levels behave like review levels.
 
 ## Level Breakdown
 
@@ -165,10 +167,15 @@ The screen shows a simplified keyboard diagram with:
 - each highlighted key tinted by the finger that should press it
 - labels for the responsible finger
 
+For learn levels, the diagram highlights:
+
+- `f` and `j`
+- the active pair for that level
+- no earlier pairs from other learn levels
+
 For review levels, the diagram highlights:
 
-- all keys unlocked so far
-- stronger emphasis on the newest pair for that arc
+- all letters taught in that arc so far, plus `f` and `j`
 
 ### Finger mapping
 
@@ -221,12 +228,13 @@ Its responsibilities are:
 
 - preserve the letter order defined above
 - keep each level's text compatible with that level's teaching role
-- make finale levels read like cumulative review, not isolated pair drills
+- keep learn levels narrow: `f j` plus the current pair
+- make finale levels read like arc-local cumulative review, not isolated pair drills
 - avoid accidental inclusion of letters that have not been unlocked yet
 
-For focus drills, the text should heavily favor `f`, `j`, and the active pair.
-For finale levels, the text should mix all unlocked letters so the player proves
-retention across the whole cumulative set.
+For focus drills, the text should use only `f`, `j`, and the active pair.
+For finale levels, the text should mix all letters taught in that arc so the
+player proves retention across that review set.
 
 ## Finale Feedback Rule
 
