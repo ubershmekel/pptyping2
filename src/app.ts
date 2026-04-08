@@ -35,6 +35,8 @@ import { createScreenMount } from "./screenMount";
 import { Router } from "./router";
 import type { Route } from "./router";
 
+type LetterIntroScreen = Extract<AppScreen, { id: "letter-intro" }>;
+
 // Returns the new letters introduced in this level for the letter-intro drill.
 // For the first learn level (level 2), the previous level is the speed test —
 // treat it as if nothing was learned yet (prev = "").
@@ -241,27 +243,12 @@ export class App {
     } else if (screen.id === "letter-intro") {
       const letters = getLetterIntroLetters(screen.number);
       const letter = letters[screen.letterIndex] ?? letters[0] ?? "f";
-      const isLastLetter = screen.letterIndex + 1 >= letters.length;
-      const onDone = !isLastLetter
-        ? () =>
-            this.showScreen({
-              id: "letter-intro",
-              number: screen.number,
-              letterIndex: screen.letterIndex + 1,
-            })
-        : screen.number === 3
-          ? () => this.showScreen({ id: "fj-intro", number: screen.number })
-          : () =>
-              this.showScreen({
-                id: "finger-guide",
-                number: screen.number,
-                skipLetterIntro: true,
-              });
+      const nextScreen = this.getNextLetterIntroScreen(screen, letters.length);
       return renderLetterIntro(
         this.profile.activeTeam,
         screen.number,
         letter,
-        onDone,
+        () => this.showScreen(nextScreen),
       );
     } else if (screen.id === "fj-intro") {
       return renderFjIntro(this.profile.activeTeam, () =>
@@ -319,6 +306,30 @@ export class App {
   }
 
   // ─── Event handlers ─────────────────────────────────────────────────────────
+
+  private getNextLetterIntroScreen(
+    screen: LetterIntroScreen,
+    letterCount: number,
+  ): AppScreen {
+    const nextLetterIndex = screen.letterIndex + 1;
+    if (nextLetterIndex < letterCount) {
+      return {
+        id: "letter-intro",
+        number: screen.number,
+        letterIndex: nextLetterIndex,
+      };
+    }
+
+    if (screen.number === 3) {
+      return { id: "fj-intro", number: screen.number };
+    }
+
+    return {
+      id: "finger-guide",
+      number: screen.number,
+      skipLetterIntro: true,
+    };
+  }
 
   private onTeamSelected(team: Team): void {
     this.profile = selectTeam(this.profile, team);
