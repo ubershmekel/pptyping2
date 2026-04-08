@@ -45,7 +45,3 @@ resolved.
 - `19-assets-tech.md`: the 36 level reward images
   (`public/images/rewards/{team}/{level}.webp`) have not been generated or added
   to the project
-
-### Content integrity tests
-
-- `21-content-tests-spec.md`: none of the tests exist yet

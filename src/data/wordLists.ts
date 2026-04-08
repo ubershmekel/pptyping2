@@ -31,28 +31,28 @@ export const LEVEL_TEXTS: Record<number, string> = {
   9: "their shirt roles short forest roles their shirt short forest shirt their roles short forest trail rains holes",
 
   // Level 10: + u d (fjetoainhsrlud)
-  10: "round found sound round found sound round found sound should round found sound should",
+  10: "round found sound should thunder round found sound should thunder round found sound should",
 
   // Level 11: + y w (fjetoainhsrludyw)
-  11: "worthy worthy worthy worthy worthy worthy worthy worthy worthy worthy worthy worthy worthy",
+  11: "worthy youth windy dusty slowly rusty study worthy youth windy dusty slowly rusty study worthy",
 
   // Level 12: arc 3 finale — review f j r l u d y w (cumulative: all unlocked)
   12: "worthy study world youth round truly dusty rusty shield thunder wander journal thirst forest finest slowly worthy study world youth",
 
   // Level 13: + m g (fjetoainhsrludywmg)
-  13: "among morning among morning among morning among morning among morning among morning among",
+  13: "among morning mighty roaming gaming grind among morning mighty roaming gaming grind among",
 
   // Level 14: + c p (fjetoainhsrludywmgcp)
-  14: "complete complete complete complete complete complete complete complete complete complete",
+  14: "complete camping captain whisper capture complete camping captain whisper capture complete",
 
   // Level 15: + k b (fjetoainhsrludywmgcpkb)
-  15: "blanket blanket blanket blanket blanket blanket blanket blanket blanket blanket blanket",
+  15: "blanket broken basket market bucket blanket broken basket market bucket blanket broken",
 
   // Level 16: arc 4 finale — review f j m g c p k b (cumulative: all unlocked)
   16: "kingdom blanket problem compact morning whisper broken graphic camping market kingdom blanket problem compact morning whisper broken",
 
   // Level 17: + v x (fjetoainhsrludywmgcpkbvx)
-  17: "vortex exactly vortex exactly vortex exactly vortex exactly vortex exactly vortex",
+  17: "vortex exactly vertex woven foxes vivid vortex exactly vertex woven foxes vivid vortex",
 
   // Level 18: + q z — full alphabet now available
   18: "the quick brown fox jumps over the lazy dog the quick brown fox jumps over the lazy dog",
