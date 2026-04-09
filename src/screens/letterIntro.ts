@@ -201,8 +201,8 @@ export function renderLetterIntro(
       <div class="li-finger-label">${fingerLabel}</div>
 
       <div class="li-hand-wrap">
-        <div class="li-hand-svg li-hand-shadow${side === "right" ? " li-hand-flip" : ""}"></div>
-        <div class="li-hand-svg${side === "left" ? " li-hand-flip" : ""}"></div>
+        <div class="li-hand-svg${side === "right" ? " li-hand-shadow" : ""} li-hand-flip"></div>
+        <div class="li-hand-svg${side === "left" ? " li-hand-shadow" : ""}"></div>
       </div>
       <canvas class="li-canvas"></canvas>
 
