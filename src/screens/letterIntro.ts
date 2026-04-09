@@ -201,6 +201,7 @@ export function renderLetterIntro(
       <div class="li-finger-label">${fingerLabel}</div>
 
       <div class="li-hand-wrap">
+        <div class="li-hand-svg li-hand-shadow${side === "right" ? " li-hand-flip" : ""}"></div>
         <div class="li-hand-svg${side === "left" ? " li-hand-flip" : ""}"></div>
       </div>
       <canvas class="li-canvas"></canvas>
@@ -215,10 +216,22 @@ export function renderLetterIntro(
     </div>
   `;
 
-  // ── Hand SVG ───────────────────────────────────────────────────────────────
-  const handWrap = screen.querySelector(".li-hand-svg") as HTMLElement;
+  // ── Hand SVGs ──────────────────────────────────────────────────────────────
+  const shadowWrap = screen.querySelector(".li-hand-shadow") as HTMLElement;
+  const handWrap = screen.querySelector(".li-hand-svg:not(.li-hand-shadow)") as HTMLElement;
+  shadowWrap.innerHTML = handSvgRaw;
   handWrap.innerHTML = handSvgRaw;
   colorFocusedHand(handWrap, fingerName, fingerColor, side);
+  // Shadow: show only the base hand shape — hide all finger paths
+  const shadowSvg = shadowWrap.querySelector("svg");
+  if (shadowSvg) {
+    const bgRect = shadowSvg.querySelector('rect[width="208"]') as SVGElement | null;
+    if (bgRect) bgRect.style.display = "none";
+    for (const id of ["Pinky", "Ring", "Middle", "Index", "Thumb"]) {
+      const el = shadowSvg.querySelector(`#${id}`) as SVGElement | null;
+      if (el) el.style.display = "none";
+    }
+  }
 
   // ── Canvas particles (overlays the hand-wrap) ─────────────────────────────
   const canvas = screen.querySelector(".li-canvas") as HTMLCanvasElement;

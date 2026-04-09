@@ -66,17 +66,6 @@ export const FINGER_LABELS: Record<string, string> = {
   "right-pinky": "Right pinky",
 };
 
-const FINGER_ORDER = [
-  "left-pinky",
-  "left-ring",
-  "left-middle",
-  "left-index",
-  "right-index",
-  "right-middle",
-  "right-ring",
-  "right-pinky",
-];
-
 // SVG path IDs in right-hand.svg → the matching keyboard finger name.
 // The left hand is the same SVG flipped (scaleX(-1)), so Index→left-index etc.
 export const HAND_FINGER_IDS: { svgId: string; right: string; left: string }[] =

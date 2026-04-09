@@ -107,6 +107,18 @@ accepted. The player always proceeds to the next level regardless of speed or
 accuracy. The level complete screen for level 1 shows the results as a baseline
 snapshot, not a grade.
 
+## Letter Intro Screen
+
+Before each new letter pair is introduced in a learn level, the game shows a
+brief per-letter drill screen. The player presses the new letter three times
+before continuing. Its job is to lock in the finger association before live
+typing begins.
+
+The screen shows a hand diagram with the correct finger lit up. Both hands are
+shown — the active hand prominently, and the other hand as a faint ghost in the
+background. The ghost hand gives the learner spatial context for where their
+resting hand sits without distracting from the focus finger.
+
 ## Pre-Level Finger Guide Screen
 
 ### Placement in flow

@@ -80,6 +80,12 @@
 .li-hand-wrap {
   display: flex;
   justify-content: center;
+  align-items: flex-end;
+  gap: 1.5rem;
+}
+
+.li-hand-shadow {
+  opacity: 0.09;
 }
 
 /* SVG finger animations — transform-box + origin so scale is from element center */

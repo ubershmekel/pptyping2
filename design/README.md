@@ -8,6 +8,8 @@ implementation.
   principles, stack choices, and the main project constraints.
 - [`teaching-touch-typing.md`](./teaching-touch-typing.md) - The typing
   curriculum, finger assignments, and how letters unlock across the game.
+- [`teaching-level-flow.md`](./teaching-level-flow.md) - The sequence of
+  screens from level start to finish, with the rationale for each step.
 - [`main-menu.md`](./main-menu.md) - Entry-screen goals, layout, and actions.
 - [`team-select.md`](./team-select.md) - Team choice flow, messaging, and
   expected outcomes of selection.
