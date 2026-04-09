@@ -20,9 +20,9 @@ A three-way toggle: Easy / Medium / Hard. Each tier has a team-specific label:
 - Medium: "Gym Leader" (Pokemon) / "Royal Guard" (MLP)
 - Hard: "Elite Four" (Pokemon) / "Alicorn" (MLP)
 
-Changing difficulty takes effect on the next level attempt. Completed level
-records are stored per-attempt and compared against whatever difficulty was
-active at the time.
+Changing difficulty takes effect immediately on any subsequent level attempt.
+Completed level records are stored per-attempt and compared against whatever
+difficulty was active at the time.
 
 ### Activity Log
 

@@ -23,8 +23,6 @@ resolved.
 
 ### Settings screen completeness
 
-- `settings.md`: difficulty toggle is not in the settings screen; it is
-  only accessible via the difficulty switcher on the level complete screen
 - `settings.md`: audio controls (master volume, SFX, ambient music) are
   not implemented anywhere
 - `settings.md`: data export/import (JSON copy-paste) is not implemented

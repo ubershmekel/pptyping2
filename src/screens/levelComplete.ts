@@ -7,7 +7,7 @@ import type {
   Team,
 } from "../types";
 import { createScreenMount } from "../screenMount";
-import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from "../types";
+import { DIFFICULTY_THRESHOLDS } from "../types";
 import { MAX_LEVEL } from "../data/levels";
 
 export function renderLevelComplete(
@@ -18,7 +18,6 @@ export function renderLevelComplete(
   onNext: () => void,
   onRetry: () => void,
   onLevelSelect: () => void,
-  onChangeDifficulty: (d: Difficulty) => void,
   speedTestHistory?: SpeedTestEntry[],
 ): ScreenMount {
   const isSpeedTest = levelNumber === 1;
@@ -103,7 +102,6 @@ export function renderLevelComplete(
     `;
   } else {
     const thresholds = DIFFICULTY_THRESHOLDS[difficulty];
-    const diffName = DIFFICULTY_DISPLAY[team][difficulty];
     const passed = stats.passed;
 
     screen.className = `screen level-complete-screen team-${team} ${passed ? "lc-passed" : "lc-failed"}`;
@@ -119,8 +117,6 @@ export function renderLevelComplete(
     const accColor =
       stats.accuracy >= thresholds.accuracy ? "stat-bar-pass" : "stat-bar-fail";
 
-    const difficultyOptions: Difficulty[] = ["easy", "medium", "hard"];
-
     screen.innerHTML = `
       <div class="lc-content">
         <!-- Header -->
@@ -129,7 +125,6 @@ export function renderLevelComplete(
             ${passed ? "✓ Level Complete!" : "✗ Not quite!"}
           </div>
           <h2 class="lc-level-title">Level ${levelNumber}</h2>
-          <p class="lc-difficulty-line">Playing as: <strong>${diffName}</strong></p>
         </div>
 
         <!-- Stats -->
@@ -189,25 +184,6 @@ export function renderLevelComplete(
           <button class="lc-btn lc-btn-secondary" id="lc-level-select">Level Select</button>
         </div>
 
-        <!-- Difficulty switcher -->
-        <div class="lc-difficulty-switcher">
-          <span class="lc-diff-label">Change difficulty:</span>
-          <div class="lc-diff-options">
-            ${difficultyOptions
-              .map(
-                (d) => `
-              <button
-                class="lc-diff-btn ${d === difficulty ? "lc-diff-active" : ""}"
-                data-diff="${d}"
-                aria-pressed="${d === difficulty}"
-              >
-                ${DIFFICULTY_DISPLAY[team][d]}
-              </button>
-            `,
-              )
-              .join("")}
-          </div>
-        </div>
       </div>
 
       <!-- Particles -->
@@ -226,21 +202,6 @@ export function renderLevelComplete(
   if (retryBtn) mount.listen(retryBtn, "click", onRetry);
   if (nextAnywayBtn) mount.listen(nextAnywayBtn, "click", onNext);
   if (levelSelectBtn) mount.listen(levelSelectBtn, "click", onLevelSelect);
-
-  // Difficulty buttons
-  screen.querySelectorAll<HTMLButtonElement>(".lc-diff-btn").forEach((btn) => {
-    mount.listen(btn, "click", () => {
-      const d = (btn as HTMLElement).dataset.diff as Difficulty;
-      screen.querySelectorAll(".lc-diff-btn").forEach((b) => {
-        b.classList.toggle("lc-diff-active", b === btn);
-        (b as HTMLButtonElement).setAttribute(
-          "aria-pressed",
-          String(b === btn),
-        );
-      });
-      onChangeDifficulty(d);
-    });
-  });
 
   // Animate stat bars in
   mount.timeout(() => {

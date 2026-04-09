@@ -54,7 +54,6 @@ function getLetterIntroLetters(levelNumber: number): string[] {
 
 export class App {
   private container: HTMLElement;
-  private currentScreen: AppScreen = { id: "main-menu" };
   private currentMount: ScreenMount | null = null;
   private profile = loadProfile();
   private router: Router;
@@ -188,7 +187,6 @@ export class App {
       this.currentMount = null;
     }
 
-    this.currentScreen = screen;
     this.applyBodyClasses();
 
     const mount = this.buildScreenMount(screen);
@@ -297,11 +295,15 @@ export class App {
         () => this.onLevelCompleteNext(screen.number, screen.stats),
         () => this.navigate({ id: "level", number: screen.number }),
         () => this.navigate({ id: "level-select", attempted: screen.number }),
-        (d) => this.onDifficultyChange(d),
         this.profile.speedTestHistory,
       );
     } else if (screen.id === "settings") {
-      return renderSettings(() => this.navigate({ id: "main-menu" }));
+      return renderSettings(
+        this.profile.activeTeam,
+        this.profile.difficulty,
+        (d) => this.onDifficultyChange(d),
+        () => this.navigate({ id: "main-menu" }),
+      );
     }
 
     return createScreenMount(document.createElement("div"));
@@ -358,7 +360,7 @@ export class App {
     this.navigate({ id: "level-complete", number: levelNumber, stats });
   }
 
-  private onLevelCompleteNext(levelNumber: number, stats: LevelStats): void {
+  private onLevelCompleteNext(levelNumber: number, _stats: LevelStats): void {
     const cutscene = cutsceneAfterLevel(levelNumber);
     if (cutscene !== null) {
       this.navigate({ id: "cutscene", index: cutscene });
@@ -372,10 +374,6 @@ export class App {
   private onDifficultyChange(difficulty: Difficulty): void {
     this.profile = setDifficulty(this.profile, difficulty);
     saveProfile(this.profile);
-    // Refresh the level-complete screen to update thresholds
-    if (this.currentScreen.id === "level-complete") {
-      this.showScreen({ ...this.currentScreen });
-    }
   }
 
   // ─── Body classes for theming ────────────────────────────────────────────────

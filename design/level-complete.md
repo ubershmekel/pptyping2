@@ -44,7 +44,6 @@ result is framed as a baseline, not a grade.
 - Pass/fail state — visually clear (green/success vs. amber/retry)
 - Short story blurb (2–3 sentences from `stories.ts`, team-specific) — even on
   failure the blurb can be shown (it's flavor, not a reward gate)
-- Difficulty label (so the player knows what thresholds they were held to)
 - **Reward image** — on pass, a level-specific illustration is shown alongside
   the story blurb. On fail, no image is shown. See `assets.md` for the
   naming convention and asset list.

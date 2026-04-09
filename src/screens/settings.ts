@@ -1,8 +1,16 @@
 import "./settings.css";
-import type { ScreenMount } from "../types";
+import type { Difficulty, ScreenMount, Team } from "../types";
 import { createScreenMount } from "../screenMount";
+import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from "../types";
 
-export function renderSettings(onBack: () => void): ScreenMount {
+const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
+
+export function renderSettings(
+  team: Team,
+  difficulty: Difficulty,
+  onChangeDifficulty: (d: Difficulty) => void,
+  onBack: () => void,
+): ScreenMount {
   const screen = document.createElement("div");
   const mount = createScreenMount(screen);
   screen.className = "screen settings-screen";
@@ -44,6 +52,22 @@ export function renderSettings(onBack: () => void): ScreenMount {
         </section>
 
         <section class="st-card">
+          <h3 class="st-card-title">Difficulty</h3>
+          <div class="st-diff-options">
+            ${DIFFICULTIES.map((d) => `
+              <button
+                class="st-diff-btn ${d === difficulty ? "st-diff-active" : ""}"
+                data-diff="${d}"
+                aria-pressed="${d === difficulty}"
+              >
+                <span class="st-diff-name">${DIFFICULTY_DISPLAY[team][d]}</span>
+                <span class="st-diff-req">${DIFFICULTY_THRESHOLDS[d].wpm} WPM · ${DIFFICULTY_THRESHOLDS[d].accuracy}% acc</span>
+              </button>
+            `).join("")}
+          </div>
+        </section>
+
+        <section class="st-card">
           <h3 class="st-card-title">Keyboard Shortcuts</h3>
           <ul class="st-shortcut-list">
             <li><kbd>Esc</kbd> Pause / back</li>
@@ -55,11 +79,22 @@ export function renderSettings(onBack: () => void): ScreenMount {
   `;
 
   mount.listen(screen, "click", (e: Event) => {
-    const btn = (e.target as HTMLElement).closest(
-      "[data-action]",
-    ) as HTMLElement | null;
-    if (btn?.dataset["action"] === "back") {
+    const target = e.target as HTMLElement;
+
+    const backBtn = target.closest("[data-action]") as HTMLElement | null;
+    if (backBtn?.dataset["action"] === "back") {
       onBack();
+      return;
+    }
+
+    const diffBtn = target.closest(".st-diff-btn") as HTMLElement | null;
+    if (diffBtn) {
+      const d = diffBtn.dataset["diff"] as Difficulty;
+      screen.querySelectorAll(".st-diff-btn").forEach((b) => {
+        b.classList.toggle("st-diff-active", b === diffBtn);
+        (b as HTMLButtonElement).setAttribute("aria-pressed", String(b === diffBtn));
+      });
+      onChangeDifficulty(d);
     }
   });
 
