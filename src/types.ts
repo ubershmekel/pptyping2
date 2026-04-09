@@ -55,12 +55,21 @@ export interface SpeedTestEntry {
   accuracy: number; // 0-100
 }
 
+export interface ActivityLogEntry {
+  date: string; // YYYY-MM-DD
+  levelNumber: number;
+  wpm: number;
+  accuracy: number; // 0-100
+  passed: boolean;
+}
+
 export interface PlayerProfile {
   activeTeam: Team;
   teamSelected: boolean; // true once the player has explicitly picked a team
   difficulty: Difficulty;
   teams: Record<Team, TeamProgress>;
   speedTestHistory: SpeedTestEntry[];
+  activityLog: ActivityLogEntry[];
 }
 
 // ─── Screen lifecycle ───────────────────────────────────────────────────────

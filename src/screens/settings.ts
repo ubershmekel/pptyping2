@@ -1,13 +1,48 @@
 import "./settings.css";
-import type { Difficulty, ScreenMount, Team } from "../types";
+import type { ActivityLogEntry, Difficulty, ScreenMount, Team } from "../types";
 import { createScreenMount } from "../screenMount";
 import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from "../types";
 
 const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
 
+function renderActivityLogSection(log: ActivityLogEntry[]): string {
+  if (log.length === 0) {
+    return `<p class="st-log-empty">No attempts yet. Complete a level to see your history here.</p>`;
+  }
+  const rows = [...log]
+    .reverse()
+    .map(
+      (e) => `
+      <tr class="${e.passed ? "st-log-pass" : "st-log-fail"}">
+        <td>${e.date}</td>
+        <td>Level ${e.levelNumber}</td>
+        <td>${e.wpm}</td>
+        <td>${e.accuracy}%</td>
+        <td class="st-log-result">${e.passed ? "✓" : "✗"}</td>
+      </tr>`,
+    )
+    .join("");
+  return `
+    <div class="st-log-wrap">
+      <table class="st-log-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Level</th>
+            <th>WPM</th>
+            <th>Acc</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
 export function renderSettings(
   team: Team,
   difficulty: Difficulty,
+  activityLog: ActivityLogEntry[],
   onChangeDifficulty: (d: Difficulty) => void,
   onBack: () => void,
 ): ScreenMount {
@@ -65,6 +100,11 @@ export function renderSettings(
               </button>
             `).join("")}
           </div>
+        </section>
+
+        <section class="st-card">
+          <h3 class="st-card-title">Activity Log</h3>
+          ${renderActivityLogSection(activityLog)}
         </section>
 
         <section class="st-card">

@@ -181,6 +181,69 @@
   opacity: 0.7;
 }
 
+/* ── Activity log card ───────────────────────────────────────────────────── */
+
+.st-log-empty {
+  color: #666;
+  font-size: 0.88rem;
+  font-style: italic;
+}
+
+.st-log-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.st-log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+}
+
+.st-log-table thead th {
+  padding: 0.45rem 0.65rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #666;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.st-log-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.st-log-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.st-log-table td {
+  padding: 0.4rem 0.65rem;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+.st-log-pass td {
+  color: #ccc;
+}
+
+.st-log-result {
+  font-weight: 700;
+}
+
+.st-log-pass .st-log-result {
+  color: #4caf50;
+}
+
+.st-log-fail .st-log-result {
+  color: #e57373;
+}
+
 /* ── Shortcuts card ──────────────────────────────────────────────────────── */
 
 .st-shortcut-list {

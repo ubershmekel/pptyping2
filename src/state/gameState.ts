@@ -1,4 +1,5 @@
 import type {
+  ActivityLogEntry,
   Difficulty,
   LevelRecord,
   LevelStats,
@@ -34,6 +35,7 @@ export const DEFAULT_PROFILE: PlayerProfile = {
     },
   },
   speedTestHistory: [],
+  activityLog: [],
 };
 
 // ─── Load / Save ─────────────────────────────────────────────────────────────
@@ -67,6 +69,7 @@ export function loadProfile(): PlayerProfile {
           [otherTeam]: { ...DEFAULT_TEAM_PROGRESS },
         } as Record<Team, TeamProgress>,
         speedTestHistory: [],
+        activityLog: [],
       };
       saveProfile(migrated);
       return migrated;
@@ -82,6 +85,7 @@ export function loadProfile(): PlayerProfile {
       speedTestHistory: Array.isArray(parsed.speedTestHistory)
         ? parsed.speedTestHistory
         : [],
+      activityLog: Array.isArray(parsed.activityLog) ? parsed.activityLog : [],
     };
   } catch {
     return { ...DEFAULT_PROFILE, teams: { ...DEFAULT_PROFILE.teams } };
@@ -109,6 +113,7 @@ export function resetProfile(): PlayerProfile {
         highestUnlockedLevel: 1,
       },
     },
+    activityLog: [],
   };
   saveProfile(fresh);
   return fresh;
@@ -183,6 +188,15 @@ export function applyLevelResult(
     };
     next = { ...next, speedTestHistory: [...profile.speedTestHistory, entry] };
   }
+
+  const logEntry: ActivityLogEntry = {
+    date: new Date().toISOString().slice(0, 10),
+    levelNumber,
+    wpm: stats.wpm,
+    accuracy: stats.accuracy,
+    passed,
+  };
+  next = { ...next, activityLog: [...next.activityLog, logEntry] };
 
   saveProfile(next);
   return next;

@@ -26,8 +26,7 @@ difficulty was active at the time.
 
 ### Activity Log
 
-A scrollable table showing every level attempt (levels 2 and beyond), newest
-first. Each row shows:
+A scrollable table showing every level played, newest first. Each row shows:
 
 - Date
 - Level number

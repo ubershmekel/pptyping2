@@ -301,6 +301,7 @@ export class App {
       return renderSettings(
         this.profile.activeTeam,
         this.profile.difficulty,
+        this.profile.activityLog,
         (d) => this.onDifficultyChange(d),
         () => this.navigate({ id: "main-menu" }),
       );

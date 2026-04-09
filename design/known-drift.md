@@ -11,16 +11,6 @@ resolved.
   recommends a refresher level based on the player's weakest character is
   specified but not yet implemented
 
-### Activity log
-
-- `data-model.md`: `ActivityLogEntry` type and
-  `activityLog: ActivityLogEntry[]` on `PlayerProfile` do not exist yet in
-  `src/types.ts`
-- `src/state/gameState.ts` `applyLevelResult` does not append an
-  `ActivityLogEntry` on level 2+ completions
-- `settings.md`: the settings screen (`src/screens/settings.ts`) has no
-  activity log section — currently it only shows About and Keyboard Shortcuts
-
 ### Settings screen completeness
 
 - `settings.md`: audio controls (master volume, SFX, ambient music) are
