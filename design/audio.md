@@ -36,7 +36,7 @@ acceptable.
 Each environment has one ambient background loop that plays during the level
 screen, level complete screen, and cutscene within that arc. Loops are defined
 in the `EnvironmentConfig` and started/stopped by the environment manager (see
-`11-environments-ux.md`).
+`environments.md`).
 
 The audio manager maintains a reference to the currently playing loop. When
 switching environments, it fades out the previous loop and fades in the new one.

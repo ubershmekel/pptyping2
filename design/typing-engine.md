@@ -55,7 +55,7 @@ The engine tracks:
 - **Elapsed time**: starts on first keystroke, pauses when the pause overlay is
   active.
 
-Stats are emitted continuously so the stats display (see `17-typing-engine-tech.md`)
+Stats are emitted continuously so the stats display (see `typing-engine.md`)
 can update without polling.
 
 ### Combo / Streak Tracking
@@ -69,7 +69,7 @@ a particle burst.
 
 When all lines are typed, the engine emits `levelComplete` with the final stats
 object: `{ wpm, accuracy, elapsedSeconds, totalErrors }`. The level screen
-compares these against the difficulty thresholds (see `18-difficulty-system-tech.md`)
+compares these against the difficulty thresholds (see `difficulty-system.md`)
 and transitions to the level complete screen.
 
 ## Key Files

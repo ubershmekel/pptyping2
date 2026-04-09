@@ -59,7 +59,7 @@ via the `EnvironmentConfig` in `src/content/arcs.ts`.
 Character art now has two runtime forms:
 
 - Companion art: standalone SVG files used by the in-level companion system (see
-  `10-character-companion-ux.md`)
+  `character-companion.md`)
 - Menu portraits: static images or Aseprite-exported sprite sheets used by
   screens like Team Select
 

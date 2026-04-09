@@ -8,9 +8,9 @@ tip before live typing starts. It is not optional. The teaching reminder is
 part of the curriculum, not polish.
 
 Level 1 (the speed test) uses a different intro screen — see
-`01b-teaching-touch-typing.md`. The finger guide is never shown for level 1.
+`teaching-touch-typing.md`. The finger guide is never shown for level 1.
 
-See `01b-teaching-touch-typing.md` for the curriculum contract this screen
+See `teaching-touch-typing.md` for the curriculum contract this screen
 enforces.
 
 ## Placement in flow
@@ -42,7 +42,7 @@ The screen has five stacked regions inside a centered column (max 860 px):
 
 Each level shows exactly **one** teaching tip, displayed prominently (not as a
 small chip — this is the headline of the screen). The tip rotates across levels
-following the schedule in `01b-teaching-touch-typing.md`.
+following the schedule in `teaching-touch-typing.md`.
 
 Level 2 also shows a secondary note beneath the main tip:
 

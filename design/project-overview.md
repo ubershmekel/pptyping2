@@ -1,4 +1,4 @@
-# 01 - Project Overview
+# Project Overview
 
 ## Concept
 
@@ -59,5 +59,5 @@ These are non-negotiable constraints that every screen must satisfy:
   renders the initial screen
 - `vite.config.ts` - build configuration
 - `src/types.ts` - canonical TypeScript types for the entire game (see
-  `13-data-model-tech.md`)
+  `data-model.md`)
 - `test/` - TypeScript tests run through Node's built-in test runner via `tsx`

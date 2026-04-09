@@ -4,7 +4,7 @@ import test from "node:test";
 import { LEVELS } from "../src/data/levels";
 import { LEVEL_LETTERS, LEVEL_TEXTS } from "../src/data/wordLists";
 
-// All letters with a defined touch-typing finger assignment (see design/01b-teaching-touch-typing.md)
+// All letters with a defined touch-typing finger assignment (see design/teaching-touch-typing.md)
 const FINGER_ASSIGNED = new Set(
   "q a z w s x e d c r f v t g b y h n u j m i k o l p".split(" "),
 );

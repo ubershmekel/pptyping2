@@ -15,7 +15,7 @@ it and move on quickly.
 
 The engine emits final stats (WPM and accuracy). The level complete screen
 compares them against the current difficulty's thresholds (see
-`18-difficulty-system-tech.md`):
+`difficulty-system.md`):
 
 - **Pass**: WPM ≥ threshold AND accuracy ≥ threshold
 - **Fail**: either metric below threshold
@@ -46,7 +46,7 @@ result is framed as a baseline, not a grade.
   failure the blurb can be shown (it's flavor, not a reward gate)
 - Difficulty label (so the player knows what thresholds they were held to)
 - **Reward image** — on pass, a level-specific illustration is shown alongside
-  the story blurb. On fail, no image is shown. See `19-assets-tech.md` for the
+  the story blurb. On fail, no image is shown. See `assets.md` for the
   naming convention and asset list.
 
 ### Level 1 (speed test baseline)

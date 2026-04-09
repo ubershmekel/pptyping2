@@ -14,13 +14,13 @@ is unused in testing.
 ## Level Definitions
 
 20 levels. Each level is defined as a `LevelDefinition` object (see
-`13-data-model-tech.md`).
+`data-model.md`).
 
 **Letter introduction order** follows the curriculum order
 `fjetoainhsrludywmgcpkbvxqz` so that real words are available as early as
 possible. Level 1 is a speed test using the full keyboard.
 
-See `01b-teaching-touch-typing.md` for the list of levels and focus letters.
+See `teaching-touch-typing.md` for the list of levels and focus letters.
 
 The word pool for each learn level is pre-filtered to only include words
 constructible from that level's focused letter set. Review levels widen to the
@@ -30,7 +30,7 @@ arc's cumulative set, and only the final review widens to the full alphabet.
 
 Word lists are curated per level, not generated at runtime. Each level has a
 list of valid words. The typing engine draws from this list when constructing
-lines (see `17-typing-engine-tech.md`). Words are all lowercase.
+lines (see `typing-engine.md`). Words are all lowercase.
 
 For the speed test (level 1), the word list is a standard common-words corpus —
 the goal is establishing a baseline WPM, not teaching letters.
@@ -56,5 +56,5 @@ content for one team is never shown to a player on the other team.
 5 arcs group levels under one environment theme (4, 4, 4, 4, and 4 gameplay
 levels per arc). Arc definitions include the `EnvironmentConfig` (background
 image, CSS variables, particle preset, ambient sound key) and a reference to the
-cutscene that follows the arc. See `11-environments-ux.md` for how the
+cutscene that follows the arc. See `environments.md` for how the
 environment presentation is applied on screen.

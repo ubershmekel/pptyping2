@@ -218,7 +218,7 @@ multiple times on the same day, all runs are stored — not just the best.
 
 The level complete screen for level 1 shows the current result alongside a
 brief history so the player can see their trajectory. See
-`07-level-complete-ux.md` for how this is displayed.
+`level-complete.md` for how this is displayed.
 
 ## Word-List Contract
 

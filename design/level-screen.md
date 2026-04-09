@@ -93,7 +93,7 @@ stardust trail for Stardrift Coast) that override the team default.
 ## Pause
 
 Pressing Escape or the pause button mounts the pause overlay (see
-`08-pause-overlay-ux.md`) on top of the level screen without destroying it. The
+`pause-overlay.md`) on top of the level screen without destroying it. The
 typing engine is paused (stops accepting input, stops the stat timer). On
 resume, everything continues from where it left off.
 

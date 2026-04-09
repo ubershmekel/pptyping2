@@ -14,7 +14,7 @@ environment system additive and safe to modify without touching game logic.
 ## What an Environment Controls
 
 Each `EnvironmentConfig` (defined in `src/content/arcs.ts`, typed in
-`13-data-model-tech.md`) controls:
+`data-model.md`) controls:
 
 1. **Background image** — a full-bleed atmospheric scene behind the text area.
    Pre-generated. Applies as a CSS `background-image` on the level screen's root
@@ -29,11 +29,11 @@ Each `EnvironmentConfig` (defined in `src/content/arcs.ts`, typed in
      yellow for Pokemon, soft pink/purple for MLP — these may be team-specific
      variants of the env colors)
 3. **Particle preset** — a key referencing a preset configuration in the
-   particle manager (see `12-particles-ux.md`). Examples: floating leaves for a
+   particle manager (see `particles.md`). Examples: floating leaves for a
    forest arc, embers for a fire arc, snowflakes for an ice arc, bubbles for an
    ocean arc, sparkles for a final arc.
 4. **Ambient sound key** — a key referencing a registered loop in the audio
-   manager (see `20-audio-tech.md`). Examples: forest birds, cave echoes, ocean
+   manager (see `audio.md`). Examples: forest birds, cave echoes, ocean
    waves, wind, magic hum.
 
 ## Environment Application

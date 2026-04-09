@@ -16,7 +16,7 @@ the same test runner as the rest of the project.
 
 Every level's `availableLetters` set must be a subset of the letters that have a
 defined finger assignment in the touch-typing map (see
-`01b-teaching-touch-typing.md`).
+`teaching-touch-typing.md`).
 
 **Test file**: `test/content.test.ts`
 
