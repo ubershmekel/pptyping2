@@ -12,6 +12,11 @@ back up or transfer progress.
 
 ## Settings Available
 
+### About
+
+- A short project blurb explaining PPTyping
+- A GitHub link for the repository
+
 ### Difficulty
 
 A three-way toggle: Easy / Medium / Hard. Each tier has a team-specific label:

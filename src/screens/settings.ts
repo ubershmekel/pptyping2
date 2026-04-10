@@ -63,6 +63,7 @@ export function renderSettings(
           <p class="st-about-text">
             PP Typing is a free typing game featuring Pokémon and My Little Pony characters.
             Practice your typing while watching your favorite characters run!
+            This unofficial fan game is not endorsed by or officially licensed by anyone.
           </p>
           <a
             class="st-link-btn"
@@ -89,7 +90,8 @@ export function renderSettings(
         <section class="st-card">
           <h3 class="st-card-title">Difficulty</h3>
           <div class="st-diff-options">
-            ${DIFFICULTIES.map((d) => `
+            ${DIFFICULTIES.map(
+              (d) => `
               <button
                 class="st-diff-btn ${d === difficulty ? "st-diff-active" : ""}"
                 data-diff="${d}"
@@ -98,7 +100,8 @@ export function renderSettings(
                 <span class="st-diff-name">${DIFFICULTY_DISPLAY[team][d]}</span>
                 <span class="st-diff-req">${DIFFICULTY_THRESHOLDS[d].wpm} WPM · ${DIFFICULTY_THRESHOLDS[d].accuracy}% acc</span>
               </button>
-            `).join("")}
+            `,
+            ).join("")}
           </div>
         </section>
 
@@ -107,13 +110,6 @@ export function renderSettings(
           ${renderActivityLogSection(activityLog)}
         </section>
 
-        <section class="st-card">
-          <h3 class="st-card-title">Keyboard Shortcuts</h3>
-          <ul class="st-shortcut-list">
-            <li><kbd>Esc</kbd> Pause / back</li>
-            <li><kbd>Enter</kbd> Confirm / advance</li>
-          </ul>
-        </section>
       </div>
     </div>
   `;
@@ -132,7 +128,10 @@ export function renderSettings(
       const d = diffBtn.dataset["diff"] as Difficulty;
       screen.querySelectorAll(".st-diff-btn").forEach((b) => {
         b.classList.toggle("st-diff-active", b === diffBtn);
-        (b as HTMLButtonElement).setAttribute("aria-pressed", String(b === diffBtn));
+        (b as HTMLButtonElement).setAttribute(
+          "aria-pressed",
+          String(b === diffBtn),
+        );
       });
       onChangeDifficulty(d);
     }
