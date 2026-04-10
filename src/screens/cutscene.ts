@@ -83,99 +83,11 @@ export function renderCutscene(
   return mount;
 }
 
-// ─── Inline CSS art placeholders ─────────────────────────────────────────────
-// Beautiful CSS paintings — each tells a visual story without external images.
-
 function generateCutsceneArt(team: Team, index: number): string {
-  if (team === "pokemon") {
-    const arts = [
-      // 0: Pikachu looking at a corrupted keyboard
-      `<div class="cs-art-scene">
-        <div class="cs-sky cs-sky-electric"></div>
-        <div class="cs-ground"></div>
-        <div class="cs-art-pikachu-big"></div>
-        <div class="cs-keyboard-corrupted"></div>
-        <div class="cs-sparkles-electric"></div>
-      </div>`,
-      // 1: Pikachu celebrating, first keys glowing
-      `<div class="cs-art-scene">
-        <div class="cs-sky cs-sky-dawn"></div>
-        <div class="cs-ground cs-ground-lit"></div>
-        <div class="cs-art-pikachu-big cs-pikachu-celebrate"></div>
-        <div class="cs-keys-glowing"></div>
-        <div class="cs-lightning-burst"></div>
-      </div>`,
-      // 2–5: Progressive scenes
-      `<div class="cs-art-scene cs-art-cavern">
-        <div class="cs-sky cs-sky-cave"></div>
-        <div class="cs-crystals"></div>
-        <div class="cs-art-pikachu-big"></div>
-      </div>`,
-      `<div class="cs-art-scene cs-art-coast">
-        <div class="cs-sky cs-sky-ocean"></div>
-        <div class="cs-waves"></div>
-        <div class="cs-art-pikachu-big"></div>
-        <div class="cs-rowlet-silhouette"></div>
-      </div>`,
-      `<div class="cs-art-scene cs-art-mountain">
-        <div class="cs-sky cs-sky-summit"></div>
-        <div class="cs-mountains"></div>
-        <div class="cs-art-pikachu-big cs-pikachu-determined"></div>
-      </div>`,
-      `<div class="cs-art-scene cs-art-finale">
-        <div class="cs-sky cs-sky-victory"></div>
-        <div class="cs-art-pikachu-big cs-pikachu-celebrate"></div>
-        <div class="cs-art-rowlet"></div>
-        <div class="cs-confetti-burst"></div>
-        <div class="cs-keys-all-glowing"></div>
-      </div>`,
-    ];
-    return arts[index] ?? arts[0];
-  } else {
-    const arts = [
-      // 0: Pinkie at keyboard, looking excited
-      `<div class="cs-art-scene">
-        <div class="cs-sky cs-sky-ponyville"></div>
-        <div class="cs-ground cs-ground-rainbow"></div>
-        <div class="cs-art-pinkie-big"></div>
-        <div class="cs-keyboard-corrupted cs-keyboard-yellow"></div>
-        <div class="cs-sparkles-rainbow"></div>
-      </div>`,
-      // 1: Pinkie celebrating first restored keys
-      `<div class="cs-art-scene">
-        <div class="cs-sky cs-sky-dawn cs-sky-pink"></div>
-        <div class="cs-ground cs-ground-flowers"></div>
-        <div class="cs-art-pinkie-big cs-pinkie-celebrate"></div>
-        <div class="cs-rainbow-burst"></div>
-        <div class="cs-keys-glowing cs-keys-pink"></div>
-      </div>`,
-      `<div class="cs-art-scene cs-art-meadow">
-        <div class="cs-sky cs-sky-noon"></div>
-        <div class="cs-ground cs-ground-flowers"></div>
-        <div class="cs-art-pinkie-big"></div>
-        <div class="cs-balloons"></div>
-      </div>`,
-      `<div class="cs-art-scene cs-art-crystal">
-        <div class="cs-sky cs-sky-cave cs-sky-pink-cave"></div>
-        <div class="cs-crystals cs-crystals-pink"></div>
-        <div class="cs-art-pinkie-big"></div>
-        <div class="cs-party-cannon"></div>
-      </div>`,
-      `<div class="cs-art-scene cs-art-mountain">
-        <div class="cs-sky cs-sky-summit cs-sky-pink-summit"></div>
-        <div class="cs-mountains cs-mountains-pastel"></div>
-        <div class="cs-art-pinkie-big cs-pinkie-determined"></div>
-      </div>`,
-      `<div class="cs-art-scene cs-art-finale cs-finale-mlp">
-        <div class="cs-sky cs-sky-victory cs-sky-rainbow"></div>
-        <div class="cs-art-pinkie-big cs-pinkie-celebrate"></div>
-        <div class="cs-confetti-burst cs-confetti-rainbow"></div>
-        <div class="cs-keys-all-glowing cs-keys-rainbow"></div>
-        <div class="cs-balloons cs-balloons-many"></div>
-      </div>`,
-    ];
-    return arts[index] ?? arts[0];
-  }
+  const prefix = team === "pokemon" ? "pok" : "mlp";
+  const src = `/cutscenes/${prefix}${index}.jpg`;
+  const caption = getArtCaption(team, index);
+  return `<img class="cs-art-img" src="${src}" alt="${caption}">`;
 }
 
 function getArtCaption(team: Team, index: number): string {
