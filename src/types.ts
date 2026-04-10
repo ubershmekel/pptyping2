@@ -34,6 +34,8 @@ export interface LevelStats {
   errors: number;
   totalKeystrokes: number;
   passed: boolean;
+  charErrors: Record<string, number>; // incorrect presses per expected char (spaces excluded)
+  charAvgTimes: Record<string, number>; // avg ms between correct keystrokes per char (spaces excluded, first key excluded)
 }
 
 // ─── Persistence ────────────────────────────────────────────────────────────

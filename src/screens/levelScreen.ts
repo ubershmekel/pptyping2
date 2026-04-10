@@ -25,6 +25,9 @@ class TypingEngine {
   private currentLineIndex = 0;
   private readonly lines: LineDef[];
   private visibleSpans: HTMLSpanElement[] = [];
+  private charErrorCounts: Map<string, number> = new Map();
+  private charTimings: Map<string, number[]> = new Map();
+  private lastCorrectTime: number | null = null;
 
   onCorrect?: (charIndex: number, span: HTMLSpanElement | null) => void;
   onError?: (charIndex: number, span: HTMLSpanElement | null) => void;
@@ -117,6 +120,12 @@ class TypingEngine {
       this.visibleSpans[
         this.index - this.lines[this.currentLineIndex].start
       ]?.classList.add("error-flash");
+      if (expected !== " ") {
+        this.charErrorCounts.set(
+          expected,
+          (this.charErrorCounts.get(expected) ?? 0) + 1,
+        );
+      }
       this.onError?.(
         this.index,
         this.visibleSpans[
@@ -127,6 +136,15 @@ class TypingEngine {
     }
 
     this.correctStrokes++;
+    if (expected !== " ") {
+      const now = Date.now();
+      if (this.lastCorrectTime !== null) {
+        const timings = this.charTimings.get(expected) ?? [];
+        timings.push(now - this.lastCorrectTime);
+        this.charTimings.set(expected, timings);
+      }
+      this.lastCorrectTime = now;
+    }
 
     const line = this.lines[this.currentLineIndex];
     const localIndex = this.index - line.start;
@@ -211,6 +229,18 @@ class TypingEngine {
         ? Math.round((this.correctStrokes / this.totalStrokes) * 100)
         : 100;
 
+    const charErrors: Record<string, number> = {};
+    this.charErrorCounts.forEach((count, char) => {
+      charErrors[char] = count;
+    });
+
+    const charAvgTimes: Record<string, number> = {};
+    this.charTimings.forEach((times, char) => {
+      if (times.length > 0) {
+        charAvgTimes[char] = times.reduce((a, b) => a + b, 0) / times.length;
+      }
+    });
+
     return {
       wpm,
       accuracy,
@@ -218,6 +248,8 @@ class TypingEngine {
       errors: this.totalStrokes - this.correctStrokes,
       totalKeystrokes: this.totalStrokes,
       passed: false,
+      charErrors,
+      charAvgTimes,
     };
   }
 }

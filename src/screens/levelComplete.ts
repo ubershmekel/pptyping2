@@ -8,7 +8,7 @@ import type {
 } from "../types";
 import { createScreenMount } from "../screenMount";
 import { DIFFICULTY_THRESHOLDS } from "../types";
-import { MAX_LEVEL } from "../data/levels";
+import { CHAR_TO_LEARN_LEVEL, getLevelDef, MAX_LEVEL } from "../data/levels";
 
 export function renderLevelComplete(
   team: Team,
@@ -103,6 +103,8 @@ export function renderLevelComplete(
   } else {
     const thresholds = DIFFICULTY_THRESHOLDS[difficulty];
     const passed = stats.passed;
+    const levelDef = getLevelDef(levelNumber);
+    const isSpeedCheck = levelDef.isSpeedTest || levelNumber === MAX_LEVEL;
 
     screen.className = `screen level-complete-screen team-${team} ${passed ? "lc-passed" : "lc-failed"}`;
 
@@ -117,6 +119,10 @@ export function renderLevelComplete(
     const accColor =
       stats.accuracy >= thresholds.accuracy ? "stat-bar-pass" : "stat-bar-fail";
 
+    const retryRec = levelDef.isFinale
+      ? buildRetryRecommendation(stats, levelDef.availableLetters)
+      : null;
+
     screen.innerHTML = `
       <div class="lc-content">
         <!-- Header -->
@@ -124,7 +130,7 @@ export function renderLevelComplete(
           <div class="lc-result-badge ${passed ? "badge-pass" : "badge-fail"}">
             ${passed ? "✓ Level Complete!" : "✗ Not quite!"}
           </div>
-          <h2 class="lc-level-title">Level ${levelNumber}</h2>
+          <h2 class="lc-level-title">${isSpeedCheck ? `Level ${levelNumber} — Speed Check` : `Level ${levelNumber}`}</h2>
         </div>
 
         <!-- Stats -->
@@ -162,6 +168,9 @@ export function renderLevelComplete(
         <div class="lc-message ${passed ? "lc-message-pass" : "lc-message-fail"}">
           ${getFeedbackMessage(team, passed, stats)}
         </div>
+
+        <!-- Retry recommendation (failed finales only) -->
+        ${retryRec ? `<div class="lc-retry-rec">${retryRec}</div>` : ""}
 
         <!-- Actions -->
         <div class="lc-actions">
@@ -211,6 +220,70 @@ export function renderLevelComplete(
   }, 200);
 
   return mount;
+}
+
+// Curriculum order — used to break ties (prefer latest)
+const CURRICULUM_ORDER = "fjetoainhsrludywmgcpkbvxqz";
+
+function buildRetryRecommendation(
+  stats: LevelStats,
+  availableLetters: string,
+): string {
+  const chars = availableLetters.split("").filter((c) => c !== " ");
+
+  // Most-errored char
+  let maxErrors = -1;
+  let worstErrorChar = "";
+  for (const char of CURRICULUM_ORDER) {
+    if (!chars.includes(char)) continue;
+    const count = stats.charErrors[char] ?? 0;
+    if (count >= maxErrors) {
+      maxErrors = count;
+      worstErrorChar = char;
+    }
+  }
+
+  // Slowest char (highest average time between keystrokes)
+  let maxAvgTime = -1;
+  let slowestChar = "";
+  for (const char of CURRICULUM_ORDER) {
+    if (!chars.includes(char)) continue;
+    const avg = stats.charAvgTimes[char] ?? 0;
+    if (avg >= maxAvgTime) {
+      maxAvgTime = avg;
+      slowestChar = char;
+    }
+  }
+
+  const lines: string[] = [];
+  const hasErrors = maxErrors > 0 && worstErrorChar;
+  const hasTiming = !!slowestChar;
+
+  if (hasErrors && hasTiming && worstErrorChar === slowestChar) {
+    const level = CHAR_TO_LEARN_LEVEL[worstErrorChar];
+    const levelHint = level ? ` Replay Level ${level} to work on it.` : "";
+    lines.push(
+      `<strong>"${worstErrorChar}"</strong> was your most-missed and slowest key.${levelHint}`,
+    );
+  } else {
+    if (hasErrors) {
+      const level = CHAR_TO_LEARN_LEVEL[worstErrorChar];
+      const levelHint = level ? ` — replay Level ${level} to drill it` : "";
+      lines.push(
+        `You missed <strong>"${worstErrorChar}"</strong> most often${levelHint}.`,
+      );
+    }
+
+    if (hasTiming) {
+      const level = CHAR_TO_LEARN_LEVEL[slowestChar];
+      const levelHint = level ? ` — replay Level ${level} to build speed` : "";
+      lines.push(
+        `<strong>"${slowestChar}"</strong> was your slowest key${levelHint}.`,
+      );
+    }
+  }
+
+  return lines.join("<br>");
 }
 
 function formatTime(seconds: number): string {

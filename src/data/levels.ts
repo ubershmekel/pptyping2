@@ -152,6 +152,31 @@ export const LEVELS: LevelDefinition[] = [
 // Derived constants — import these instead of hardcoding level numbers elsewhere
 export const MAX_LEVEL = LEVELS[LEVELS.length - 1].number;
 
+// Maps each letter to the learn level that first introduces it.
+// Finales and the speed-test levels are excluded — only the drill levels count.
+const LEARN_LEVEL_CHARS: Array<{ level: number; chars: string }> = [
+  { level: 2, chars: "fj" },
+  { level: 3, chars: "et" },
+  { level: 5, chars: "oa" },
+  { level: 6, chars: "in" },
+  { level: 7, chars: "hs" },
+  { level: 9, chars: "rl" },
+  { level: 10, chars: "ud" },
+  { level: 11, chars: "yw" },
+  { level: 13, chars: "mg" },
+  { level: 14, chars: "cp" },
+  { level: 15, chars: "kb" },
+  { level: 17, chars: "vx" },
+  { level: 18, chars: "qz" },
+];
+
+export const CHAR_TO_LEARN_LEVEL: Record<string, number> = {};
+for (const { level, chars } of LEARN_LEVEL_CHARS) {
+  for (const c of chars) {
+    CHAR_TO_LEARN_LEVEL[c] = level;
+  }
+}
+
 export function getLevelDef(number: number): LevelDefinition {
   return LEVELS.find((l) => l.number === number) ?? LEVELS[0];
 }
