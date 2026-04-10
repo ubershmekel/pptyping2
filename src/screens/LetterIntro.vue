@@ -21,11 +21,11 @@
 
       <div class="li-hand-wrap">
         <div
-          ref="shadowWrap"
-          :class="`li-hand-svg${side === 'right' ? ' li-hand-shadow' : ''} li-hand-flip`"
+          ref="leftHandWrap"
+          :class="`li-hand-svg li-hand-flip${side === 'right' ? ' li-hand-shadow' : ''}`"
         ></div>
         <div
-          ref="handWrap"
+          ref="rightHandWrap"
           :class="`li-hand-svg${side === 'left' ? ' li-hand-shadow' : ''}`"
         ></div>
       </div>
@@ -58,8 +58,8 @@ const props = defineProps<{ levelNumber: number; letter: string; team: Team }>()
 const emit = defineEmits<{ done: []; back: [] }>();
 
 const screenEl = ref<HTMLElement | null>(null);
-const shadowWrap = ref<HTMLElement | null>(null);
-const handWrap = ref<HTMLElement | null>(null);
+const leftHandWrap = ref<HTMLElement | null>(null);
+const rightHandWrap = ref<HTMLElement | null>(null);
 const canvas = ref<HTMLCanvasElement | null>(null);
 const promptEl = ref<HTMLElement | null>(null);
 
@@ -69,6 +69,12 @@ const fingerColor = computed(() => FINGER_COLORS[fingerName.value] ?? "#ffffff")
 const fingerLabel = computed(() => FINGER_LABELS[fingerName.value] ?? fingerName.value);
 const side = computed<"left" | "right">(() =>
   fingerName.value.startsWith("left") ? "left" : "right",
+);
+const activeHandWrap = computed(() =>
+  side.value === "left" ? leftHandWrap.value : rightHandWrap.value,
+);
+const ghostHandWrap = computed(() =>
+  side.value === "left" ? rightHandWrap.value : leftHandWrap.value,
 );
 
 const pressCount = ref(0);
@@ -134,10 +140,10 @@ function getFingerBurstOrigin(): { x: number; y: number } {
   const entry = HAND_FINGER_IDS.find(
     ({ right, left }) => (side.value === "right" ? right : left) === fingerName.value,
   );
-  if (!entry || !handWrap.value || !canvas.value || !screenEl.value) {
+  if (!entry || !activeHandWrap.value || !canvas.value || !screenEl.value) {
     return { x: canvas.value ? canvas.value.width / 2 : 0, y: canvas.value ? canvas.value.height / 2 : 0 };
   }
-  const svg = handWrap.value.querySelector("svg");
+  const svg = activeHandWrap.value.querySelector("svg");
   const el = svg?.querySelector(`#${entry.svgId}`) as SVGElement | null;
   if (!el) return { x: canvas.value.width / 2, y: canvas.value.height / 2 };
   const rect = el.getBoundingClientRect();
@@ -147,14 +153,14 @@ function getFingerBurstOrigin(): { x: number; y: number } {
 
 // ─── Hand SVG helpers ─────────────────────────────────────────────────────────
 
-function colorFocusedHand(container: HTMLElement): void {
+function colorFocusedHand(container: HTMLElement, handSide: "left" | "right"): void {
   const svg = container.querySelector("svg");
   if (!svg) return;
   svg.style.overflow = "visible";
   const bgRect = svg.querySelector('rect[width="208"]') as SVGElement | null;
   if (bgRect) bgRect.style.display = "none";
   for (const { svgId, right, left } of HAND_FINGER_IDS) {
-    const thisFinger = side.value === "right" ? right : left;
+    const thisFinger = handSide === "right" ? right : left;
     const el = svg.querySelector(`#${svgId}`) as SVGElement | null;
     if (!el) continue;
     if (thisFinger === fingerName.value) {
@@ -174,11 +180,22 @@ function colorFocusedHand(container: HTMLElement): void {
   if (palm) { palm.style.fill = "#5a5248"; palm.style.opacity = "0.8"; palm.style.filter = ""; }
 }
 
+function prepareGhostHand(container: HTMLElement): void {
+  const svg = container.querySelector("svg");
+  if (!svg) return;
+  const bgRect = svg.querySelector('rect[width="208"]') as SVGElement | null;
+  if (bgRect) bgRect.style.display = "none";
+  for (const id of ["Pinky", "Ring", "Middle", "Index", "Thumb"]) {
+    const el = svg.querySelector(`#${id}`) as SVGElement | null;
+    if (el) el.style.display = "none";
+  }
+}
+
 let tapTimer: ReturnType<typeof setTimeout> | null = null;
 
 function flashFocusedFinger(): void {
-  if (!handWrap.value) return;
-  const svg = handWrap.value.querySelector("svg");
+  if (!activeHandWrap.value) return;
+  const svg = activeHandWrap.value.querySelector("svg");
   if (!svg) return;
   const entry = HAND_FINGER_IDS.find(
     ({ right, left }) => (side.value === "right" ? right : left) === fingerName.value,
@@ -193,7 +210,7 @@ function flashFocusedFinger(): void {
   el.style.opacity = "1";
   tapTimer = setTimeout(() => {
     tapTimer = null;
-    if (handWrap.value) colorFocusedHand(handWrap.value);
+    if (activeHandWrap.value) colorFocusedHand(activeHandWrap.value, side.value);
   }, 300);
 }
 
@@ -235,21 +252,17 @@ onMounted(() => {
   }
 
   // Hand SVGs
-  if (shadowWrap.value) {
-    shadowWrap.value.innerHTML = handSvgRaw;
-    const svg = shadowWrap.value.querySelector("svg");
-    if (svg) {
-      const bgRect = svg.querySelector('rect[width="208"]') as SVGElement | null;
-      if (bgRect) bgRect.style.display = "none";
-      for (const id of ["Pinky", "Ring", "Middle", "Index", "Thumb"]) {
-        const el = svg.querySelector(`#${id}`) as SVGElement | null;
-        if (el) el.style.display = "none";
-      }
-    }
+  if (leftHandWrap.value) {
+    leftHandWrap.value.innerHTML = handSvgRaw;
   }
-  if (handWrap.value) {
-    handWrap.value.innerHTML = handSvgRaw;
-    colorFocusedHand(handWrap.value);
+  if (rightHandWrap.value) {
+    rightHandWrap.value.innerHTML = handSvgRaw;
+  }
+  if (ghostHandWrap.value) {
+    prepareGhostHand(ghostHandWrap.value);
+  }
+  if (activeHandWrap.value) {
+    colorFocusedHand(activeHandWrap.value, side.value);
   }
 
   // RAF particle loop
