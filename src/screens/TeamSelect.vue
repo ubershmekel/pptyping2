@@ -4,7 +4,9 @@
       <div class="ts-logo">
         <span class="logo-pp">PP</span><span class="logo-typing">Typing</span>
       </div>
-      <p class="ts-tagline">Choose your side. Cleanse the keyboard. Type your way to victory.</p>
+      <p class="ts-tagline">
+        Choose your side. Cleanse the keyboard. Type your way to victory.
+      </p>
     </div>
 
     <div class="ts-panels">
@@ -27,8 +29,8 @@
           <div class="ts-panel-text">
             <h2 class="ts-team-name">Team <span>Pokemon</span></h2>
             <p class="ts-team-lore">
-              Rowlet has been birdnapped.<br>
-              Pikachu must zap the keyboard<br>
+              Rowlet has been birdnapped.<br />
+              Pikachu must zap the keyboard<br />
               clean - one key at a time.
             </p>
             <div class="ts-btn ts-btn-pokemon">⚡ Choose Pokémon</div>
@@ -63,8 +65,8 @@
           <div class="ts-panel-text">
             <h2 class="ts-team-name">Team <span>Ponies</span></h2>
             <p class="ts-team-lore">
-              Friendship is the only antidote.<br>
-              Pinkie Pie must befriend every<br>
+              Friendship is the only antidote.<br />
+              Pinkie Pie must befriend every<br />
               key - one at a time.
             </p>
             <div class="ts-btn ts-btn-mlp">🌈 Choose Ponies</div>
@@ -77,7 +79,10 @@
     </div>
 
     <div v-if="existingTeam" class="ts-existing-save">
-      <span>You have a saved game as Team {{ existingTeam === "pokemon" ? "Pokemon" : "Ponies" }}.</span>
+      <span
+        >You have a saved game as Team
+        {{ existingTeam === "pokemon" ? "Pokemon" : "Ponies" }}.</span
+      >
       <button class="ts-continue-btn" @click.stop="selectTeam(existingTeam)">
         Continue saved game
       </button>
@@ -109,7 +114,8 @@ let cancelSelect: ReturnType<typeof setTimeout> | null = null;
 const existingTeam = computed<Team | undefined>(() => {
   if (!profile.value.teamSelected) return undefined;
   const progress = activeProgress(profile.value);
-  const hasProgress = progress.highestUnlockedLevel > 1 || progress.levelRecords[1]?.completed;
+  const hasProgress =
+    progress.highestUnlockedLevel > 1 || progress.levelRecords[1]?.completed;
   return hasProgress ? profile.value.activeTeam : undefined;
 });
 
@@ -134,7 +140,9 @@ const portraitCleanups: (() => void)[] = [];
 onMounted(() => {
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
-    requestAnimationFrame(() => screenEl.value?.classList.remove("screen-enter"));
+    requestAnimationFrame(() =>
+      screenEl.value?.classList.remove("screen-enter"),
+    );
   }
 
   const slots: [HTMLElement | null, Team, string, string | undefined][] = [
@@ -143,11 +151,15 @@ onMounted(() => {
   ];
   for (const [slot, team, alt, loopTag] of slots) {
     if (!slot) continue;
-    const portrait = createCharacterPortraitElement(CHARACTER_PORTRAITS[team], alt, {
-      animated: true,
-      className: "ts-character-art",
-      loopTag,
-    });
+    const portrait = createCharacterPortraitElement(
+      CHARACTER_PORTRAITS[team],
+      alt,
+      {
+        animated: true,
+        className: "ts-character-art",
+        loopTag,
+      },
+    );
     slot.appendChild(portrait.element);
     portraitCleanups.push(portrait.cleanup);
   }

@@ -16,7 +16,12 @@
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useProfile } from "../composables/useProfile";
-import { getLevelDef, levelAfterCutscene, cutsceneAfterLevel, MAX_LEVEL } from "../data/levels";
+import {
+  getLevelDef,
+  levelAfterCutscene,
+  cutsceneAfterLevel,
+  MAX_LEVEL,
+} from "../data/levels";
 import { LEVEL_LETTERS } from "../data/wordLists";
 import type { LevelStats } from "../types";
 
@@ -141,12 +146,18 @@ const componentKey = computed(() =>
 
 const currentComponent = computed(() => {
   switch (subScreen.value) {
-    case "speed-test-intro": return SpeedTestIntro;
-    case "letter-intro":     return LetterIntro;
-    case "fj-intro":         return FjIntro;
-    case "finger-guide":     return FingerGuide;
-    case "level":            return LevelScreen;
-    case "level-complete":   return LevelComplete;
+    case "speed-test-intro":
+      return SpeedTestIntro;
+    case "letter-intro":
+      return LetterIntro;
+    case "fj-intro":
+      return FjIntro;
+    case "finger-guide":
+      return FingerGuide;
+    case "level":
+      return LevelScreen;
+    case "level-complete":
+      return LevelComplete;
   }
 });
 

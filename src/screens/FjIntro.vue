@@ -1,5 +1,9 @@
 <template>
-  <div ref="screenEl" :class="`screen fj-intro-screen team-${team}`" :class2="completedClass">
+  <div
+    ref="screenEl"
+    :class="`screen fj-intro-screen team-${team}`"
+    :class2="completedClass"
+  >
     <div class="fji-layout">
       <div class="fji-keys">
         <div class="fji-key">F</div>
@@ -7,9 +11,17 @@
         <div class="fji-key">J</div>
       </div>
       <h2 class="fji-title">Always come back here</h2>
-      <p class="fji-body">After typing E or T, slide your fingers back to <kbd>F</kbd> and <kbd>J</kbd>.</p>
-      <p class="fji-nub">Both keys have a small bump — feel for it and you can find home without looking down.</p>
-      <div class="fji-prompt">Try it now — press <kbd>F</kbd> or <kbd>J</kbd> to continue</div>
+      <p class="fji-body">
+        After typing E or T, slide your fingers back to <kbd>F</kbd> and
+        <kbd>J</kbd>.
+      </p>
+      <p class="fji-nub">
+        Both keys have a small bump — feel for it and you can find home without
+        looking down.
+      </p>
+      <div class="fji-prompt">
+        Try it now — press <kbd>F</kbd> or <kbd>J</kbd> to continue
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +51,9 @@ function keyHandler(e: KeyboardEvent): void {
 onMounted(() => {
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
-    requestAnimationFrame(() => screenEl.value?.classList.remove("screen-enter"));
+    requestAnimationFrame(() =>
+      screenEl.value?.classList.remove("screen-enter"),
+    );
   }
   document.addEventListener("keydown", keyHandler);
 });

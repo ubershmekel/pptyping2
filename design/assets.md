@@ -16,14 +16,15 @@ Images for cutscene reveals. One per arc per team.
 - 6 Pokemon story images
 - 6 MLP story images
 
-Naming convention: `public/images/stories/{team}/{cutscene-number}.webp`
+Naming convention: `public/cutscenes/{team-prefix}{cutscene-number}.jpg`
 Examples:
 
-- `public/images/stories/pokemon/01.webp`
-- `public/images/stories/mlp/03.webp`
+- `public/cutscenes/pok0.jpg`
+- `public/cutscenes/mlp3.jpg`
 
 These are large, atmospheric illustrations. Target ~800x600px, compressed to
-keep load times reasonable.
+keep load times reasonable. Runtime code references them via
+`import.meta.env.BASE_URL` so they resolve correctly under any deploy base path.
 
 ### Level Reward Images
 
@@ -151,6 +152,7 @@ Naming convention: `public/audio/ambient/{key}.webm`
 ## Key Files
 
 - `public/` - static runtime assets copied as-is by Vite
+- `public/cutscenes/` - cutscene JPGs used by `Cutscene.vue`
 - `src/assets/characters/` - character SVG source files imported by the app
 - `src/assets/characters/index.ts` - character asset manifest used by the app
 - `src/aseprite.ts` - generic parser and tag selector for Aseprite JSON exports

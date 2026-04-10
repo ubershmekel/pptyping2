@@ -53,7 +53,6 @@ import { useProfile } from "../composables/useProfile";
 import { CUTSCENE_STORIES } from "../data/stories";
 import { ParticleManager } from "../particles/particleManager";
 import type { BurstType } from "../particles/presets";
-import { withBasePath } from "../basePath";
 import { levelAfterCutscene } from "../data/levels";
 
 const CUTSCENE_ENV = [
@@ -73,7 +72,10 @@ const CUTSCENE_BURSTS: Record<string, BurstEvent[][]> = {
     [{ delay: 1400, type: "electric" }],
     [{ delay: 1600, type: "ripple" }],
     [{ delay: 1200, type: "electric" }],
-    [{ delay: 900, type: "lightning" }, { delay: 2200, type: "glass" }],
+    [
+      { delay: 900, type: "lightning" },
+      { delay: 2200, type: "glass" },
+    ],
   ],
   mlp: [
     [{ delay: 1400, type: "water" }],
@@ -85,18 +87,24 @@ const CUTSCENE_BURSTS: Record<string, BurstEvent[][]> = {
   ],
 };
 
+const appBaseUrl = import.meta.env.BASE_URL;
+
 const route = useRoute();
 const router = useRouter();
 const { profile } = useProfile();
 
 const team = computed(() => profile.value.activeTeam);
-const cutsceneIndex = computed(() => parseInt(route.params.index as string, 10));
+const cutsceneIndex = computed(() =>
+  parseInt(route.params.index as string, 10),
+);
 const story = computed(() => CUTSCENE_STORIES[team.value][cutsceneIndex.value]);
-const envClass = computed(() => CUTSCENE_ENV[cutsceneIndex.value] ?? "env-digital-grove");
+const envClass = computed(
+  () => CUTSCENE_ENV[cutsceneIndex.value] ?? "env-digital-grove",
+);
 
 const artSrc = computed(() => {
   const prefix = team.value === "pokemon" ? "pok" : "mlp";
-  return withBasePath(`/cutscenes/${prefix}${cutsceneIndex.value}.jpg`);
+  return `${appBaseUrl}cutscenes/${prefix}${cutsceneIndex.value}.jpg`;
 });
 
 const artCaption = computed(() => {
@@ -164,7 +172,9 @@ function goLevelSelect(): void {
 onMounted(() => {
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
-    requestAnimationFrame(() => screenEl.value?.classList.remove("screen-enter"));
+    requestAnimationFrame(() =>
+      screenEl.value?.classList.remove("screen-enter"),
+    );
   }
 
   // Art reveal
@@ -177,8 +187,12 @@ onMounted(() => {
 
     const cx = window.innerWidth / 2;
     const cy = window.innerHeight / 2;
-    for (const burst of CUTSCENE_BURSTS[team.value][cutsceneIndex.value] ?? []) {
-      const t = setTimeout(() => particles?.triggerBurst(burst.type, cx, cy), burst.delay);
+    for (const burst of CUTSCENE_BURSTS[team.value][cutsceneIndex.value] ??
+      []) {
+      const t = setTimeout(
+        () => particles?.triggerBurst(burst.type, cx, cy),
+        burst.delay,
+      );
       timers.push(t);
     }
   }

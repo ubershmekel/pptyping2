@@ -40,10 +40,10 @@ base path instead of assuming the site is mounted at `/`.
 - **Back button**: The `popstate` event re-renders the screen corresponding to
   the browser's current URL. All screen renders are idempotent - calling
   "render level 3" twice is safe.
-- **GitHub Pages deep links**: A root `404.html` redirects unknown requests back
-  to the app entry with the originally requested in-app route encoded in the
-  query string; startup restores the route from that redirect parameter with
-  `replaceState` before the app reads `window.location.pathname`.
+- **GitHub Pages deep links**: The build emits a static `index.html` entry for
+  every canonical route (`/team-select`, `/level/<N>`, `/cutscene/<N>`, etc.) so
+  direct requests do not depend on a redirect shim. `404.html` remains a normal
+  not-found page for truly unknown routes.
 
 ## Screen Manager
 
@@ -63,5 +63,6 @@ DOM container and the active `ScreenMount`. Navigating to a new screen:
   and generates canonical URLs for navigation
 - `src/app.ts` - owns the root `#app` DOM element, tears down the current
   `ScreenMount`, mounts the next one, and coordinates route guards
-- `404.html` - GitHub Pages SPA fallback that redirects deep links back to the
-  app entry point
+- `404.html` - static not-found page for routes that are not part of the game
+- `scripts/generate-static-routes.ts` - duplicates the built app shell into
+  per-route HTML entry files for GitHub Pages deep-link support

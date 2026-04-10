@@ -17,19 +17,31 @@
 
     <nav class="mm-nav">
       <template v-if="hasSave">
-        <button class="mm-btn mm-btn-primary" @click="router.push('/level-select')">
+        <button
+          class="mm-btn mm-btn-primary"
+          @click="router.push('/level-select')"
+        >
           ▶ Continue
         </button>
-        <button class="mm-btn mm-btn-ghost" @click="router.push('/team-select')">
+        <button
+          class="mm-btn mm-btn-ghost"
+          @click="router.push('/team-select')"
+        >
           Switch Teams
         </button>
       </template>
       <template v-else>
-        <button class="mm-btn mm-btn-primary" @click="router.push('/team-select')">
+        <button
+          class="mm-btn mm-btn-primary"
+          @click="router.push('/team-select')"
+        >
           Start Game
         </button>
       </template>
-      <button class="mm-btn mm-btn-ghost mm-btn-settings" @click="router.push('/settings')">
+      <button
+        class="mm-btn mm-btn-ghost mm-btn-settings"
+        @click="router.push('/settings')"
+      >
         ⚙ Settings
       </button>
     </nav>
@@ -53,7 +65,9 @@ const portraitSlot = ref<HTMLElement | null>(null);
 const hasSave = computed(() => {
   if (!profile.value.teamSelected) return false;
   const progress = activeProgress(profile.value);
-  return progress.highestUnlockedLevel > 1 || progress.levelRecords[1]?.completed;
+  return (
+    progress.highestUnlockedLevel > 1 || progress.levelRecords[1]?.completed
+  );
 });
 
 let portraitCleanup: (() => void) | null = null;
@@ -62,7 +76,9 @@ onMounted(() => {
   // Screen enter animation
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
-    requestAnimationFrame(() => screenEl.value?.classList.remove("screen-enter"));
+    requestAnimationFrame(() =>
+      screenEl.value?.classList.remove("screen-enter"),
+    );
   }
 
   // Character portrait

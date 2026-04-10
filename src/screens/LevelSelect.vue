@@ -1,5 +1,8 @@
 <template>
-  <div ref="screenEl" :class="`screen level-select-screen team-${profile.activeTeam}`">
+  <div
+    ref="screenEl"
+    :class="`screen level-select-screen team-${profile.activeTeam}`"
+  >
     <div class="ls-header">
       <button class="ls-back-btn" @click="router.push('/')">← Back</button>
       <h2 class="ls-title">Choose Level</h2>
@@ -14,7 +17,11 @@
     </div>
 
     <div class="ls-map">
-      <div v-for="arcNum in [1, 2, 3, 4, 5]" :key="arcNum" :class="`ls-arc arc-${arcNum}`">
+      <div
+        v-for="arcNum in [1, 2, 3, 4, 5]"
+        :key="arcNum"
+        :class="`ls-arc arc-${arcNum}`"
+      >
         <div class="ls-arc-header">
           <span class="ls-arc-icon">{{ ARC_ICONS[arcNum] }}</span>
           <div class="ls-arc-text">
@@ -47,7 +54,7 @@
             :class="[
               'ls-level-card',
               levelStateClass(lvl.number),
-              lvl.number === attempted ? 'ls-attempted' : ''
+              lvl.number === attempted ? 'ls-attempted' : '',
             ]"
             :data-level="lvl.number"
             :tabindex="isUnlocked(lvl.number) ? 0 : -1"
@@ -58,15 +65,29 @@
           >
             <div class="ls-card-row1">
               <span class="ls-lv-num">LV.{{ lvl.number }}</span>
-              <span v-if="lvl.isSpeedTest" class="ls-speed-badge">⚡ Speed check</span>
-              <span v-if="isCompleted(lvl.number)" class="ls-status ls-done">✓</span>
-              <span v-else-if="isUnlocked(lvl.number)" class="ls-status ls-open">▶</span>
+              <span v-if="lvl.isSpeedTest" class="ls-speed-badge"
+                >⚡ Speed check</span
+              >
+              <span v-if="isCompleted(lvl.number)" class="ls-status ls-done"
+                >✓</span
+              >
+              <span v-else-if="isUnlocked(lvl.number)" class="ls-status ls-open"
+                >▶</span
+              >
               <span v-else class="ls-status ls-locked-icon">⚿</span>
             </div>
-            <div v-if="isCompleted(lvl.number) && levelRecord(lvl.number)" class="ls-card-stats">
-              <span class="ls-wpm">{{ levelRecord(lvl.number)!.bestWpm }}<small>wpm</small></span>
+            <div
+              v-if="isCompleted(lvl.number) && levelRecord(lvl.number)"
+              class="ls-card-stats"
+            >
+              <span class="ls-wpm"
+                >{{ levelRecord(lvl.number)!.bestWpm }}<small>wpm</small></span
+              >
               <span class="ls-sep">·</span>
-              <span class="ls-acc">{{ levelRecord(lvl.number)!.bestAccuracy }}<small>%</small></span>
+              <span class="ls-acc"
+                >{{ levelRecord(lvl.number)!.bestAccuracy
+                }}<small>%</small></span
+              >
             </div>
             <div v-else class="ls-card-stats ls-stats-empty">
               {{ isUnlocked(lvl.number) ? "Not played yet" : "Locked" }}
@@ -76,22 +97,34 @@
                 v-for="letter in newLettersFor(lvl)"
                 :key="letter"
                 class="ls-chip"
-              >{{ letter.toUpperCase() }}</span>
+                >{{ letter.toUpperCase() }}</span
+              >
             </div>
           </div>
 
           <!-- Arc outro cutscene -->
           <div
-            :class="['ls-cs-node', arcOutroUnlocked(arcNum) ? 'ls-cs-open' : 'ls-cs-locked']"
+            :class="[
+              'ls-cs-node',
+              arcOutroUnlocked(arcNum) ? 'ls-cs-open' : 'ls-cs-locked',
+            ]"
             :data-cutscene="ARC_OUTRO_CS[arcNum]"
             :data-unlocked="arcOutroUnlocked(arcNum)"
             :tabindex="arcOutroUnlocked(arcNum) ? 0 : -1"
             role="button"
             :aria-label="`${arcOutroLabel(arcNum)} cutscene${arcOutroUnlocked(arcNum) ? '' : ' (locked)'}`"
-            @click="arcOutroUnlocked(arcNum) && router.push(`/cutscene/${ARC_OUTRO_CS[arcNum]}`)"
-            @keydown.enter.space.prevent="arcOutroUnlocked(arcNum) && router.push(`/cutscene/${ARC_OUTRO_CS[arcNum]}`)"
+            @click="
+              arcOutroUnlocked(arcNum) &&
+              router.push(`/cutscene/${ARC_OUTRO_CS[arcNum]}`)
+            "
+            @keydown.enter.space.prevent="
+              arcOutroUnlocked(arcNum) &&
+              router.push(`/cutscene/${ARC_OUTRO_CS[arcNum]}`)
+            "
           >
-            <span class="ls-cs-icon">{{ arcOutroUnlocked(arcNum) ? (arcNum === 5 ? '🏆' : '▶') : '🔒' }}</span>
+            <span class="ls-cs-icon">{{
+              arcOutroUnlocked(arcNum) ? (arcNum === 5 ? "🏆" : "▶") : "🔒"
+            }}</span>
             <span class="ls-cs-label">{{ arcOutroLabel(arcNum) }}</span>
           </div>
         </div>
@@ -113,9 +146,21 @@ import { activeProgress } from "../state/gameState";
 import { LEVELS, ARC_ENVIRONMENTS } from "../data/levels";
 import type { LevelDefinition } from "../types";
 
-const ARC_ICONS: Record<number, string> = { 1: "🌿", 2: "⚡", 3: "💎", 4: "🌊", 5: "🏔️" };
+const ARC_ICONS: Record<number, string> = {
+  1: "🌿",
+  2: "⚡",
+  3: "💎",
+  4: "🌊",
+  5: "🏔️",
+};
 const ARC_OUTRO_CS: Record<number, number> = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 };
-const CS_TRIGGER_LEVEL: Record<number, number> = { 1: 4, 2: 8, 3: 12, 4: 16, 5: 20 };
+const CS_TRIGGER_LEVEL: Record<number, number> = {
+  1: 4,
+  2: 8,
+  3: 12,
+  4: 16,
+  5: 20,
+};
 
 const router = useRouter();
 const route = useRoute();
@@ -133,11 +178,19 @@ const attempted = computed(() => {
 const progress = computed(() => activeProgress(profile.value));
 
 const totalCompleted = computed(
-  () => Object.values(progress.value.levelRecords).filter((r) => r.completed).length,
+  () =>
+    Object.values(progress.value.levelRecords).filter((r) => r.completed)
+      .length,
 );
 
 const arcLevels = computed<Record<number, LevelDefinition[]>>(() => {
-  const map: Record<number, LevelDefinition[]> = { 1: [], 2: [], 3: [], 4: [], 5: [] };
+  const map: Record<number, LevelDefinition[]> = {
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+  };
   for (const lvl of LEVELS) map[lvl.arc].push(lvl);
   return map;
 });
@@ -173,11 +226,19 @@ function newLettersFor(lvl: LevelDefinition): string[] {
 }
 
 function arcOutroUnlocked(arcNum: number): boolean {
-  return progress.value.levelRecords[CS_TRIGGER_LEVEL[arcNum]]?.completed ?? false;
+  return (
+    progress.value.levelRecords[CS_TRIGGER_LEVEL[arcNum]]?.completed ?? false
+  );
 }
 
 function arcOutroLabel(arcNum: number): string {
-  const labels: Record<number, string> = { 1: "Ch. 1", 2: "Ch. 2", 3: "Ch. 3", 4: "Ch. 4", 5: "Finale" };
+  const labels: Record<number, string> = {
+    1: "Ch. 1",
+    2: "Ch. 2",
+    3: "Ch. 3",
+    4: "Ch. 4",
+    5: "Finale",
+  };
   return labels[arcNum] ?? `Ch.${arcNum}`;
 }
 
@@ -207,12 +268,16 @@ function onLevelClick(n: number): void {
 onMounted(() => {
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
-    requestAnimationFrame(() => screenEl.value?.classList.remove("screen-enter"));
+    requestAnimationFrame(() =>
+      screenEl.value?.classList.remove("screen-enter"),
+    );
   }
 
   // Staggered enter animation for level cards and cutscene nodes
   requestAnimationFrame(() => {
-    const items = screenEl.value?.querySelectorAll<HTMLElement>(".ls-level-card, .ls-cs-node");
+    const items = screenEl.value?.querySelectorAll<HTMLElement>(
+      ".ls-level-card, .ls-cs-node",
+    );
     items?.forEach((el, index) => {
       el.style.setProperty("--enter-delay", `${index * 40}ms`);
       el.classList.add("ls-entering");

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && tsx scripts/generate-static-routes.ts",
     "preview": "vite preview",
     "check:screen-lifecycle": "tsx scripts/check-screen-lifecycle.ts",
     "test": "node --import tsx --test tests/all.test.ts",

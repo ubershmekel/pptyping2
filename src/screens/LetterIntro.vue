@@ -32,7 +32,12 @@
       <canvas ref="canvas" class="li-canvas"></canvas>
 
       <div class="li-progress">
-        <div v-for="n in 3" :key="n" class="li-dot" :class="{ 'li-dot-filled': pressCount >= n }"></div>
+        <div
+          v-for="n in 3"
+          :key="n"
+          class="li-dot"
+          :class="{ 'li-dot-filled': pressCount >= n }"
+        ></div>
       </div>
 
       <div class="li-prompt" ref="promptEl">
@@ -54,7 +59,11 @@ import {
 } from "./keyboardData";
 import type { Team } from "../types";
 
-const props = defineProps<{ levelNumber: number; letter: string; team: Team }>();
+const props = defineProps<{
+  levelNumber: number;
+  letter: string;
+  team: Team;
+}>();
 const emit = defineEmits<{ done: []; back: [] }>();
 
 const screenEl = ref<HTMLElement | null>(null);
@@ -65,8 +74,12 @@ const promptEl = ref<HTMLElement | null>(null);
 
 const meta = computed(() => KEY_DATA[props.letter]);
 const fingerName = computed(() => meta.value.finger);
-const fingerColor = computed(() => FINGER_COLORS[fingerName.value] ?? "#ffffff");
-const fingerLabel = computed(() => FINGER_LABELS[fingerName.value] ?? fingerName.value);
+const fingerColor = computed(
+  () => FINGER_COLORS[fingerName.value] ?? "#ffffff",
+);
+const fingerLabel = computed(
+  () => FINGER_LABELS[fingerName.value] ?? fingerName.value,
+);
 const side = computed<"left" | "right">(() =>
   fingerName.value.startsWith("left") ? "left" : "right",
 );
@@ -82,7 +95,13 @@ const pressCount = ref(0);
 // ─── Particle system ──────────────────────────────────────────────────────────
 
 interface Particle {
-  x: number; y: number; vx: number; vy: number; life: number; size: number; color: string;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  size: number;
+  color: string;
 }
 const particles: Particle[] = [];
 let rafId: number | null = null;
@@ -114,8 +133,14 @@ function drawParticles(dt: number): void {
   ctx.clearRect(0, 0, c.width, c.height);
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
-    p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 0.18 * dt; p.life -= 0.028 * dt;
-    if (p.life <= 0) { particles.splice(i, 1); continue; }
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.vy += 0.18 * dt;
+    p.life -= 0.028 * dt;
+    if (p.life <= 0) {
+      particles.splice(i, 1);
+      continue;
+    }
     const radius = p.size * Math.max(p.life, 0.05);
     ctx.save();
     ctx.globalAlpha = Math.min(p.life * 1.3, 1);
@@ -133,27 +158,40 @@ function resizeCanvas(): void {
   if (!s || !c) return;
   const w = s.offsetWidth;
   const h = s.offsetHeight;
-  if (w > 0 && (c.width !== w || c.height !== h)) { c.width = w; c.height = h; }
+  if (w > 0 && (c.width !== w || c.height !== h)) {
+    c.width = w;
+    c.height = h;
+  }
 }
 
 function getFingerBurstOrigin(): { x: number; y: number } {
   const entry = HAND_FINGER_IDS.find(
-    ({ right, left }) => (side.value === "right" ? right : left) === fingerName.value,
+    ({ right, left }) =>
+      (side.value === "right" ? right : left) === fingerName.value,
   );
   if (!entry || !activeHandWrap.value || !canvas.value || !screenEl.value) {
-    return { x: canvas.value ? canvas.value.width / 2 : 0, y: canvas.value ? canvas.value.height / 2 : 0 };
+    return {
+      x: canvas.value ? canvas.value.width / 2 : 0,
+      y: canvas.value ? canvas.value.height / 2 : 0,
+    };
   }
   const svg = activeHandWrap.value.querySelector("svg");
   const el = svg?.querySelector(`#${entry.svgId}`) as SVGElement | null;
   if (!el) return { x: canvas.value.width / 2, y: canvas.value.height / 2 };
   const rect = el.getBoundingClientRect();
   const screenRect = screenEl.value.getBoundingClientRect();
-  return { x: rect.left + rect.width / 2 - screenRect.left, y: rect.top + rect.height / 2 - screenRect.top };
+  return {
+    x: rect.left + rect.width / 2 - screenRect.left,
+    y: rect.top + rect.height / 2 - screenRect.top,
+  };
 }
 
 // ─── Hand SVG helpers ─────────────────────────────────────────────────────────
 
-function colorFocusedHand(container: HTMLElement, handSide: "left" | "right"): void {
+function colorFocusedHand(
+  container: HTMLElement,
+  handSide: "left" | "right",
+): void {
   const svg = container.querySelector("svg");
   if (!svg) return;
   svg.style.overflow = "visible";
@@ -170,14 +208,25 @@ function colorFocusedHand(container: HTMLElement, handSide: "left" | "right"): v
       el.classList.add("li-finger-pulse");
       el.classList.remove("li-finger-tap");
     } else {
-      el.style.fill = "#7a7268"; el.style.opacity = "0.5"; el.style.filter = "";
+      el.style.fill = "#7a7268";
+      el.style.opacity = "0.5";
+      el.style.filter = "";
       el.classList.remove("li-finger-pulse", "li-finger-tap");
     }
   }
   const thumb = svg.querySelector("#Thumb") as SVGElement | null;
-  if (thumb) { thumb.style.fill = "#7a7268"; thumb.style.opacity = "0.45"; thumb.style.filter = ""; thumb.classList.remove("li-finger-pulse", "li-finger-tap"); }
+  if (thumb) {
+    thumb.style.fill = "#7a7268";
+    thumb.style.opacity = "0.45";
+    thumb.style.filter = "";
+    thumb.classList.remove("li-finger-pulse", "li-finger-tap");
+  }
   const palm = svg.querySelector("#Hand") as SVGElement | null;
-  if (palm) { palm.style.fill = "#5a5248"; palm.style.opacity = "0.8"; palm.style.filter = ""; }
+  if (palm) {
+    palm.style.fill = "#5a5248";
+    palm.style.opacity = "0.8";
+    palm.style.filter = "";
+  }
 }
 
 function prepareGhostHand(container: HTMLElement): void {
@@ -198,9 +247,12 @@ function flashFocusedFinger(): void {
   const svg = activeHandWrap.value.querySelector("svg");
   if (!svg) return;
   const entry = HAND_FINGER_IDS.find(
-    ({ right, left }) => (side.value === "right" ? right : left) === fingerName.value,
+    ({ right, left }) =>
+      (side.value === "right" ? right : left) === fingerName.value,
   );
-  const el = entry ? (svg.querySelector(`#${entry.svgId}`) as SVGElement | null) : null;
+  const el = entry
+    ? (svg.querySelector(`#${entry.svgId}`) as SVGElement | null)
+    : null;
   if (!el) return;
   el.classList.remove("li-finger-pulse", "li-finger-tap");
   void el.getBoundingClientRect();
@@ -210,7 +262,8 @@ function flashFocusedFinger(): void {
   el.style.opacity = "1";
   tapTimer = setTimeout(() => {
     tapTimer = null;
-    if (activeHandWrap.value) colorFocusedHand(activeHandWrap.value, side.value);
+    if (activeHandWrap.value)
+      colorFocusedHand(activeHandWrap.value, side.value);
   }, 300);
 }
 
@@ -229,8 +282,10 @@ function onCorrectPress(): void {
   }
   const remaining = REQUIRED_PRESSES - pressCount.value;
   if (promptEl.value) {
-    if (remaining === 2) promptEl.value.innerHTML = `Press <kbd>${props.letter.toUpperCase()}</kbd> two more times`;
-    else if (remaining === 1) promptEl.value.innerHTML = `Press <kbd>${props.letter.toUpperCase()}</kbd> one more time`;
+    if (remaining === 2)
+      promptEl.value.innerHTML = `Press <kbd>${props.letter.toUpperCase()}</kbd> two more times`;
+    else if (remaining === 1)
+      promptEl.value.innerHTML = `Press <kbd>${props.letter.toUpperCase()}</kbd> one more time`;
     else if (remaining <= 0) {
       advancing = true;
       promptEl.value.innerHTML = "";
@@ -248,7 +303,9 @@ function keyHandler(e: KeyboardEvent): void {
 onMounted(() => {
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
-    requestAnimationFrame(() => screenEl.value?.classList.remove("screen-enter"));
+    requestAnimationFrame(() =>
+      screenEl.value?.classList.remove("screen-enter"),
+    );
   }
 
   // Hand SVGs

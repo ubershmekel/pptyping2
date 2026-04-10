@@ -60,9 +60,10 @@ export const FINGER_LABELS: Record<string, string> = {
 
 // SVG path IDs in right-hand.svg → the matching keyboard finger name.
 // The left hand is the same SVG flipped (scaleX(-1)), so Index→left-index etc.
-export const HAND_FINGER_IDS: { svgId: string; right: string; left: string }[] = [
-  { svgId: "Pinky", right: "right-pinky", left: "left-pinky" },
-  { svgId: "Ring", right: "right-ring", left: "left-ring" },
-  { svgId: "Middle", right: "right-middle", left: "left-middle" },
-  { svgId: "Index", right: "right-index", left: "left-index" },
-];
+export const HAND_FINGER_IDS: { svgId: string; right: string; left: string }[] =
+  [
+    { svgId: "Pinky", right: "right-pinky", left: "left-pinky" },
+    { svgId: "Ring", right: "right-ring", left: "left-ring" },
+    { svgId: "Middle", right: "right-middle", left: "left-middle" },
+    { svgId: "Index", right: "right-index", left: "left-index" },
+  ];

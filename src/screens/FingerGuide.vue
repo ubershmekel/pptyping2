@@ -30,7 +30,9 @@
 
       <div class="fg-actions">
         <button class="fg-btn-primary" @click="onStart">Start Level →</button>
-        <button class="fg-btn-secondary" @click="emit('back')">← Level Select</button>
+        <button class="fg-btn-secondary" @click="emit('back')">
+          ← Level Select
+        </button>
       </div>
     </div>
   </div>
@@ -43,11 +45,7 @@ import { getLevelDef } from "../data/levels";
 import { LEVEL_LETTERS } from "../data/wordLists";
 import kbSvgRaw from "../assets/keyboard/KB_United_States.svg?raw";
 import handSvgRaw from "../assets/hand/right-hand.svg?raw";
-import {
-  KEY_DATA,
-  FINGER_COLORS,
-  HAND_FINGER_IDS,
-} from "./keyboardData";
+import { KEY_DATA, FINGER_COLORS, HAND_FINGER_IDS } from "./keyboardData";
 import type { Team } from "../types";
 
 const props = defineProps<{ levelNumber: number; team: Team }>();
@@ -59,20 +57,24 @@ const leftHandWrap = ref<HTMLElement | null>(null);
 const rightHandWrap = ref<HTMLElement | null>(null);
 
 const levelDef = computed(() => getLevelDef(props.levelNumber));
-const available = computed(() => new Set(levelDef.value.availableLetters.split("")));
+const available = computed(
+  () => new Set(levelDef.value.availableLetters.split("")),
+);
 const prevLetters = computed(() =>
   props.levelNumber > 1 ? (LEVEL_LETTERS[props.levelNumber - 1] ?? "") : "",
 );
 const prevSet = computed(() => new Set(prevLetters.value.split("")));
-const newSet = computed(() =>
-  new Set([...available.value].filter((k) => !prevSet.value.has(k))),
+const newSet = computed(
+  () => new Set([...available.value].filter((k) => !prevSet.value.has(k))),
 );
 
 const TEACHING_TIPS = [
   { icon: "👁", html: "Eyes on the screen, not your fingers" },
   { icon: "✋", html: "Use the highlighted finger for each key" },
 ];
-const tip = computed(() => TEACHING_TIPS[(props.levelNumber - 2) % TEACHING_TIPS.length]);
+const tip = computed(
+  () => TEACHING_TIPS[(props.levelNumber - 2) % TEACHING_TIPS.length],
+);
 
 const levelTag = computed(() => {
   let tag = `Level ${props.levelNumber}`;
@@ -96,7 +98,11 @@ function onStart(): void {
 
 // ─── Keyboard interaction helpers ─────────────────────────────────────────────
 
-function colorHandSvg(container: HTMLElement, side: "left" | "right", usedFingers: Set<string>): void {
+function colorHandSvg(
+  container: HTMLElement,
+  side: "left" | "right",
+  usedFingers: Set<string>,
+): void {
   const svg = container.querySelector("svg");
   if (!svg) return;
   const bgRect = svg.querySelector('rect[width="208"]') as SVGElement | null;
@@ -114,7 +120,10 @@ function colorHandSvg(container: HTMLElement, side: "left" | "right", usedFinger
     }
   }
   const thumb = svg.querySelector("#Thumb") as SVGElement | null;
-  if (thumb) { thumb.style.fill = "#d8d4ce"; thumb.style.opacity = "0.85"; }
+  if (thumb) {
+    thumb.style.fill = "#d8d4ce";
+    thumb.style.opacity = "0.85";
+  }
   const hasAnyActive = HAND_FINGER_IDS.some(({ right, left }) =>
     usedFingers.has(side === "right" ? right : left),
   );
@@ -127,7 +136,9 @@ const cleanups: (() => void)[] = [];
 onMounted(() => {
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
-    requestAnimationFrame(() => screenEl.value?.classList.remove("screen-enter"));
+    requestAnimationFrame(() =>
+      screenEl.value?.classList.remove("screen-enter"),
+    );
   }
 
   // Keyboard SVG
@@ -141,9 +152,14 @@ onMounted(() => {
     const usedFingers = new Set<string>();
     for (const [key, meta] of Object.entries(KEY_DATA)) {
       const cap = kbSvg.querySelector(`#${meta.capId}`) as SVGElement | null;
-      const label = meta.labelId ? (kbSvg.querySelector(`#${meta.labelId}`) as SVGElement | null) : null;
+      const label = meta.labelId
+        ? (kbSvg.querySelector(`#${meta.labelId}`) as SVGElement | null)
+        : null;
       if (key === " ") {
-        if (cap) { cap.style.fill = "#d8d4ce"; cap.style.opacity = "1"; }
+        if (cap) {
+          cap.style.fill = "#d8d4ce";
+          cap.style.opacity = "1";
+        }
         continue;
       }
       if (!available.value.has(key)) {
@@ -156,7 +172,10 @@ onMounted(() => {
       }
       usedFingers.add(meta.finger);
       const isAnchor = key === "f" || key === "j";
-      const isNew = newSet.value.has(key) && !levelDef.value.isSpeedTest && !levelDef.value.isFinale;
+      const isNew =
+        newSet.value.has(key) &&
+        !levelDef.value.isSpeedTest &&
+        !levelDef.value.isFinale;
       const color = FINGER_COLORS[meta.finger];
       if (cap) {
         cap.style.fill = color;
@@ -164,7 +183,10 @@ onMounted(() => {
         cap.style.stroke = isAnchor || isNew ? "#4b2f18" : "#888";
         cap.style.strokeWidth = isAnchor ? "2.8" : isNew ? "2.2" : "1";
       }
-      if (label) { label.style.fill = "#1e1b16"; label.style.opacity = "1"; }
+      if (label) {
+        label.style.fill = "#1e1b16";
+        label.style.opacity = "1";
+      }
     }
 
     // Hand SVGs
@@ -179,7 +201,8 @@ onMounted(() => {
 
     // Interactive key highlighting
     const capIdToKey: Record<string, string> = {};
-    for (const [key, meta] of Object.entries(KEY_DATA)) capIdToKey[meta.capId] = key;
+    for (const [key, meta] of Object.entries(KEY_DATA))
+      capIdToKey[meta.capId] = key;
 
     function getFingerEl(activeFinger: string): SVGElement | null {
       const side = activeFinger.startsWith("left") ? "left" : "right";
@@ -189,14 +212,20 @@ onMounted(() => {
       const entry = HAND_FINGER_IDS.find(
         ({ right, left }) => (side === "right" ? right : left) === activeFinger,
       );
-      return entry ? (svg.querySelector(`#${entry.svgId}`) as SVGElement | null) : null;
+      return entry
+        ? (svg.querySelector(`#${entry.svgId}`) as SVGElement | null)
+        : null;
     }
 
     function highlightActiveFinger(activeFinger: string): void {
       if (activeFinger === "thumb") {
         for (const wrap of [leftHandWrap.value, rightHandWrap.value]) {
           const el = wrap?.querySelector("#Thumb") as SVGElement | null;
-          if (el) { el.style.fill = "#222222"; el.style.filter = "drop-shadow(0 0 6px #d8d4ce) drop-shadow(0 0 3px #000)"; }
+          if (el) {
+            el.style.fill = "#222222";
+            el.style.filter =
+              "drop-shadow(0 0 6px #d8d4ce) drop-shadow(0 0 3px #000)";
+          }
         }
         return;
       }
@@ -208,8 +237,10 @@ onMounted(() => {
 
     function restoreActiveFinger(activeFinger: string): void {
       if (activeFinger === "thumb") {
-        if (leftHandWrap.value) colorHandSvg(leftHandWrap.value, "left", usedFingers);
-        if (rightHandWrap.value) colorHandSvg(rightHandWrap.value, "right", usedFingers);
+        if (leftHandWrap.value)
+          colorHandSvg(leftHandWrap.value, "left", usedFingers);
+        if (rightHandWrap.value)
+          colorHandSvg(rightHandWrap.value, "right", usedFingers);
         return;
       }
       const el = getFingerEl(activeFinger);
@@ -229,7 +260,11 @@ onMounted(() => {
       activeKey = key;
       const meta = KEY_DATA[key];
       const cap = kbSvg.querySelector(`#${meta.capId}`) as SVGElement | null;
-      if (cap) { cap.style.filter = "brightness(0.78)"; cap.style.stroke = "#1a0a00"; cap.style.strokeWidth = "3"; }
+      if (cap) {
+        cap.style.filter = "brightness(0.78)";
+        cap.style.stroke = "#1a0a00";
+        cap.style.strokeWidth = "3";
+      }
       highlightActiveFinger(meta.finger);
     }
 
@@ -244,7 +279,10 @@ onMounted(() => {
         cap.style.strokeWidth = "";
         if (available.value.has(key)) {
           const isAnchor = key === "f" || key === "j";
-          const isNew = newSet.value.has(key) && !levelDef.value.isSpeedTest && !levelDef.value.isFinale;
+          const isNew =
+            newSet.value.has(key) &&
+            !levelDef.value.isSpeedTest &&
+            !levelDef.value.isFinale;
           cap.style.stroke = isAnchor || isNew ? "#4b2f18" : "#888";
           cap.style.strokeWidth = isAnchor ? "2.8" : isNew ? "2.2" : "1";
         }
@@ -252,10 +290,21 @@ onMounted(() => {
       restoreActiveFinger(meta.finger);
     }
 
-    const kbDown = (e: KeyboardEvent) => { const key = e.key.toLowerCase(); if (KEY_DATA[key]) pressKey(key); };
-    const kbUp = (e: KeyboardEvent) => { const key = e.key.toLowerCase(); if (KEY_DATA[key]) releaseKey(key); };
-    const mouseDown = (e: MouseEvent) => { const key = capIdToKey[(e.target as SVGElement).id]; if (key) pressKey(key); };
-    const mouseUp = () => { if (activeKey) releaseKey(activeKey); };
+    const kbDown = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase();
+      if (KEY_DATA[key]) pressKey(key);
+    };
+    const kbUp = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase();
+      if (KEY_DATA[key]) releaseKey(key);
+    };
+    const mouseDown = (e: MouseEvent) => {
+      const key = capIdToKey[(e.target as SVGElement).id];
+      if (key) pressKey(key);
+    };
+    const mouseUp = () => {
+      if (activeKey) releaseKey(activeKey);
+    };
 
     document.addEventListener("keydown", kbDown);
     document.addEventListener("keyup", kbUp);
@@ -269,7 +318,9 @@ onMounted(() => {
     );
   }
 
-  const enterKey = (e: KeyboardEvent) => { if (e.key === "Enter") onStart(); };
+  const enterKey = (e: KeyboardEvent) => {
+    if (e.key === "Enter") onStart();
+  };
   document.addEventListener("keydown", enterKey);
   cleanups.push(() => document.removeEventListener("keydown", enterKey));
 });

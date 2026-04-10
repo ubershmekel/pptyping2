@@ -4,7 +4,8 @@
       <h1 class="dp-title">Particle Debugger</h1>
       <div class="dp-team-badge">team-{{ team }}</div>
       <div class="dp-hint">
-        Click <strong>Fire</strong> on any card — particles spawn at screen center.<br>
+        Click <strong>Fire</strong> on any card — particles spawn at screen
+        center.<br />
         Adjust knobs live. Changes apply immediately on next fire.
       </div>
     </div>
@@ -22,7 +23,11 @@
         <div class="dp-card-label">{{ BURST_META[type].label }}</div>
         <div class="dp-card-context">{{ BURST_META[type].context }}</div>
         <div class="dp-knobs">
-          <div v-for="[key, label, min, max, step] in FIELDS" :key="key" class="dp-knob">
+          <div
+            v-for="[key, label, min, max, step] in FIELDS"
+            :key="key"
+            class="dp-knob"
+          >
             <label class="dp-knob-label">
               {{ label }}
               <span class="dp-knob-val">{{ cfg[type][key] }}</span>
@@ -34,7 +39,13 @@
               :max="max"
               :step="step"
               :value="cfg[type][key]"
-              @input="onKnobInput(type, key, ($event.target as HTMLInputElement).valueAsNumber)"
+              @input="
+                onKnobInput(
+                  type,
+                  key,
+                  ($event.target as HTMLInputElement).valueAsNumber,
+                )
+              "
             />
           </div>
         </div>
@@ -53,24 +64,55 @@ import { BURST_CONFIGS, type BurstType } from "../particles/presets";
 type ConfigKey = "count" | "speed" | "life" | "size" | "gravity";
 
 const ALL_BURSTS: BurstType[] = [
-  "correct", "error", "combo", "victory",
-  "petal", "golden", "electric", "ripple", "lightning",
-  "glass", "water", "confetti", "party",
+  "correct",
+  "error",
+  "combo",
+  "victory",
+  "petal",
+  "golden",
+  "electric",
+  "ripple",
+  "lightning",
+  "glass",
+  "water",
+  "confetti",
+  "party",
 ];
 
 const BURST_META: Record<BurstType, { label: string; context: string }> = {
-  correct: { label: "Correct keystroke", context: "Level screen — every correct key" },
+  correct: {
+    label: "Correct keystroke",
+    context: "Level screen — every correct key",
+  },
   error: { label: "Error keystroke", context: "Level screen — every mistake" },
   combo: { label: "Combo ×10", context: "Level screen — every 10 correct" },
-  victory: { label: "Victory shower", context: "Level screen — level complete" },
+  victory: {
+    label: "Victory shower",
+    context: "Level screen — level complete",
+  },
   petal: { label: "Pink petals", context: "Pokémon #0 — Fluttershy's trail" },
-  golden: { label: "Golden flash", context: "Pokémon #1 & MLP #4 — restored keys / warm moment" },
-  electric: { label: "Electric static", context: "Pokémon #2 & #4 — Thunder Shrine curtain / cheek charge" },
-  ripple: { label: "Crystal ripple", context: "Pokémon #3 — Pikachu touches the wall" },
+  golden: {
+    label: "Golden flash",
+    context: "Pokémon #1 & MLP #4 — restored keys / warm moment",
+  },
+  electric: {
+    label: "Electric static",
+    context: "Pokémon #2 & #4 — Thunder Shrine curtain / cheek charge",
+  },
+  ripple: {
+    label: "Crystal ripple",
+    context: "Pokémon #3 — Pikachu touches the wall",
+  },
   lightning: { label: "Thunderbolt", context: "Pokémon #5 — the big zap" },
-  glass: { label: "Shattering glass", context: "Pokémon #5 — dimensional barrier breaks" },
+  glass: {
+    label: "Shattering glass",
+    context: "Pokémon #5 — dimensional barrier breaks",
+  },
   water: { label: "Water blast", context: "MLP #0 & #2 — Squirtle's pranks" },
-  confetti: { label: "Confetti pop", context: "MLP #1 & #3 — prank landing / whoopee cushion" },
+  confetti: {
+    label: "Confetti pop",
+    context: "MLP #1 & #3 — prank landing / whoopee cushion",
+  },
   party: { label: "Party cannon", context: "MLP #5 — the finale party" },
 };
 
@@ -90,7 +132,9 @@ const activeBurst = ref<BurstType>("victory");
 
 // Reactive copy of configs for live editing
 const cfg = reactive<Record<BurstType, (typeof BURST_CONFIGS)[BurstType]>>(
-  Object.fromEntries(ALL_BURSTS.map((t) => [t, { ...BURST_CONFIGS[t] }])) as Record<BurstType, (typeof BURST_CONFIGS)[BurstType]>,
+  Object.fromEntries(
+    ALL_BURSTS.map((t) => [t, { ...BURST_CONFIGS[t] }]),
+  ) as Record<BurstType, (typeof BURST_CONFIGS)[BurstType]>,
 );
 
 let particles: ParticleManager | null = null;
@@ -118,7 +162,9 @@ function keyHandler(e: KeyboardEvent): void {
 onMounted(() => {
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
-    requestAnimationFrame(() => screenEl.value?.classList.remove("screen-enter"));
+    requestAnimationFrame(() =>
+      screenEl.value?.classList.remove("screen-enter"),
+    );
 
     particles = new ParticleManager(team);
     particles.mount(screenEl.value);

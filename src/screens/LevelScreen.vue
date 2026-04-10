@@ -18,7 +18,9 @@
         aria-haspopup="dialog"
         aria-controls="pause-overlay"
         @click="openPause"
-      >Pause</button>
+      >
+        Pause
+      </button>
     </div>
 
     <div class="level-body">
@@ -36,7 +38,12 @@
     </div>
 
     <div ref="pauseOverlay" class="pause-overlay" hidden>
-      <div class="pause-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+      <div
+        class="pause-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pause-title"
+      >
         <h2 id="pause-title" class="pause-title">Paused</h2>
         <div class="pause-stats">
           <span class="pause-stat">
@@ -53,10 +60,27 @@
           </span>
         </div>
         <div class="pause-actions">
-          <button ref="pauseResume" class="pause-action pause-action-primary" type="button" @click="closePause">Resume</button>
-          <button class="pause-action" type="button" @click="emit('retry')">Retry</button>
-          <button class="pause-action" type="button" @click="emit('levelSelect')">Level Select</button>
-          <button class="pause-action" type="button" @click="emit('quit')">Quit to Main Menu</button>
+          <button
+            ref="pauseResume"
+            class="pause-action pause-action-primary"
+            type="button"
+            @click="closePause"
+          >
+            Resume
+          </button>
+          <button class="pause-action" type="button" @click="emit('retry')">
+            Retry
+          </button>
+          <button
+            class="pause-action"
+            type="button"
+            @click="emit('levelSelect')"
+          >
+            Level Select
+          </button>
+          <button class="pause-action" type="button" @click="emit('quit')">
+            Quit to Main Menu
+          </button>
         </div>
       </div>
     </div>
@@ -118,8 +142,14 @@ class TypingEngine {
       const span = document.createElement("span");
       const globalIndex = line.start + i;
       span.className = "char";
-      span.dataset.state = globalIndex < this.index ? "done" : globalIndex === this.index ? "current" : "pending";
-      const isTrailingSpace = line.text[i] === " " && i === line.text.length - 1;
+      span.dataset.state =
+        globalIndex < this.index
+          ? "done"
+          : globalIndex === this.index
+            ? "current"
+            : "pending";
+      const isTrailingSpace =
+        line.text[i] === " " && i === line.text.length - 1;
       span.textContent = line.text[i] === " " ? "\u00A0" : line.text[i];
       if (line.text[i] === " ") span.classList.add("is-space");
       if (isTrailingSpace) span.classList.add("is-line-end-space");
@@ -153,15 +183,31 @@ class TypingEngine {
   }
 
   handleKey(key: string, container: HTMLElement): void {
-    if (this.pausedAt !== null || this.index >= this.text.length || key.length !== 1) return;
+    if (
+      this.pausedAt !== null ||
+      this.index >= this.text.length ||
+      key.length !== 1
+    )
+      return;
     if (this.startTime === null) this.startTime = Date.now();
     const expected = this.text[this.index];
     const pressed = key.toLowerCase();
     this.totalStrokes++;
     if (pressed !== expected) {
-      this.visibleSpans[this.index - this.lines[this.currentLineIndex].start]?.classList.add("error-flash");
-      if (expected !== " ") this.charErrorCounts.set(expected, (this.charErrorCounts.get(expected) ?? 0) + 1);
-      this.onError?.(this.index, this.visibleSpans[this.index - this.lines[this.currentLineIndex].start] ?? null);
+      this.visibleSpans[
+        this.index - this.lines[this.currentLineIndex].start
+      ]?.classList.add("error-flash");
+      if (expected !== " ")
+        this.charErrorCounts.set(
+          expected,
+          (this.charErrorCounts.get(expected) ?? 0) + 1,
+        );
+      this.onError?.(
+        this.index,
+        this.visibleSpans[
+          this.index - this.lines[this.currentLineIndex].start
+        ] ?? null,
+      );
       return;
     }
     this.correctStrokes++;
@@ -194,7 +240,12 @@ class TypingEngine {
   }
 
   pause(): void {
-    if (this.pausedAt !== null || this.startTime === null || this.endTime !== null) return;
+    if (
+      this.pausedAt !== null ||
+      this.startTime === null ||
+      this.endTime !== null
+    )
+      return;
     this.pausedAt = Date.now();
   }
 
@@ -204,12 +255,26 @@ class TypingEngine {
     this.pausedAt = null;
   }
 
-  getLiveStats(): { wpm: number; accuracy: number; progress: number; timeSeconds: number } {
+  getLiveStats(): {
+    wpm: number;
+    accuracy: number;
+    progress: number;
+    timeSeconds: number;
+  } {
     const elapsedMs = this.getElapsedMs();
     const elapsed = elapsedMs / 1000;
-    const wpm = elapsed > 3 ? Math.round(this.correctStrokes / 5 / (elapsed / 60)) : 0;
-    const accuracy = this.totalStrokes > 0 ? Math.round((this.correctStrokes / this.totalStrokes) * 100) : 100;
-    return { wpm, accuracy, progress: this.text.length > 0 ? this.index / this.text.length : 0, timeSeconds: elapsed };
+    const wpm =
+      elapsed > 3 ? Math.round(this.correctStrokes / 5 / (elapsed / 60)) : 0;
+    const accuracy =
+      this.totalStrokes > 0
+        ? Math.round((this.correctStrokes / this.totalStrokes) * 100)
+        : 100;
+    return {
+      wpm,
+      accuracy,
+      progress: this.text.length > 0 ? this.index / this.text.length : 0,
+      timeSeconds: elapsed,
+    };
   }
 
   getCurrentSpan(): HTMLSpanElement | null {
@@ -219,20 +284,41 @@ class TypingEngine {
 
   private getElapsedMs(): number {
     if (this.startTime === null) return 0;
-    return Math.max(0, (this.endTime ?? this.pausedAt ?? Date.now()) - this.startTime - this.pausedDurationMs);
+    return Math.max(
+      0,
+      (this.endTime ?? this.pausedAt ?? Date.now()) -
+        this.startTime -
+        this.pausedDurationMs,
+    );
   }
 
   private buildStats(): LevelStats {
     const elapsed = this.getElapsedMs() / 1000;
-    const wpm = elapsed > 0 ? Math.round(this.correctStrokes / 5 / (elapsed / 60)) : 0;
-    const accuracy = this.totalStrokes > 0 ? Math.round((this.correctStrokes / this.totalStrokes) * 100) : 100;
+    const wpm =
+      elapsed > 0 ? Math.round(this.correctStrokes / 5 / (elapsed / 60)) : 0;
+    const accuracy =
+      this.totalStrokes > 0
+        ? Math.round((this.correctStrokes / this.totalStrokes) * 100)
+        : 100;
     const charErrors: Record<string, number> = {};
-    this.charErrorCounts.forEach((count, char) => { charErrors[char] = count; });
+    this.charErrorCounts.forEach((count, char) => {
+      charErrors[char] = count;
+    });
     const charAvgTimes: Record<string, number> = {};
     this.charTimings.forEach((times, char) => {
-      if (times.length > 0) charAvgTimes[char] = times.reduce((a, b) => a + b, 0) / times.length;
+      if (times.length > 0)
+        charAvgTimes[char] = times.reduce((a, b) => a + b, 0) / times.length;
     });
-    return { wpm, accuracy, timeSeconds: elapsed, errors: this.totalStrokes - this.correctStrokes, totalKeystrokes: this.totalStrokes, passed: false, charErrors, charAvgTimes };
+    return {
+      wpm,
+      accuracy,
+      timeSeconds: elapsed,
+      errors: this.totalStrokes - this.correctStrokes,
+      totalKeystrokes: this.totalStrokes,
+      passed: false,
+      charErrors,
+      charAvgTimes,
+    };
   }
 }
 
@@ -247,7 +333,11 @@ function buildLines(text: string, maxLength = 32): LineDef[] {
     const nextText = nextWords.join(" ");
     if (lineWords.length > 0 && nextText.length > maxLength) {
       const textLine = lineWords.join(" ");
-      lines.push({ text: textLine + " ", start: lineStart, end: lineStart + textLine.length + 1 });
+      lines.push({
+        text: textLine + " ",
+        start: lineStart,
+        end: lineStart + textLine.length + 1,
+      });
       cursor += textLine.length + 1;
       lineStart = cursor;
       lineWords = [word];
@@ -257,12 +347,19 @@ function buildLines(text: string, maxLength = 32): LineDef[] {
   }
   if (lineWords.length > 0) {
     const textLine = lineWords.join(" ");
-    lines.push({ text: textLine, start: lineStart, end: lineStart + textLine.length });
+    lines.push({
+      text: textLine,
+      start: lineStart,
+      end: lineStart + textLine.length,
+    });
   }
   return lines;
 }
 
-function setSpanState(span: HTMLSpanElement | undefined, state: "done" | "current" | "pending"): void {
+function setSpanState(
+  span: HTMLSpanElement | undefined,
+  state: "done" | "current" | "pending",
+): void {
   if (!span) return;
   span.dataset.state = state;
 }
@@ -276,7 +373,11 @@ function formatSeconds(timeSeconds: number): string {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const props = defineProps<{ levelNumber: number; team: Team; difficulty: Difficulty }>();
+const props = defineProps<{
+  levelNumber: number;
+  team: Team;
+  difficulty: Difficulty;
+}>();
 const emit = defineEmits<{
   complete: [stats: LevelStats];
   retry: [];
@@ -317,12 +418,16 @@ function syncStats(): void {
   if (pauseWpm.value) pauseWpm.value.textContent = String(wpm);
   if (pauseAcc.value) pauseAcc.value.textContent = `${accuracy}%`;
   if (pauseTime.value) pauseTime.value.textContent = formatSeconds(timeSeconds);
-  if (progressBeam.value) progressBeam.value.style.width = `${Math.round(progress * 100)}%`;
+  if (progressBeam.value)
+    progressBeam.value.style.width = `${Math.round(progress * 100)}%`;
 }
 
 function updateCharacterPosition(reset = false): void {
   if (!character || !charTrack.value || !engine) return;
-  if (reset) { character.moveTo(28); return; }
+  if (reset) {
+    character.moveTo(28);
+    return;
+  }
   const span = engine.getCurrentSpan();
   if (!span) return;
   const trackRect = charTrack.value.getBoundingClientRect();
@@ -334,9 +439,13 @@ function playLineEnter(container: HTMLElement): void {
   container.classList.remove("line-enter");
   void container.offsetWidth;
   container.classList.add("line-enter");
-  container.addEventListener("animationend", () => {
-    container.classList.remove("line-enter");
-  }, { once: true });
+  container.addEventListener(
+    "animationend",
+    () => {
+      container.classList.remove("line-enter");
+    },
+    { once: true },
+  );
 }
 
 function spawnLineExitOverlay(container: HTMLElement): void {
@@ -349,9 +458,13 @@ function spawnLineExitOverlay(container: HTMLElement): void {
   overlay.removeAttribute("tabindex");
   overlay.removeAttribute("role");
   overlay.removeAttribute("aria-label");
-  overlay.addEventListener("animationend", () => {
-    overlay.remove();
-  }, { once: true });
+  overlay.addEventListener(
+    "animationend",
+    () => {
+      overlay.remove();
+    },
+    { once: true },
+  );
   parent.appendChild(overlay);
 }
 
@@ -376,20 +489,29 @@ function closePause(): void {
   textDisplay.value?.focus();
 }
 
-function spawnEffect(span: HTMLSpanElement | null, type: "correct" | "error"): void {
+function spawnEffect(
+  span: HTMLSpanElement | null,
+  type: "correct" | "error",
+): void {
   if (!span) return;
   span.classList.remove("letter-hit", "letter-error");
   void span.offsetWidth;
   span.classList.add(type === "correct" ? "letter-hit" : "letter-error");
-  span.addEventListener("animationend", () => {
-    span.classList.remove("letter-hit", "letter-error", "error-flash");
-  }, { once: true });
+  span.addEventListener(
+    "animationend",
+    () => {
+      span.classList.remove("letter-hit", "letter-error", "error-flash");
+    },
+    { once: true },
+  );
 }
 
 onMounted(() => {
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
-    requestAnimationFrame(() => screenEl.value?.classList.remove("screen-enter"));
+    requestAnimationFrame(() =>
+      screenEl.value?.classList.remove("screen-enter"),
+    );
   }
 
   const levelText = getLevelText(props.levelNumber);
@@ -440,7 +562,11 @@ onMounted(() => {
     spawnEffect(errSpan, "error");
     if (errSpan) {
       const r = errSpan.getBoundingClientRect();
-      particles?.triggerBurst("error", r.left + r.width / 2, r.top + r.height / 2);
+      particles?.triggerBurst(
+        "error",
+        r.left + r.width / 2,
+        r.top + r.height / 2,
+      );
     }
     character?.flinch();
     syncStats();
@@ -458,7 +584,8 @@ onMounted(() => {
   };
 
   engine.onComplete = (stats) => {
-    const passed = stats.accuracy >= thresholds.accuracy && stats.wpm >= thresholds.wpm;
+    const passed =
+      stats.accuracy >= thresholds.accuracy && stats.wpm >= thresholds.wpm;
     const finalStats: LevelStats = { ...stats, passed };
     syncStats();
     character?.celebrate();
@@ -484,7 +611,10 @@ onMounted(() => {
       isPaused ? closePause() : openPause();
       return;
     }
-    if (isPaused || e.key === "Tab") { e.preventDefault(); return; }
+    if (isPaused || e.key === "Tab") {
+      e.preventDefault();
+      return;
+    }
     engine?.handleKey(e.key, textDisplay.value!);
   };
   document.addEventListener("keydown", keydownHandler);
