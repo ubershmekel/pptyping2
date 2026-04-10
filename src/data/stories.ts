@@ -10,9 +10,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "A HERO ANSWERS THE CALL",
       artClass: "art-pokemon-0",
       paragraphs: [
-        "Deep in the heart of Pallet Town, the keyboard began to malfunction. Letters glitched, words scrambled, and typing became impossible. A mysterious energy — rainbow-bright and glittery — had infected every single key.",
-        "Rowlet was delivering a very important message when the keyboard struck. The little owl was whisked through a swirling portal of corrupted letters and vanished into the unknown.",
-        "Pikachu's eyes flashed with quiet determination. 'Pika.' If Rowlet was going to be saved, the keyboard would need to be cleansed — one key at a time.",
+        "Rowlet was halfway through his delivery route when something reached through the trees and lifted him out of the grove. Pikachu found the message bag on the ground, a few scattered letters beside it, and a single pink feather drifting down to meet them. His cheeks sparked once.",
       ],
     },
     // Cutscene 1 — after Level 4, before Arc 2
@@ -20,9 +18,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "THE KEYS BEGIN TO WAKE",
       artClass: "art-pokemon-1",
       paragraphs: [
-        "A spark of golden lightning crackled across the first row of restored keys. Pikachu's typing had begun to undo the rainbow corruption, letter by letter.",
-        "'Pika pika!' The little electric mouse cheered as the f and j keys glowed with healthy yellow light. Somewhere beyond the portal, a faint hoot echoed.",
-        "Rowlet was still out there. And so were many more corrupted keys. The adventure had only just begun.",
+        "Four keys restored. The petal trail led deeper into the grove and then, through the trees, to a warm glow: a yellow cottage. Rowlet's silhouette sat in the window. \"Pika.\" _I see you. I'm coming._",
       ],
     },
     // Cutscene 2 — after Level 8
@@ -30,9 +26,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "DEEPER INTO THE KEYBOARD",
       artClass: "art-pokemon-2",
       paragraphs: [
-        "Eight keys cleansed. Pikachu could feel the keyboard's power returning — each restored letter hummed with warm electric energy.",
-        "The corruption wasn't just from outside. Something in the middle rows had gone wrong too. Weird pony-shaped static drifted across the screen.",
-        "'We\'re getting closer,' Pikachu said, which nobody understood because it was just 'Pika pika' — but the intent was clear.",
+        "Through the electric haze came a vision: a warm cottage, flower petals, Rowlet in a little nest, watching the door. She was being very, very kind. That almost made it worse. Pikachu's cheeks sparked. _Faster._",
       ],
     },
     // Cutscene 3 — after Level 12
@@ -40,9 +34,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "HALFWAY HOME",
       artClass: "art-pokemon-3",
       paragraphs: [
-        "Twelve levels behind. Pikachu was typing faster now, each keystroke sending a ripple of golden light through the crystal cavern.",
-        "Through a gap in the corrupted keys, Pikachu glimpsed something: a round green shape, quietly hooting. Rowlet — just on the other side.",
-        "'Almost there,' Pikachu whispered. 'Just a few more rows.'",
+        "Through the crystal came a low, searching hoot. Then a soft voice: \"You don't need to go anywhere.\" Pikachu pressed his paw flat against the wall and typed harder.",
       ],
     },
     // Cutscene 4 — after Level 16
@@ -50,9 +42,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "THE HOME STRETCH",
       artClass: "art-pokemon-4",
       paragraphs: [
-        "The keyboard shimmered and crackled. Sixteen levels down. Only four levels of corrupted keys remained — the rarest, the strangest, the ones nobody ever used.",
-        "Pikachu stood at the edge of the Apex Summit. The wind howled. V, X, Q, and Z waited in the distance, wrapped in dense rainbow fog.",
-        "'This is it,' Pikachu said. 'Pika. Pika pika pika.' Which meant: 'I trained for this. I was born for this. Let\'s GO.'",
+        "Sixteen keys. The summit ahead. Pikachu's cheeks glowed steady, not flickering. He had been saving that charge for one thing only. _Four more keys._",
       ],
     },
     // Cutscene 5 — finale, after Level 20
@@ -60,9 +50,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "THE KEYBOARD IS SAVED!",
       artClass: "art-pokemon-5",
       paragraphs: [
-        "The final key shone gold. The corruption evaporated in a cascade of lightning and light. Every letter on the keyboard glowed clean and warm.",
-        "Rowlet tumbled through the clearing portal, spinning joyfully, and crash-landed on Pikachu's head. They sat there for a moment, just existing.",
-        "Somewhere in Equestria, a pink pony sneezed glitter. The keyboard was saved. The story — and the real adventure of touch typing — had only just begun.",
+        "The last key. Pikachu planted his feet and let everything go. _THUNDERBOLT._ The barrier shattered. Rowlet came spiraling home. A soft voice in the dust: \"Oh. He had someone. I'm so sorry.\" Rowlet glanced back once, then tucked in.",
       ],
     },
   ],
@@ -73,9 +61,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "THE KEYBOARD NEEDS FRIENDSHIP!",
       artClass: "art-mlp-0",
       paragraphs: [
-        "Pinkie Pie was planning the most spectacular party Equestria had ever seen — and it was going to be typed. Invitations, banners, confetti cannon timings, all written up and ready.",
-        "Then the keyboard went haywire! A strange energy — yellow, electric, and smelling faintly of ketchup — zapped across every key, scrambling all the letters into nonsense.",
-        "'Ooh, this keyboard just needs some serious friendship!' Pinkie announced, bouncing in place. 'And I am the absolute EXPERT at that!'",
+        "Pinkie's invitations were perfect until something small, blue, and very wet crashed through the window and blasted them into soggy confetti. She looked at the little turtle. He grinned back. \"Oh, honey,\" she said. \"We need to talk.\"",
       ],
     },
     // Cutscene 1 — after Level 4, before Arc 2
@@ -83,9 +69,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "FRIENDSHIP BEGINS WITH F AND J",
       artClass: "art-mlp-1",
       paragraphs: [
-        "The f key burst into pink sparkles. The j key answered with a cheerful rainbow shimmer. Pinkie jumped three feet in the air and landed perfectly.",
-        "'Yesyesyesyes! It\'s working!' she squealed, already planning which keys to befriend next. The corrupted energy retreated slightly, confused by sheer enthusiasm.",
-        "But the keyboard was large, and many keys still glowed with that strange yellow electric energy. Pinkie cracked her hooves. Time to make more friends.",
+        "\"Rule one,\" Pinkie said. \"Everyone laughs, _especially_ the pony it happened to.\" She demonstrated. It worked. The little turtle stared at his hands. \"It's different when they laugh too.\" \"It's everything,\" said Pinkie.",
       ],
     },
     // Cutscene 2 — after Level 8
@@ -93,9 +77,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "THE MIDDLE ROW OPENS UP",
       artClass: "art-mlp-2",
       paragraphs: [
-        "Eight keys befriended. Pinkie could see the keyboard lighting up like a Hearth's Warming display — each restored letter sparkled with genuine warmth.",
-        "The corruption was stubborn in the middle rows, though. It seemed the strange yellow electricity had dug in deep. Pinkie narrowed her eyes. This called for extra friendship.",
-        "'Hey keys!' she called. 'I brought CAKE.' Nobody knows if that helped. It definitely didn\'t hurt.",
+        "He tried. The timing was off. A bird choir scattered and nobody laughed. Pinkie put a hoof on his shoulder. \"If you can't picture them smiling, don't.\" Something in his expression changed.",
       ],
     },
     // Cutscene 3 — after Level 12
@@ -103,9 +85,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "MORE THAN HALFWAY THERE",
       artClass: "art-mlp-3",
       paragraphs: [
-        "Twelve keys restored. Pinkie had made a personal friend out of every single one, and she had names for all of them. The f key was named Franklin.",
-        "Through the crystal cavern walls, she could hear strange sounds from the other side — something that sounded like an electric mouse humming the same theme song on loop.",
-        "'They\'re not so different from us,' Pinkie decided. 'They just need the right introduction. And a party. Everyone needs a party.'",
+        "A whoopee cushion. Perfect timing. The pony laughed, and so did the little turtle. \"They laughed _because of me_,\" he said quietly. \"That's never happened before.\" Pinkie smiled and, unusually, said nothing.",
       ],
     },
     // Cutscene 4 — after Level 16
@@ -113,9 +93,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "THE FINAL KEYS AWAIT",
       artClass: "art-mlp-4",
       paragraphs: [
-        "The Apex Summit rose before Pinkie Pie — the keyboard's highest peak, where the rarest letters lived. V, X, Q, and Z waited in the mist, cold and forgotten.",
-        "'Nobody ever types us,' X admitted quietly. 'We feel a bit left out, honestly.'",
-        "Pinkie's eyes filled with tears. Of joy. 'That ends TODAY,' she declared, pulling a party cannon from absolutely nowhere.",
+        "\"Is this what friendship is? Pranks?\" Pinkie thought for two whole seconds. \"Pranks are the fun part. The real part? You pick someone and you show up.\" He turned his notebook over. \"I've never done that.\" \"I know,\" she said. \"You're going to be great at it.\"",
       ],
     },
     // Cutscene 5 — finale, after Level 20
@@ -123,9 +101,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "EVERY KEY HAS A FRIEND!",
       artClass: "art-mlp-5",
       paragraphs: [
-        "The last key shimmered with rainbow light. The electric corruption dissolved into warm glitter and drifted gently away. Every letter on the keyboard glowed soft and content.",
-        "Pinkie had befriended them all. Even Q. Especially Q. Q got a very long hug and its own personal banner.",
-        "Far away, a small yellow mouse sneezed, glanced at its keyboard, and typed a single perfectly clean letter. The two worlds had learned something important: every key matters. Every keystroke counts.",
+        "The party happened. He helped with the decorations — no pranks, and they never even crossed his mind. Halfway through, Pinkie spotted him surrounded by new friends, just laughing. _That's the one,_ she thought. _That's the whole lesson._",
       ],
     },
   ],

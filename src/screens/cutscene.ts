@@ -22,7 +22,7 @@ export function renderCutscene(
           ${story.paragraphs
             .map(
               (p, i) =>
-                `<p class="cs-p" style="animation-delay:${0.4 + i * 0.35}s">${p}</p>`,
+                `<p class="cs-p" style="animation-delay:${0.4 + i * 0.35}s">${renderEmphasis(p)}</p>`,
             )
             .join("")}
         </div>
@@ -78,9 +78,13 @@ export function renderCutscene(
   mount.timeout(() => {
     stopKeyHandler = mount.listen(document, "keydown", keyHandler);
   }, 500);
-  mount.timeout(() => art?.classList.add("cs-art-revealed"), 800);
+  mount.timeout(() => art?.classList.add("cs-art-revealed"), 0);
 
   return mount;
+}
+
+function renderEmphasis(text: string): string {
+  return text.replace(/_([^_]+)_/g, "<em>$1</em>");
 }
 
 function generateCutsceneArt(team: Team, index: number): string {

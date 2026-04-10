@@ -58,8 +58,8 @@
 }
 
 .cs-p {
-  color: #ccc;
-  font-size: 0.95rem;
+  color: #eee;
+  font-size: 1.1rem;
   line-height: 1.75;
   opacity: 0;
   animation: cs-fade-up 0.7s ease forwards;
@@ -101,7 +101,7 @@
   inset: 0;
   z-index: 10;
   background: #111;
-  transition: opacity 1.2s ease 0.3s;
+  transition: opacity 4.2s ease 0.3s;
 }
 
 .cs-art-revealed .cs-art-reveal {
