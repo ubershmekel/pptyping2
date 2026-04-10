@@ -24,16 +24,15 @@ Each cutscene has two components:
 ## Presentation Sequence
 
 1. Screen fades in from black
-2. Narrative text fades in line by line (or paragraph by paragraph), paced with
-   a short delay between each block
-3. A "Continue" prompt appears once all text has been shown (or immediately if
-   the player clicks anywhere, to accommodate players who have already read it)
-4. The player presses Continue (or clicks/taps anywhere)
-5. The AI illustration materializes from particles - particles coalesce into
-   the image shape, revealing the full illustration over about 2 seconds
-6. A second "Continue" prompt appears below the image, with a neighboring
-   "Level Select" button so the player can leave the cutscene flow without
-   advancing
+2. The chapter label, title, and narrative paragraphs fade in with staggered
+   timing so the story still feels paced and cinematic
+3. The illustration begins its reveal immediately as the art overlay fades away
+4. The cutscene's one-shot burst particles fire on their configured schedule,
+   centered on the illustration instead of the full screen
+5. The Continue and Level Select actions stay visible beneath the story so the
+   player can advance or leave at any point
+6. After the art is visible, clicking the illustration instantly replays the
+   cutscene's burst particles for that chapter with no additional delay
 7. The player continues to the next level (or the main menu if it is the
    finale cutscene)
 
@@ -50,6 +49,7 @@ from.
 
 ## Key Files
 
-- `src/screens/cutscene.ts` - renders the narrative text animation, manages the
+- `src/screens/Cutscene.vue` - renders the narrative text animation, manages the
   Continue and Level Select interactions, triggers the particle image reveal,
-  reads content from `stories.ts`, and navigates forward on completion
+  replays burst particles when the art is clicked, reads content from
+  `stories.ts`, and navigates forward on completion

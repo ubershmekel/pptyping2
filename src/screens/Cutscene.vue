@@ -1,25 +1,18 @@
 <template>
-  <div
-    ref="screenEl"
-    :class="`screen cutscene-screen team-${team} ${envClass}`"
-  >
+  <div ref="screenEl" :class="`screen cutscene-screen team-${team} ${envClass}`">
     <div class="cs-content">
       <div class="cs-story" aria-live="polite">
         <div class="cs-chapter">Chapter {{ cutsceneIndex + 1 }}</div>
         <h1 class="cs-title">{{ story.title }}</h1>
         <div class="cs-paragraphs">
-          <p
-            v-for="(p, i) in story.paragraphs"
-            :key="i"
-            class="cs-p"
-            :style="`animation-delay:${0.4 + i * 0.35}s`"
-            v-html="renderEmphasis(p)"
-          ></p>
+          <p v-for="(p, i) in story.paragraphs" :key="i" class="cs-p" :style="`animation-delay:${0.4 + i * 0.35}s`"
+            v-html="renderEmphasis(p)"></p>
         </div>
       </div>
 
       <div class="cs-art-container">
-        <div :class="`cs-art ${story.artClass}`" ref="artEl" aria-hidden="true">
+        <div :class="`cs-art ${story.artClass}`" ref="artEl" aria-hidden="true" title="Click to replay particle effects"
+          @click.stop="replayArtBursts">
           <div class="cs-art-reveal"></div>
           <img class="cs-art-img" :src="artSrc" :alt="artCaption" />
         </div>
@@ -35,7 +28,7 @@
             Level Select
           </button>
         </div>
-        <div class="cs-hint">Press Enter or click to continue</div>
+        <div class="cs-hint">Press Enter or use Continue to advance</div>
       </div>
     </div>
 
@@ -142,6 +135,43 @@ const timers: ReturnType<typeof setTimeout>[] = [];
 let keyHandler: ((e: KeyboardEvent) => void) | null = null;
 let stopKeyTimer: ReturnType<typeof setTimeout> | null = null;
 
+function getArtBurstOrigin(): { x: number; y: number } {
+  const rect = artEl.value?.getBoundingClientRect();
+  if (!rect) {
+    return {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+    };
+  }
+
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2,
+  };
+}
+
+function scheduleCutsceneBursts(x: number, y: number): void {
+  for (const burst of CUTSCENE_BURSTS[team.value][cutsceneIndex.value] ?? []) {
+    const t = setTimeout(
+      () => particles?.triggerBurst(burst.type, x, y),
+      burst.delay,
+    );
+    timers.push(t);
+  }
+}
+
+function triggerCutsceneBurstsNow(x: number, y: number): void {
+  for (const burst of CUTSCENE_BURSTS[team.value][cutsceneIndex.value] ?? []) {
+    particles?.triggerBurst(burst.type, x, y);
+  }
+}
+
+function replayArtBursts(): void {
+  if (advanced || particles === null) return;
+  const { x, y } = getArtBurstOrigin();
+  triggerCutsceneBurstsNow(x, y);
+}
+
 function leave(action: () => void): void {
   if (advanced) return;
   advanced = true;
@@ -185,16 +215,8 @@ onMounted(() => {
     particles = new ParticleManager(team.value);
     particles.mount(screenEl.value);
 
-    const cx = window.innerWidth / 2;
-    const cy = window.innerHeight / 2;
-    for (const burst of CUTSCENE_BURSTS[team.value][cutsceneIndex.value] ??
-      []) {
-      const t = setTimeout(
-        () => particles?.triggerBurst(burst.type, cx, cy),
-        burst.delay,
-      );
-      timers.push(t);
-    }
+    const { x, y } = getArtBurstOrigin();
+    scheduleCutsceneBursts(x, y);
   }
 
   // Key handler (activated after 500ms to prevent accidental skip)
