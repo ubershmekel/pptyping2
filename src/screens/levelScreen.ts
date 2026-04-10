@@ -478,7 +478,11 @@ export function renderLevelScreen(
     spawnEffect(errSpan, "error");
     if (errSpan) {
       const r = errSpan.getBoundingClientRect();
-      particles.triggerBurst("error", r.left + r.width / 2, r.top + r.height / 2);
+      particles.triggerBurst(
+        "error",
+        r.left + r.width / 2,
+        r.top + r.height / 2,
+      );
     }
     character.flinch();
     syncStats();

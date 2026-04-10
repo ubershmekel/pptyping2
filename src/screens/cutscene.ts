@@ -2,6 +2,42 @@ import "./cutscene.css";
 import type { ScreenMount, Team } from "../types";
 import { createScreenMount } from "../screenMount";
 import { CUTSCENE_STORIES } from "../data/stories";
+import { ParticleManager } from "../particles/particleManager";
+import type { BurstType } from "../particles/presets";
+
+// Cutscene index → arc environment class (cutscene 0 intro = grove, 5 = summit)
+const CUTSCENE_ENV = [
+  "env-digital-grove",
+  "env-digital-grove",
+  "env-thunder-shrine",
+  "env-crystal-cavern",
+  "env-stardrift-coast",
+  "env-apex-summit",
+] as const;
+
+// One-time burst(s) per [team][cutsceneIndex]: [{delay ms, type}]
+type BurstEvent = { delay: number; type: BurstType };
+const CUTSCENE_BURSTS: Record<Team, BurstEvent[][]> = {
+  pokemon: [
+    [{ delay: 1800, type: "petal" }], // 0: pink feather trail
+    [{ delay: 1200, type: "golden" }], // 1: restored keys flash
+    [{ delay: 1400, type: "electric" }], // 2: static curtain parts
+    [{ delay: 1600, type: "ripple" }], // 3: crystal wall ripple
+    [{ delay: 1200, type: "electric" }], // 4: cheek charge sparks
+    [
+      { delay: 900, type: "lightning" },
+      { delay: 2200, type: "glass" },
+    ], // 5: Thunderbolt + shatter
+  ],
+  mlp: [
+    [{ delay: 1400, type: "water" }], // 0: water blast
+    [{ delay: 1500, type: "confetti" }], // 1: prank landing
+    [{ delay: 1300, type: "water" }], // 2: misfired prank
+    [{ delay: 1600, type: "confetti" }], // 3: whoopee cushion pop
+    [{ delay: 1700, type: "golden" }], // 4: warm moment settling
+    [{ delay: 800, type: "party" }], // 5: party cannon blast
+  ],
+};
 
 export function renderCutscene(
   team: Team,
@@ -9,9 +45,10 @@ export function renderCutscene(
   onNext: () => void,
 ): ScreenMount {
   const story = CUTSCENE_STORIES[team][cutsceneIndex];
+  const envClass = CUTSCENE_ENV[cutsceneIndex] ?? "env-digital-grove";
   const screen = document.createElement("div");
   const mount = createScreenMount(screen);
-  screen.className = `screen cutscene-screen team-${team}`;
+  screen.className = `screen cutscene-screen team-${team} ${envClass}`;
 
   screen.innerHTML = `
     <div class="cs-content">
@@ -48,6 +85,18 @@ export function renderCutscene(
       ${Array.from({ length: 12 }, () => '<span class="cs-particle"></span>').join("")}
     </div>
   `;
+
+  const particles = new ParticleManager(team);
+  particles.mount(screen);
+  mount.defer(() => particles.destroy());
+
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  for (const burst of CUTSCENE_BURSTS[team][cutsceneIndex] ?? []) {
+    mount.timeout(() => {
+      particles.triggerBurst(burst.type, cx, cy);
+    }, burst.delay);
+  }
 
   // Art reveal animation trigger (slight delay)
   const art = screen.querySelector(".cs-art") as HTMLElement;

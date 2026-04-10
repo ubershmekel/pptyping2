@@ -34,7 +34,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "HALFWAY HOME",
       artClass: "art-pokemon-3",
       paragraphs: [
-        "Through the crystal came a low, searching hoot. Then a soft voice: \"You don't need to go anywhere.\" Pikachu pressed his paw flat against the wall and typed harder.",
+        'Through the crystal came a low, searching hoot. Then a soft voice: "You don\'t need to go anywhere." Pikachu pressed his paw flat against the wall and typed harder.',
       ],
     },
     // Cutscene 4 — after Level 16
@@ -50,7 +50,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "THE KEYBOARD IS SAVED!",
       artClass: "art-pokemon-5",
       paragraphs: [
-        "The last key. Pikachu planted his feet and let everything go. _THUNDERBOLT._ The barrier shattered. Rowlet came spiraling home. A soft voice in the dust: \"Oh. He had someone. I'm so sorry.\" Rowlet glanced back once, then tucked in.",
+        'The last key. Pikachu planted his feet and let everything go. _THUNDERBOLT._ The barrier shattered. Rowlet came spiraling home. A soft voice in the dust: "Oh. He had someone. I\'m so sorry." Rowlet glanced back once, then tucked in.',
       ],
     },
   ],
@@ -61,7 +61,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "THE KEYBOARD NEEDS FRIENDSHIP!",
       artClass: "art-mlp-0",
       paragraphs: [
-        "Pinkie's invitations were perfect until something small, blue, and very wet crashed through the window and blasted them into soggy confetti. She looked at the little turtle. He grinned back. \"Oh, honey,\" she said. \"We need to talk.\"",
+        'Pinkie\'s invitations were perfect until something small, blue, and very wet crashed through the window and blasted them into soggy confetti. She looked at the little turtle. He grinned back. "Oh, honey," she said. "We need to talk."',
       ],
     },
     // Cutscene 1 — after Level 4, before Arc 2
@@ -69,7 +69,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "FRIENDSHIP BEGINS WITH F AND J",
       artClass: "art-mlp-1",
       paragraphs: [
-        "\"Rule one,\" Pinkie said. \"Everyone laughs, _especially_ the pony it happened to.\" She demonstrated. It worked. The little turtle stared at his hands. \"It's different when they laugh too.\" \"It's everything,\" said Pinkie.",
+        '"Rule one," Pinkie said. "Everyone laughs, _especially_ the pony it happened to." She demonstrated. It worked. The little turtle stared at his hands. "It\'s different when they laugh too." "It\'s everything," said Pinkie.',
       ],
     },
     // Cutscene 2 — after Level 8
@@ -85,7 +85,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "MORE THAN HALFWAY THERE",
       artClass: "art-mlp-3",
       paragraphs: [
-        "A whoopee cushion. Perfect timing. The pony laughed, and so did the little turtle. \"They laughed _because of me_,\" he said quietly. \"That's never happened before.\" Pinkie smiled and, unusually, said nothing.",
+        'A whoopee cushion. Perfect timing. The pony laughed, and so did the little turtle. "They laughed _because of me_," he said quietly. "That\'s never happened before." Pinkie smiled and, unusually, said nothing.',
       ],
     },
     // Cutscene 4 — after Level 16
@@ -93,7 +93,7 @@ export const CUTSCENE_STORIES: Record<Team, CutsceneStory[]> = {
       title: "THE FINAL KEYS AWAIT",
       artClass: "art-mlp-4",
       paragraphs: [
-        "\"Is this what friendship is? Pranks?\" Pinkie thought for two whole seconds. \"Pranks are the fun part. The real part? You pick someone and you show up.\" He turned his notebook over. \"I've never done that.\" \"I know,\" she said. \"You're going to be great at it.\"",
+        '"Is this what friendship is? Pranks?" Pinkie thought for two whole seconds. "Pranks are the fun part. The real part? You pick someone and you show up." He turned his notebook over. "I\'ve never done that." "I know," she said. "You\'re going to be great at it."',
       ],
     },
     // Cutscene 5 — finale, after Level 20

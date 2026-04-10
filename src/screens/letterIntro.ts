@@ -218,14 +218,18 @@ export function renderLetterIntro(
 
   // ── Hand SVGs ──────────────────────────────────────────────────────────────
   const shadowWrap = screen.querySelector(".li-hand-shadow") as HTMLElement;
-  const handWrap = screen.querySelector(".li-hand-svg:not(.li-hand-shadow)") as HTMLElement;
+  const handWrap = screen.querySelector(
+    ".li-hand-svg:not(.li-hand-shadow)",
+  ) as HTMLElement;
   shadowWrap.innerHTML = handSvgRaw;
   handWrap.innerHTML = handSvgRaw;
   colorFocusedHand(handWrap, fingerName, fingerColor, side);
   // Shadow: show only the base hand shape — hide all finger paths
   const shadowSvg = shadowWrap.querySelector("svg");
   if (shadowSvg) {
-    const bgRect = shadowSvg.querySelector('rect[width="208"]') as SVGElement | null;
+    const bgRect = shadowSvg.querySelector(
+      'rect[width="208"]',
+    ) as SVGElement | null;
     if (bgRect) bgRect.style.display = "none";
     for (const id of ["Pinky", "Ring", "Middle", "Index", "Thumb"]) {
       const el = shadowSvg.querySelector(`#${id}`) as SVGElement | null;

@@ -448,7 +448,8 @@
   background: var(--env-particle-color, rgba(255, 215, 0, 0.6));
   opacity: 0;
   border-radius: var(--env-particle-radius, 50%);
-  animation: var(--env-particle-anim, env-drift) var(--env-particle-duration, 8s) ease-in-out infinite;
+  animation: var(--env-particle-anim, env-drift)
+    var(--env-particle-duration, 8s) ease-in-out infinite;
 }
 
 /* Digital Grove: soft green leaf-like dots drifting up */

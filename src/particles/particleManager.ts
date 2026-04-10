@@ -61,27 +61,92 @@ export class ParticleManager {
 
   /**
    * Trigger a particle burst.
-   * @param type    - burst type driving color, count, speed, and life
-   * @param x       - viewport x (ignored for "victory", which spreads across the top)
-   * @param y       - viewport y (ignored for "victory")
+   * @param type - burst type driving color, count, speed, and life
+   * @param x    - viewport x (used as spawn origin; ignored for "victory" and "lightning")
+   * @param y    - viewport y
    */
   triggerBurst(type: BurstType, x = 0, y = 0): void {
     const cfg = BURST_CONFIGS[type];
     const palette = BURST_COLORS[type](this.teamColors);
     const w = window.innerWidth;
+    const h = window.innerHeight;
 
-    if (type === "victory") {
+    if (type === "victory" || type === "lightning") {
+      // Rain/explosion from the top edge across the full width
       for (let i = 0; i < cfg.count; i++) {
         const px = Math.random() * w;
         const speed = cfg.speed * (0.5 + Math.random());
-        const angle = Math.PI * 0.3 + Math.random() * Math.PI * 0.4; // roughly downward fan
-        this.particles.push(makeParticle(px, -8, Math.cos(angle) * speed, Math.sin(angle) * speed, cfg, palette));
+        const angle = Math.PI * 0.3 + Math.random() * Math.PI * 0.4;
+        this.particles.push(
+          makeParticle(
+            px,
+            -8,
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed,
+            cfg,
+            palette,
+          ),
+        );
+      }
+    } else if (type === "party") {
+      // Party cannon: upward fan from given position (typically bottom-center)
+      for (let i = 0; i < cfg.count; i++) {
+        const speed = cfg.speed * (0.5 + Math.random());
+        // Fan from roughly straight-up to 60° either side
+        const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.2;
+        this.particles.push(
+          makeParticle(
+            x,
+            y,
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed,
+            cfg,
+            palette,
+          ),
+        );
+      }
+    } else if (type === "petal") {
+      // Petals drift from the given position with a strong rightward bias
+      for (let i = 0; i < cfg.count; i++) {
+        const speed = cfg.speed * (0.4 + Math.random() * 0.8);
+        // Spread them vertically across the screen, drifting rightward
+        const spawnY = h * (0.1 + Math.random() * 0.8);
+        const spawnX = w * (Math.random() * 0.4); // left 40%
+        const vx = speed * (0.6 + Math.random() * 0.4); // always rightward
+        const vy = (Math.random() - 0.5) * speed * 0.5; // slight vertical wobble
+        this.particles.push(makeParticle(spawnX, spawnY, vx, vy, cfg, palette));
+      }
+    } else if (type === "ripple") {
+      // Uniform ring: equal angular spacing, consistent speed
+      for (let i = 0; i < cfg.count; i++) {
+        const angle = (i / cfg.count) * Math.PI * 2;
+        const speed = cfg.speed * (0.85 + Math.random() * 0.3);
+        this.particles.push(
+          makeParticle(
+            x,
+            y,
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed,
+            cfg,
+            palette,
+          ),
+        );
       }
     } else {
+      // Default: random radial burst from (x, y)
       for (let i = 0; i < cfg.count; i++) {
         const angle = Math.random() * Math.PI * 2;
         const speed = cfg.speed * (0.4 + Math.random() * 0.8);
-        this.particles.push(makeParticle(x, y, Math.cos(angle) * speed, Math.sin(angle) * speed, cfg, palette));
+        this.particles.push(
+          makeParticle(
+            x,
+            y,
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed,
+            cfg,
+            palette,
+          ),
+        );
       }
     }
 
@@ -98,7 +163,7 @@ export class ParticleManager {
 
   private loop = (time: number): void => {
     if (this.lastTime === null) this.lastTime = time;
-    const dt = Math.min(time - this.lastTime, 50); // cap at 50 ms to avoid jumps
+    const dt = Math.min(time - this.lastTime, 50);
     this.lastTime = time;
 
     const scale = dt / 16.667;
