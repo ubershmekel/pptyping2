@@ -304,8 +304,6 @@ let engine: TypingEngine | null = null;
 let character: CharacterCompanion | null = null;
 let particles: ParticleManager | null = null;
 let isPaused = false;
-let isTransitioningLine = false;
-let cancelLineTransition: ReturnType<typeof setTimeout> | null = null;
 let cancelComplete: ReturnType<typeof setTimeout> | null = null;
 let statsInterval: ReturnType<typeof setInterval> | null = null;
 let keydownHandler: ((e: KeyboardEvent) => void) | null = null;
@@ -330,6 +328,31 @@ function updateCharacterPosition(reset = false): void {
   const trackRect = charTrack.value.getBoundingClientRect();
   const spanRect = span.getBoundingClientRect();
   character.moveTo(spanRect.left - trackRect.left + spanRect.width * 0.5);
+}
+
+function playLineEnter(container: HTMLElement): void {
+  container.classList.remove("line-enter");
+  void container.offsetWidth;
+  container.classList.add("line-enter");
+  container.addEventListener("animationend", () => {
+    container.classList.remove("line-enter");
+  }, { once: true });
+}
+
+function spawnLineExitOverlay(container: HTMLElement): void {
+  const parent = container.parentElement;
+  if (!parent) return;
+  const overlay = container.cloneNode(true) as HTMLDivElement;
+  overlay.classList.remove("line-enter");
+  overlay.classList.add("text-display-overlay", "line-exit");
+  overlay.setAttribute("aria-hidden", "true");
+  overlay.removeAttribute("tabindex");
+  overlay.removeAttribute("role");
+  overlay.removeAttribute("aria-label");
+  overlay.addEventListener("animationend", () => {
+    overlay.remove();
+  }, { once: true });
+  parent.appendChild(overlay);
 }
 
 function openPause(): void {
@@ -424,21 +447,14 @@ onMounted(() => {
   };
 
   engine.onLineComplete = () => {
-    isTransitioningLine = true;
-    textDisplay.value?.classList.add("line-exit");
+    if (textDisplay.value && engine) {
+      spawnLineExitOverlay(textDisplay.value);
+      engine.advanceLine(textDisplay.value);
+      engine.renderNextLine(textDisplay.value);
+      playLineEnter(textDisplay.value);
+    }
     updateCharacterPosition(true);
-    if (cancelLineTransition !== null) clearTimeout(cancelLineTransition);
-    cancelLineTransition = setTimeout(() => {
-      cancelLineTransition = null;
-      if (textDisplay.value && engine) {
-        engine.advanceLine(textDisplay.value);
-        engine.renderNextLine(textDisplay.value);
-        textDisplay.value.classList.remove("line-exit");
-        textDisplay.value.classList.add("line-enter");
-      }
-      isTransitioningLine = false;
-      updateCharacterPosition();
-    }, 170);
+    requestAnimationFrame(() => updateCharacterPosition());
   };
 
   engine.onComplete = (stats) => {
@@ -468,7 +484,7 @@ onMounted(() => {
       isPaused ? closePause() : openPause();
       return;
     }
-    if (isPaused || isTransitioningLine || e.key === "Tab") { e.preventDefault(); return; }
+    if (isPaused || e.key === "Tab") { e.preventDefault(); return; }
     engine?.handleKey(e.key, textDisplay.value!);
   };
   document.addEventListener("keydown", keydownHandler);
@@ -479,7 +495,6 @@ onMounted(() => {
 onUnmounted(() => {
   if (keydownHandler) document.removeEventListener("keydown", keydownHandler);
   if (statsInterval !== null) clearInterval(statsInterval);
-  if (cancelLineTransition !== null) clearTimeout(cancelLineTransition);
   if (cancelComplete !== null) clearTimeout(cancelComplete);
   if (positionTimeout !== null) clearTimeout(positionTimeout);
   character?.destroy();

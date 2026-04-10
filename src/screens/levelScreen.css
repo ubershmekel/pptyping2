@@ -92,6 +92,7 @@
 }
 
 .text-stage {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,6 +108,8 @@
 }
 
 .text-display {
+  position: relative;
+  z-index: 1;
   display: flex;
   width: min(78vw, 760px);
   align-items: center;
@@ -123,6 +126,16 @@
   cursor: text;
   user-select: none;
   outline: none;
+}
+
+.text-display-overlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  margin: 0 auto;
+  pointer-events: none;
 }
 
 /* small gap between current line and next-line peek */
@@ -357,6 +370,8 @@
 }
 
 .level-paused .char-svg,
+.level-paused .text-display,
+.level-paused .text-display-overlay,
 .level-paused .env-particle,
 .level-paused .char[data-state="current"]::after {
   animation-play-state: paused;
