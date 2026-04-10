@@ -1,5 +1,7 @@
 import "./styles/base.css";
-import { App } from "./app";
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router/index";
 import { withBasePath } from "./basePath";
 
 function restoreRouteFromRedirectParam(): void {
@@ -16,10 +18,6 @@ function restoreRouteFromRedirectParam(): void {
   window.history.replaceState({}, "", nextUrl);
 }
 
-const container = document.getElementById("app");
-if (!container) throw new Error("#app not found");
-
 restoreRouteFromRedirectParam();
 
-const app = new App(container);
-app.start();
+createApp(App).use(router).mount("#app");

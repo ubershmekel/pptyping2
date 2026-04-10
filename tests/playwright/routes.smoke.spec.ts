@@ -145,3 +145,63 @@ for (const route of savedRouteCases) {
     await expect(page.locator(route.selector)).toBeVisible();
   });
 }
+
+// ─── Multi-letter-intro regression ───────────────────────────────────────────
+//
+// Level 5 introduces two new letters ("o" then "a").  Before the :key fix in
+// LevelFlow.vue, the second letter-intro never re-mounted, so the "a" screen
+// stayed broken and the player could not proceed to the finger guide.
+
+function buildLevel5Profile(): PlayerProfile {
+  // Levels 1–4 completed so level 5 is unlocked.
+  const levelRecords: PlayerProfile["teams"]["pokemon"]["levelRecords"] = {};
+  for (let n = 1; n <= 4; n++) {
+    levelRecords[n] = { bestWpm: 30, bestAccuracy: 95, completed: true };
+  }
+  return {
+    activeTeam: "pokemon",
+    teamSelected: true,
+    difficulty: "easy",
+    teams: {
+      pokemon: { levelRecords, highestUnlockedLevel: 5 },
+      mlp: { levelRecords: {}, highestUnlockedLevel: 1 },
+    },
+    speedTestHistory: [],
+    activityLog: [],
+  };
+}
+
+test("level 5 letter-intro: both letters advance and reach finger guide", async ({
+  page,
+}) => {
+  await seedProfile(page, buildLevel5Profile());
+  await page.goto("/level/5");
+
+  // ── First letter intro ("o") ──────────────────────────────────────────────
+  await expect(page.locator(".letter-intro-screen")).toBeVisible();
+  // The displayed letter should be "O"
+  await expect(page.locator(".li-letter")).toHaveText("O");
+
+  // Press "o" three times to complete the first intro
+  for (let i = 0; i < 3; i++) {
+    await page.keyboard.press("o");
+    // Small wait for animation between presses
+    await page.waitForTimeout(50);
+  }
+
+  // ── Second letter intro ("a") ─────────────────────────────────────────────
+  // This is the regression case: without the :key fix the component was not
+  // remounted and the screen stayed on "o" / was non-functional.
+  await expect(page.locator(".li-letter")).toHaveText("A", { timeout: 2000 });
+
+  // Press "a" three times
+  for (let i = 0; i < 3; i++) {
+    await page.keyboard.press("a");
+    await page.waitForTimeout(50);
+  }
+
+  // ── Finger guide ──────────────────────────────────────────────────────────
+  await expect(page.locator(".finger-guide-screen")).toBeVisible({
+    timeout: 2000,
+  });
+});

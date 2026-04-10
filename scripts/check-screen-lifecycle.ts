@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -99,10 +99,17 @@ export function buildLifecycleTargets(rootDir: string): LifecycleTarget[] {
   const screensDir = join(rootDir, "src", "screens");
   const appFile = join(rootDir, "src", "app.ts");
 
-  return [
-    ...collectTsFiles(screensDir).map((file) => ({ file, rules: screenRules })),
-    { file: appFile, rules: appRules },
-  ];
+  const targets: LifecycleTarget[] = collectTsFiles(screensDir).map((file) => ({
+    file,
+    rules: screenRules,
+  }));
+
+  // app.ts is removed after the Vue migration; skip if absent.
+  if (existsSync(appFile)) {
+    targets.push({ file: appFile, rules: appRules });
+  }
+
+  return targets;
 }
 
 export function findLifecycleViolations(
