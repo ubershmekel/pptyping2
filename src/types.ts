@@ -107,7 +107,8 @@ export type AppScreen =
   | { id: "finger-guide"; number: number; skipLetterIntro?: boolean } // pre-level finger explainer; no canonical URL, stays at /level/<N>
   | { id: "level"; number: number }
   | { id: "level-complete"; number: number; stats: LevelStats }
-  | { id: "settings" };
+  | { id: "settings" }
+  | { id: "debug-particles" };
 
 // ─── Level & story definitions ───────────────────────────────────────────────
 

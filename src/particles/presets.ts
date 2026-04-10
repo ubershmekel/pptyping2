@@ -34,10 +34,10 @@ export const BURST_CONFIGS: Record<BurstType, BurstConfig> = {
   golden: { count: 28, speed: 3.5, life: 700, size: 4, gravity: 0.05 },
   electric: { count: 30, speed: 5.5, life: 280, size: 2, gravity: 0.0 },
   ripple: { count: 18, speed: 2.2, life: 750, size: 3, gravity: 0.0 },
-  lightning: { count: 90, speed: 7.5, life: 650, size: 5, gravity: 0.04 },
+  lightning: { count: 800, speed: 7.5, life: 2100, size: 5, gravity: 0.04 },
   glass: { count: 28, speed: 5.0, life: 950, size: 6, gravity: 0.09 },
-  water: { count: 35, speed: 3.8, life: 520, size: 4, gravity: 0.08 },
-  confetti: { count: 40, speed: 3.2, life: 1000, size: 4, gravity: 0.07 },
+  water: { count: 450, speed: 3.8, life: 1520, size: 10, gravity: 0.08 },
+  confetti: { count: 600, speed: 6.2, life: 1500, size: 4, gravity: 0.2 },
   party: { count: 90, speed: 6.0, life: 1300, size: 5, gravity: 0.05 },
 };
 

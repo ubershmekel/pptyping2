@@ -31,6 +31,7 @@ import { renderFjIntro } from "./screens/fjIntro";
 import { renderLevelScreen } from "./screens/levelScreen";
 import { renderLevelComplete } from "./screens/levelComplete";
 import { renderSettings } from "./screens/settings";
+import { renderDebugParticles } from "./screens/debugParticles";
 import { createScreenMount } from "./screenMount";
 import { Router } from "./router";
 import type { Route } from "./router";
@@ -136,6 +137,9 @@ export class App {
         break;
       case "cutscene":
         screen = { id: "cutscene", index: route.index };
+        break;
+      case "debug-particles":
+        screen = { id: "debug-particles" };
         break;
     }
 
@@ -309,6 +313,8 @@ export class App {
         (d) => this.onDifficultyChange(d),
         () => this.navigate({ id: "main-menu" }),
       );
+    } else if (screen.id === "debug-particles") {
+      return renderDebugParticles(this.profile.activeTeam);
     }
 
     return createScreenMount(document.createElement("div"));

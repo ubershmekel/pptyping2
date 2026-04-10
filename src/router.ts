@@ -12,6 +12,7 @@ export type Route =
   | { screen: "level"; number: number }
   | { screen: "cutscene"; index: number }
   | { screen: "settings" }
+  | { screen: "debug-particles" }
   | { screen: "not-found" };
 
 import { MAX_LEVEL } from "./data/levels";
@@ -26,6 +27,7 @@ export function parseRoute(pathname: string): Route {
   if (path === "/team-select") return { screen: "team-select" };
   if (path === "/level-select") return { screen: "level-select" };
   if (path === "/settings") return { screen: "settings" };
+  if (path === "/debug-particles") return { screen: "debug-particles" };
 
   const levelMatch = path.match(/^\/level\/(\d+)$/);
   if (levelMatch) {
@@ -59,6 +61,8 @@ export function routeToPath(
       return `/level/${route.number}`;
     case "cutscene":
       return `/cutscene/${route.index}`;
+    case "debug-particles":
+      return "/debug-particles";
   }
 }
 
