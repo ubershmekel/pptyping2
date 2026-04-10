@@ -11,7 +11,7 @@ runtime; all assets are pre-produced and bundled.
 
 ### Story Illustrations (12 total)
 
-AI-generated images for cutscene reveals. One per arc per team.
+Images for cutscene reveals. One per arc per team.
 
 - 6 Pokemon story images
 - 6 MLP story images

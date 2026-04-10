@@ -4,8 +4,8 @@
 
 Cutscenes are the emotional reward moments of the game — the payoff for
 completing an arc of levels. They deliver the story narrative and reveal the
-AI-generated illustration for that arc's chapter. This screen should feel
-cinematic and unhurried.
+illustration for that arc's chapter. This screen should feel cinematic and
+unhurried.
 
 Cutscenes play automatically after an arc is completed. They can also be
 replayed from the level select screen by clicking a completed cutscene node.
@@ -17,9 +17,9 @@ Each cutscene has two components:
 1. **Narrative text** — 1–3 paragraphs of story from `stories.ts`, served for
    the player's chosen team. This advances the Pokemon adventure/rescue arc or
    the MLP diplomacy/friendship arc.
-2. **AI-generated illustration** — a pre-generated image representing the story
-   moment. One per arc per team (6 per team, 12 total assets). The image is
-   revealed with a particle effect materializing animation.
+2. **Illustration** — an image representing the story moment. One per arc per
+   team (6 per team, 12 total assets). The image is revealed with a particle
+   effect materializing animation.
 
 ## Presentation Sequence
 
