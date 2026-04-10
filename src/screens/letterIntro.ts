@@ -176,6 +176,7 @@ export function renderLetterIntro(
   levelNumber: number,
   letter: string,
   onDone: () => void,
+  onBack: () => void,
 ): ScreenMount {
   const meta = KEY_DATA[letter];
   const fingerName = meta.finger;
@@ -192,6 +193,9 @@ export function renderLetterIntro(
 
   screen.innerHTML = `
     <div class="li-layout">
+      <div class="li-top-bar">
+        <button class="li-back-btn" id="li-back">Back</button>
+      </div>
       <div class="li-badge">Level ${levelNumber} &mdash; learn which finger types the letter <strong>${letter.toUpperCase()}</strong></div>
 
       <div class="li-letter-area">
@@ -283,6 +287,7 @@ export function renderLetterIntro(
   // ── Interaction ────────────────────────────────────────────────────────────
   const dots = screen.querySelectorAll(".li-dot") as NodeListOf<HTMLElement>;
   const promptEl = screen.querySelector(".li-prompt") as HTMLElement;
+  const backBtn = screen.querySelector("#li-back") as HTMLButtonElement;
 
   let pressCount = 0;
   let advancing = false;
@@ -325,6 +330,7 @@ export function renderLetterIntro(
     if (e.repeat) return;
     if (e.key.toLowerCase() === letter) onCorrectPress();
   });
+  mount.listen(backBtn, "click", () => onBack());
 
   return mount;
 }

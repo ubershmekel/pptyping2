@@ -230,8 +230,11 @@ export class App {
         screen.attempted,
       );
     } else if (screen.id === "cutscene") {
-      return renderCutscene(this.profile.activeTeam, screen.index, () =>
-        this.onCutsceneDone(screen.index),
+      return renderCutscene(
+        this.profile.activeTeam,
+        screen.index,
+        () => this.onCutsceneDone(screen.index),
+        () => this.navigate({ id: "level-select" }),
       );
     } else if (screen.id === "speed-test-intro") {
       return renderSpeedTestIntro(
@@ -249,6 +252,7 @@ export class App {
         screen.number,
         letter,
         () => this.showScreen(nextScreen),
+        () => this.navigate({ id: "level-select" }),
       );
     } else if (screen.id === "fj-intro") {
       return renderFjIntro(this.profile.activeTeam, () =>

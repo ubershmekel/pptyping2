@@ -5,7 +5,7 @@ import { CUTSCENE_STORIES } from "../data/stories";
 import { ParticleManager } from "../particles/particleManager";
 import type { BurstType } from "../particles/presets";
 
-// Cutscene index → arc environment class (cutscene 0 intro = grove, 5 = summit)
+// Cutscene index -> arc environment class (cutscene 0 intro = grove, 5 = summit)
 const CUTSCENE_ENV = [
   "env-digital-grove",
   "env-digital-grove",
@@ -43,6 +43,7 @@ export function renderCutscene(
   team: Team,
   cutsceneIndex: number,
   onNext: () => void,
+  onLevelSelect: () => void,
 ): ScreenMount {
   const story = CUTSCENE_STORIES[team][cutsceneIndex];
   const envClass = CUTSCENE_ENV[cutsceneIndex] ?? "env-digital-grove";
@@ -74,9 +75,14 @@ export function renderCutscene(
       </div>
 
       <div class="cs-actions">
-        <button class="cs-next-btn" id="cs-next">
-          ${cutsceneIndex === 5 ? "🏆 Play Again" : "Continue →"}
-        </button>
+        <div class="cs-action-row">
+          <button class="cs-next-btn" id="cs-next">
+            ${cutsceneIndex === 5 ? "Play Again" : "Continue"}
+          </button>
+          <button class="cs-level-select-btn" id="cs-level-select">
+            Level Select
+          </button>
+        </div>
         <div class="cs-hint">Press Enter or click to continue</div>
       </div>
     </div>
@@ -98,28 +104,35 @@ export function renderCutscene(
     }, burst.delay);
   }
 
-  // Art reveal animation trigger (slight delay)
   const art = screen.querySelector(".cs-art") as HTMLElement;
   let advanced = false;
   let stopKeyHandler: (() => void) | null = null;
 
-  // Next button
   const nextBtn = screen.querySelector("#cs-next") as HTMLButtonElement;
-  const go = () => {
+  const levelSelectBtn = screen.querySelector(
+    "#cs-level-select",
+  ) as HTMLButtonElement;
+
+  const leave = (onLeave: () => void) => {
     if (advanced) {
       return;
     }
     advanced = true;
-    console.log(`[transition] fade out ← cutscene ${cutsceneIndex}`);
+    console.log(`[transition] fade out <- cutscene ${cutsceneIndex}`);
     screen.classList.add("screen-exit");
     stopKeyHandler?.();
     stopKeyHandler = null;
-    mount.timeout(onNext, 350);
+    mount.timeout(onLeave, 350);
   };
-  mount.listen(nextBtn, "click", go);
 
-  // Enter key
+  const go = () => leave(onNext);
+  mount.listen(nextBtn, "click", go);
+  mount.listen(levelSelectBtn, "click", () => leave(onLevelSelect));
+
   const keyHandler = (e: KeyboardEvent) => {
+    if (e.target instanceof HTMLElement && e.target.closest("button")) {
+      return;
+    }
     if (e.key === "Enter" || e.key === " ") {
       go();
     }
@@ -150,7 +163,7 @@ function getArtCaption(team: Team, index: number): string {
       "The first keys are restored with a lightning strike",
       "Deeper into the crystal cavern",
       "Rowlet spotted on the distant shore",
-      "The Apex Summit — final keys ahead",
+      "The Apex Summit - final keys ahead",
       "Victory! The keyboard is saved!",
     ],
     mlp: [
