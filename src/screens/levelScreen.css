@@ -445,10 +445,48 @@
   position: absolute;
   width: 4px;
   height: 4px;
-  background: var(--team-primary, #ffd700);
+  background: var(--env-particle-color, rgba(255, 215, 0, 0.6));
   opacity: 0;
-  border-radius: 50%;
-  animation: env-drift 8s ease-in-out infinite;
+  border-radius: var(--env-particle-radius, 50%);
+  animation: var(--env-particle-anim, env-drift) var(--env-particle-duration, 8s) ease-in-out infinite;
+}
+
+/* Digital Grove: soft green leaf-like dots drifting up */
+.env-digital-grove {
+  --env-particle-color: rgba(100, 220, 120, 0.5);
+  --env-particle-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+  --env-particle-anim: env-drift;
+}
+
+/* Thunder Shrine: fast-rising ember sparks */
+.env-thunder-shrine {
+  --env-particle-color: rgba(180, 100, 255, 0.55);
+  --env-particle-radius: 3px;
+  --env-particle-anim: env-ember;
+  --env-particle-duration: 5s;
+}
+
+/* Crystal Cavern: slow floating bubbles */
+.env-crystal-cavern {
+  --env-particle-color: rgba(80, 160, 255, 0.45);
+  --env-particle-radius: 50%;
+  --env-particle-anim: env-bubble;
+}
+
+/* Stardrift Coast: gentle rising ocean bubbles */
+.env-stardrift-coast {
+  --env-particle-color: rgba(60, 210, 200, 0.4);
+  --env-particle-radius: 50%;
+  --env-particle-anim: env-bubble;
+  --env-particle-duration: 10s;
+}
+
+/* Apex Summit: orbiting gold sparkles */
+.env-apex-summit {
+  --env-particle-color: rgba(255, 220, 80, 0.5);
+  --env-particle-radius: 2px;
+  --env-particle-anim: env-sparkle;
+  --env-particle-duration: 6s;
 }
 
 .env-particle:nth-child(1) {
@@ -518,6 +556,94 @@
     bottom: 100%;
     opacity: 0;
     transform: translateX(15px);
+  }
+}
+
+/* Thunder Shrine embers: fast rise with lateral flicker */
+@keyframes env-ember {
+  0% {
+    bottom: -5%;
+    opacity: 0;
+    transform: translateX(0) scale(1);
+  }
+
+  15% {
+    opacity: 0.6;
+  }
+
+  40% {
+    transform: translateX(-8px) scale(0.8);
+  }
+
+  70% {
+    transform: translateX(6px) scale(1.1);
+    opacity: 0.3;
+  }
+
+  100% {
+    bottom: 100%;
+    opacity: 0;
+    transform: translateX(-4px) scale(0.5);
+  }
+}
+
+/* Crystal Cavern / Stardrift Coast bubbles: gentle wobble */
+@keyframes env-bubble {
+  0% {
+    bottom: -5%;
+    opacity: 0;
+    transform: translateX(0) scale(0.7);
+  }
+
+  12% {
+    opacity: 0.45;
+    transform: translateX(0) scale(1);
+  }
+
+  50% {
+    transform: translateX(10px) scale(1.05);
+    opacity: 0.3;
+  }
+
+  88% {
+    transform: translateX(-6px) scale(0.95);
+    opacity: 0.15;
+  }
+
+  100% {
+    bottom: 100%;
+    opacity: 0;
+    transform: translateX(0) scale(0.6);
+  }
+}
+
+/* Apex Summit sparkles: twinkle while rising */
+@keyframes env-sparkle {
+  0% {
+    bottom: -5%;
+    opacity: 0;
+    transform: rotate(0deg) scale(0.5);
+  }
+
+  20% {
+    opacity: 0.7;
+    transform: rotate(45deg) scale(1.2);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: rotate(90deg) scale(0.8);
+  }
+
+  80% {
+    opacity: 0.6;
+    transform: rotate(135deg) scale(1.1);
+  }
+
+  100% {
+    bottom: 100%;
+    opacity: 0;
+    transform: rotate(180deg) scale(0.4);
   }
 }
 

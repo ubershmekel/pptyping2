@@ -5,6 +5,7 @@ import { DIFFICULTY_THRESHOLDS } from "../types";
 import { getLevelText } from "../data/wordLists";
 import { getLevelDef, ARC_ENVIRONMENTS } from "../data/levels";
 import { CharacterCompanion } from "../components/character";
+import { ParticleManager } from "../particles/particleManager";
 
 type LineDef = {
   text: string;
@@ -364,6 +365,10 @@ export function renderLevelScreen(
   const character = new CharacterCompanion(team);
   character.mount(charTrack);
   mount.defer(() => character.destroy());
+
+  const particles = new ParticleManager(team);
+  particles.mount(screen);
+  mount.defer(() => particles.destroy());
   engine.renderCurrentLine(textDisplay);
   engine.renderNextLine(textDisplay);
   pauseBtn.setAttribute("aria-expanded", "false");
@@ -452,8 +457,16 @@ export function renderLevelScreen(
   engine.onCorrect = (_charIndex, span) => {
     comboCount++;
     spawnEffect(span, "correct");
-    if (comboCount > 0 && comboCount % 10 === 0) {
-      character.celebrate();
+    if (span) {
+      const r = span.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      if (comboCount > 0 && comboCount % 10 === 0) {
+        character.celebrate();
+        particles.triggerBurst("combo", cx, cy);
+      } else {
+        particles.triggerBurst("correct", cx, cy);
+      }
     }
     syncStats();
     updateCharacterPosition();
@@ -461,7 +474,12 @@ export function renderLevelScreen(
 
   engine.onError = (_charIndex, span) => {
     comboCount = 0;
-    spawnEffect(span ?? engine.getCurrentSpan(), "error");
+    const errSpan = span ?? engine.getCurrentSpan();
+    spawnEffect(errSpan, "error");
+    if (errSpan) {
+      const r = errSpan.getBoundingClientRect();
+      particles.triggerBurst("error", r.left + r.width / 2, r.top + r.height / 2);
+    }
     character.flinch();
     syncStats();
   };
@@ -493,6 +511,7 @@ export function renderLevelScreen(
 
     syncStats();
     character.celebrate();
+    particles.triggerBurst("victory");
     screen.classList.add("level-complete-flash");
     stopKeyHandler();
 
