@@ -39,10 +39,10 @@ to the home row.
 - Level 2 introduces the home-row anchors `f` and `j`.
 - Later levels teach the alphabet in two-letter pairs.
 - `f` and `j` remain the visual anchors for all teaching content.
-- Learn levels use only `f`, `j`, and that level's active pair. Earlier pairs
-  do not carry into learn-level word lists or the finger guide.
-- Arc finale levels are cumulative review levels, but only within their own
-  arc. They use the arc's learned letters plus `f` and `j`.
+- Learn levels use only `f`, `j`, and that level's active pair. Earlier pairs do
+  not carry into learn-level word lists or the finger guide.
+- Arc finale levels are cumulative review levels, but only within their own arc.
+  They use the arc's learned letters plus `f` and `j`.
 - Level 20 is the only full-alphabet cumulative review.
 
 The important rule is that learn levels behave like narrow drills, while finale
@@ -167,8 +167,8 @@ Additionally, level 2 also shows "Thumbs press Space between words" as a
 one-time supplement — this is the only level where the space bar is first
 relevant.
 
-The tip should be visually prominent on the screen, not buried in a strip.
-Think of it as the headline of the pre-level screen, not a footnote.
+The tip should be visually prominent on the screen, not buried in a strip. Think
+of it as the headline of the pre-level screen, not a footnote.
 
 ### Required visual aid
 
@@ -228,9 +228,9 @@ Each entry records:
 There is no limit on the number of entries. If the player takes the speed test
 multiple times on the same day, all runs are stored — not just the best.
 
-The level complete screen for level 1 shows the current result alongside a
-brief history so the player can see their trajectory. See
-`level-complete.md` for how this is displayed.
+The level complete screen for level 1 shows the current result alongside a brief
+history so the player can see their trajectory. See `level-complete.md` for how
+this is displayed.
 
 ## Word-List Contract
 
@@ -241,12 +241,13 @@ Its responsibilities are:
 - preserve the letter order defined above
 - keep each level's text compatible with that level's teaching role
 - keep learn levels narrow: `f j` plus the current pair
-- make finale levels read like arc-local cumulative review, not isolated pair drills
+- make finale levels read like arc-local cumulative review, not isolated pair
+  drills
 - avoid accidental inclusion of letters that have not been unlocked yet
 
-For focus drills, the text should use only `f`, `j`, and the active pair.
-For finale levels, the text should mix all letters taught in that arc so the
-player proves retention across that review set.
+For focus drills, the text should use only `f`, `j`, and the active pair. For
+finale levels, the text should mix all letters taught in that arc so the player
+proves retention across that review set.
 
 ## Finale Feedback Rule
 
@@ -263,12 +264,14 @@ Example:
 ### Tracking requirement
 
 - Count incorrect presses per expected character during the level.
+- Measure average time to tap each character (ignore the first key)
 - Ignore spaces.
 - Use the expected character, not the mistyped key, when recording the error.
 
 ### Retry recommendation mapping
 
-Recommend the first level whose primary emphasis contains that character.
+Mention which key was mistaken the most, mention which key took longest to hit.
+For each of those, mention the level that teaches that key.
 
 If multiple characters tie for worst performance, prefer the latest character in
 the curriculum order
