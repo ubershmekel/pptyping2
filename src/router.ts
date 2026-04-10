@@ -105,8 +105,8 @@ export class Router {
    */
   go(route: Exclude<Route, { screen: "not-found" }>): void {
     const path = routeToPath(route);
-    window.history.pushState({ screen: route.screen }, "", path);
     this.handler(route, false);
+    window.history.pushState({ screen: route.screen }, "", path);
   }
 
   /**

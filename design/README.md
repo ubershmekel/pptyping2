@@ -37,6 +37,8 @@ implementation.
   contracts.
 - [`routing.md`](./routing.md) - URL structure, navigation rules, and screen
   transition expectations.
+- [`vue-migration.md`](./vue-migration.md) - Planned migration from the
+  hand-rolled screen system to Vue and Vue Router.
 - [`persistence.md`](./persistence.md) - Save format, local persistence, and
   import/export behavior.
 - [`game-content.md`](./game-content.md) - How levels, stories, and other static

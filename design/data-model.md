@@ -190,5 +190,5 @@ a synchronous, caller-driven cleanup.
   screen replacement
 - `scripts/check-screen-lifecycle.ts` - rejects raw listener/timer APIs inside
   `src/screens/` so the `ScreenMount` contract stays enforced
-- `test/screenMount.test.ts` - covers the `ScreenMount` cleanup contract and
+- `tests/screenMount.test.ts` - covers the `ScreenMount` cleanup contract and
   disposer semantics in TypeScript

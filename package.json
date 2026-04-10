@@ -8,11 +8,13 @@
     "build": "vite build",
     "preview": "vite preview",
     "check:screen-lifecycle": "tsx scripts/check-screen-lifecycle.ts",
-    "test": "node --import tsx --test test/all.test.ts",
+    "test": "node --import tsx --test tests/all.test.ts",
+    "test:playwright": "playwright test",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit && npm run check:screen-lifecycle",
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@types/node": "^25.5.2",
     "prettier": "^3.8.1",
     "tsx": "^4.21.0",

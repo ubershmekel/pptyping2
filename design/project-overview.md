@@ -28,6 +28,7 @@ seek it out and address it.
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | **Vite + TypeScript**      | Fast dev loop, strict types across the entire data model, no framework overhead                                         |
 | **Node test runner + tsx** | TypeScript-native repo checks and tests without a heavyweight test framework                                            |
+| **Playwright**             | Browser smoke tests that exercise representative routes and redirect guards end to end                                  |
 | **Vanilla DOM**            | No React/Vue - screens are simple enough that direct DOM manipulation is cleaner and more performant for a game         |
 | **tsparticles/slim**       | Ambient environmental particles and keystroke/victory feedback effects                                                  |
 | **Howler.js**              | Cross-browser audio with ambient loop support and one-shot sound effects                                                |
@@ -60,4 +61,7 @@ These are non-negotiable constraints that every screen must satisfy:
 - `vite.config.ts` - build configuration
 - `src/types.ts` - canonical TypeScript types for the entire game (see
   `data-model.md`)
-- `test/` - TypeScript tests run through Node's built-in test runner via `tsx`
+- `tests/` - TypeScript tests and browser smoke tests
+- `tests/playwright/` - browser smoke tests for representative route entry and
+  guard behavior
+  - `playwright.config.ts` - Playwright browser-test configuration
