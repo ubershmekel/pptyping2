@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PPTyping Redirect</title>
+  </head>
+  <body>
+    <script>
+      (function () {
+        var base = "%BASE_URL%";
+        var normalizedBase = base.endsWith("/") ? base : base + "/";
+        var baseRoot = normalizedBase.slice(0, -1);
+        var pathname = window.location.pathname;
+        var route = pathname;
+
+        if (normalizedBase !== "/") {
+          if (pathname === baseRoot) {
+            route = "/";
+          } else if (pathname.startsWith(normalizedBase)) {
+            route = "/" + pathname.slice(normalizedBase.length);
+          }
+        }
+
+        if (route === "/404.html") {
+          route = "/";
+        }
+
+        var search = window.location.search;
+        var passthrough = search ? "&" + search.slice(1) : "";
+        var target =
+          normalizedBase +
+          "?p=" +
+          encodeURIComponent(route) +
+          passthrough +
+          window.location.hash;
+
+        window.location.replace(target);
+      })();
+    </script>
+  </body>
+</html>

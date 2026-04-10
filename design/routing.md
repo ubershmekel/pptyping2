@@ -12,6 +12,10 @@ directly. The router is a thin layer that maps URL paths to screen names,
 renders the correct screen, and handles the edge case of navigating to a locked
 level.
 
+The game must also work when deployed under a subpath such as GitHub Pages at
+`/pptyping2/`. Route parsing and URL generation therefore strip/add the deploy
+base path instead of assuming the site is mounted at `/`.
+
 ## URL Structure
 
 | Path                                | Screen                        |
@@ -20,7 +24,7 @@ level.
 | `/team-select`                      | Team Select (first-time only) |
 | `/level-select`                     | Level Select                  |
 | `/level/1` through `/level/19`      | Level Screen (typing UI)      |
-| `/cutscene/1` through `/cutscene/6` | Cutscene Screen               |
+| `/cutscene/0` through `/cutscene/5` | Cutscene Screen               |
 | `/settings`                         | Settings Screen               |
 | `/debug-particles`                  | Particle Debugger (dev only)  |
 
@@ -36,6 +40,10 @@ level.
 - **Back button**: The `popstate` event re-renders the screen corresponding to
   the browser's current URL. All screen renders are idempotent - calling
   "render level 3" twice is safe.
+- **GitHub Pages deep links**: A root `404.html` redirects unknown requests back
+  to the app entry with the originally requested in-app route encoded in the
+  query string; startup restores the route from that redirect parameter with
+  `replaceState` before the app reads `window.location.pathname`.
 
 ## Screen Manager
 
@@ -51,7 +59,9 @@ DOM container and the active `ScreenMount`. Navigating to a new screen:
 
 ## Key Files
 
-- `src/router.ts` - parses `window.location.pathname`, maps to a
-  `ScreenPosition`, enforces guards, and dispatches the route to `app.ts`
+- `src/router.ts` - parses the base-aware browser pathname, maps it to a route,
+  and generates canonical URLs for navigation
 - `src/app.ts` - owns the root `#app` DOM element, tears down the current
-  `ScreenMount`, mounts the next one, and coordinates URL-driven navigation
+  `ScreenMount`, mounts the next one, and coordinates route guards
+- `404.html` - GitHub Pages SPA fallback that redirects deep links back to the
+  app entry point

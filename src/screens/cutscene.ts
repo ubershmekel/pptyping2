@@ -4,6 +4,7 @@ import { createScreenMount } from "../screenMount";
 import { CUTSCENE_STORIES } from "../data/stories";
 import { ParticleManager } from "../particles/particleManager";
 import type { BurstType } from "../particles/presets";
+import { withBasePath } from "../basePath";
 
 // Cutscene index -> arc environment class (cutscene 0 intro = grove, 5 = summit)
 const CUTSCENE_ENV = [
@@ -151,7 +152,7 @@ function renderEmphasis(text: string): string {
 
 function generateCutsceneArt(team: Team, index: number): string {
   const prefix = team === "pokemon" ? "pok" : "mlp";
-  const src = `/cutscenes/${prefix}${index}.jpg`;
+  const src = withBasePath(`/cutscenes/${prefix}${index}.jpg`);
   const caption = getArtCaption(team, index);
   return `<img class="cs-art-img" src="${src}" alt="${caption}">`;
 }

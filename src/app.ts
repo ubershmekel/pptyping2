@@ -33,7 +33,7 @@ import { renderLevelComplete } from "./screens/levelComplete";
 import { renderSettings } from "./screens/settings";
 import { renderDebugParticles } from "./screens/debugParticles";
 import { createScreenMount } from "./screenMount";
-import { Router } from "./router";
+import { Router, routeToPath } from "./router";
 import type { Route } from "./router";
 
 type LetterIntroScreen = Extract<AppScreen, { id: "letter-intro" }>;
@@ -82,7 +82,7 @@ export class App {
   private handleRoute = (route: Route, fromPopState: boolean): void => {
     // ── Guard: unknown URL → main menu ───────────────────────────────────────
     if (route.screen === "not-found") {
-      if (!fromPopState) this.router.replace({ screen: "main-menu" });
+      this.router.replace({ screen: "main-menu" });
       this.showScreen({ id: "main-menu" });
       return;
     }
@@ -91,11 +91,7 @@ export class App {
     const needsTeam = !this.profile.teamSelected;
     const gameplayScreens = new Set(["level", "cutscene", "level-select"]);
     if (needsTeam && gameplayScreens.has(route.screen)) {
-      if (!fromPopState) {
-        this.router.replace({ screen: "team-select" });
-      } else {
-        window.history.replaceState({}, "", "/team-select");
-      }
+      this.router.replace({ screen: "team-select" });
       this.showScreen({ id: "team-select" });
       return;
     }
@@ -104,11 +100,7 @@ export class App {
     if (route.screen === "level") {
       if (route.number > activeProgress(this.profile).highestUnlockedLevel) {
         const redirect = { screen: "level-select" as const };
-        if (!fromPopState) {
-          this.router.replace(redirect);
-        } else {
-          window.history.replaceState({}, "", "/level-select");
-        }
+        this.router.replace(redirect);
         this.showScreen({ id: "level-select", attempted: route.number });
         return;
       }
@@ -171,7 +163,11 @@ export class App {
         break;
       case "level-complete":
         // level-complete has no URL; keep the URL at /level/<N> and render locally.
-        this.router.replace({ screen: "level", number: screen.number });
+        window.history.replaceState(
+          { screen: "level" },
+          "",
+          routeToPath({ screen: "level", number: screen.number }),
+        );
         this.showScreen(screen);
         break;
     }

@@ -16,12 +16,13 @@ export type Route =
   | { screen: "not-found" };
 
 import { MAX_LEVEL } from "./data/levels";
+import { stripBasePath, withBasePath } from "./basePath";
 
 // ─── URL ↔ Route mapping ─────────────────────────────────────────────────────
 
 /** Parse a pathname string into a Route. */
-export function parseRoute(pathname: string): Route {
-  const path = pathname || "/";
+export function parseRoute(pathname: string, basePath?: string): Route {
+  const path = stripBasePath(pathname || "/", basePath);
 
   if (path === "/") return { screen: "main-menu" };
   if (path === "/team-select") return { screen: "team-select" };
@@ -47,23 +48,34 @@ export function parseRoute(pathname: string): Route {
 /** Build the canonical path string for a navigable route. */
 export function routeToPath(
   route: Exclude<Route, { screen: "not-found" }>,
+  basePath?: string,
 ): string {
+  let path = "/";
   switch (route.screen) {
     case "main-menu":
-      return "/";
+      path = "/";
+      break;
     case "team-select":
-      return "/team-select";
+      path = "/team-select";
+      break;
     case "level-select":
-      return "/level-select";
+      path = "/level-select";
+      break;
     case "settings":
-      return "/settings";
+      path = "/settings";
+      break;
     case "level":
-      return `/level/${route.number}`;
+      path = `/level/${route.number}`;
+      break;
     case "cutscene":
-      return `/cutscene/${route.index}`;
+      path = `/cutscene/${route.index}`;
+      break;
     case "debug-particles":
-      return "/debug-particles";
+      path = "/debug-particles";
+      break;
   }
+
+  return withBasePath(path, basePath);
 }
 
 // ─── Router class ────────────────────────────────────────────────────────────

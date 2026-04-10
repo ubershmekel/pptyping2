@@ -86,7 +86,9 @@
   font-weight: 800;
   letter-spacing: 0.04em;
   cursor: pointer;
-  transition: transform 0.1s, filter 0.1s;
+  transition:
+    transform 0.1s,
+    filter 0.1s;
 }
 
 .dp-fire-btn:hover {
