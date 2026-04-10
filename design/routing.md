@@ -22,6 +22,7 @@ level.
 | `/level/1` through `/level/19`      | Level Screen (typing UI)      |
 | `/cutscene/1` through `/cutscene/6` | Cutscene Screen               |
 | `/settings`                         | Settings Screen               |
+| `/debug-particles`                  | Particle Debugger (dev only)  |
 
 ## Navigation Rules
 
