@@ -23,7 +23,7 @@ const DEFAULT_TEAM_PROGRESS: TeamProgress = {
 export const DEFAULT_PROFILE: PlayerProfile = {
   activeTeam: "pokemon",
   teamSelected: false,
-  difficulty: "easy",
+  difficulty: "medium",
   teams: {
     pokemon: {
       levelRecords: { 1: { bestWpm: 0, bestAccuracy: 0, completed: false } },
@@ -58,7 +58,7 @@ export function loadProfile(): PlayerProfile {
       const migrated: PlayerProfile = {
         activeTeam: oldTeam,
         teamSelected: parsed.teamSelected ?? false,
-        difficulty: parsed.difficulty ?? "easy",
+        difficulty: parsed.difficulty ?? "medium",
         teams: {
           [oldTeam]: {
             levelRecords: parsed.levelRecords ?? {

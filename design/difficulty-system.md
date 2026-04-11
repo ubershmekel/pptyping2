@@ -23,6 +23,10 @@ These are approximate. Thresholds may be tuned during playtesting, but the
 intent is: Easy is genuinely forgiving, Medium requires real effort, Hard
 requires practiced typing.
 
+## Default
+
+New players start on **Medium**. This can be changed at any time in Settings.
+
 ## Pass/Fail Logic
 
 A level attempt **passes** if BOTH conditions are met:
