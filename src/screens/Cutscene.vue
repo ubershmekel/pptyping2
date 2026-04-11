@@ -1,18 +1,31 @@
 <template>
-  <div ref="screenEl" :class="`screen cutscene-screen team-${team} ${envClass}`">
+  <div
+    ref="screenEl"
+    :class="`screen cutscene-screen team-${team} ${envClass}`"
+  >
     <div class="cs-content">
       <div class="cs-story" aria-live="polite">
         <div class="cs-chapter">Chapter {{ cutsceneIndex + 1 }}</div>
         <h1 class="cs-title">{{ story.title }}</h1>
         <div class="cs-paragraphs">
-          <p v-for="(p, i) in story.paragraphs" :key="i" class="cs-p" :style="`animation-delay:${0.4 + i * 0.35}s`"
-            v-html="renderEmphasis(p)"></p>
+          <p
+            v-for="(p, i) in story.paragraphs"
+            :key="i"
+            class="cs-p"
+            :style="`animation-delay:${0.4 + i * 0.35}s`"
+            v-html="renderEmphasis(p)"
+          ></p>
         </div>
       </div>
 
       <div class="cs-art-container">
-        <div :class="`cs-art ${story.artClass}`" ref="artEl" aria-hidden="true" title="Click to replay particle effects"
-          @click.stop="replayArtBursts">
+        <div
+          :class="`cs-art ${story.artClass}`"
+          ref="artEl"
+          aria-hidden="true"
+          title="Click to replay particle effects"
+          @click.stop="replayArtBursts"
+        >
           <div class="cs-art-reveal"></div>
           <img class="cs-art-img" :src="artSrc" :alt="artCaption" />
         </div>
