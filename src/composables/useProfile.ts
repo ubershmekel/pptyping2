@@ -6,6 +6,7 @@ import {
   selectTeam,
   setDifficulty,
   applyLevelResult,
+  logTrainingActivity,
 } from "../state/gameState";
 import type { LevelStats } from "../types";
 
@@ -30,5 +31,19 @@ export function useProfile() {
     update(applyLevelResult(profile.value, levelNumber, stats));
   }
 
-  return { profile, update, onSelectTeam, onSetDifficulty, onLevelResult };
+  function onTrainingActivity(
+    type: "training-speedcheck" | "training-drill",
+    stats: LevelStats,
+  ): void {
+    update(logTrainingActivity(profile.value, type, stats));
+  }
+
+  return {
+    profile,
+    update,
+    onSelectTeam,
+    onSetDifficulty,
+    onLevelResult,
+    onTrainingActivity,
+  };
 }

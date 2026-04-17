@@ -38,10 +38,7 @@
           Start Game
         </button>
       </template>
-      <button
-        class="mm-btn mm-btn-ghost"
-        @click="router.push('/training')"
-      >
+      <button class="mm-btn mm-btn-ghost" @click="router.push('/training')">
         Training Mode
       </button>
       <button

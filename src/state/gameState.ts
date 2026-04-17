@@ -202,6 +202,28 @@ export function applyLevelResult(
   return next;
 }
 
+/** Log a training-mode activity (speed check or drill) without affecting level progress. */
+export function logTrainingActivity(
+  profile: PlayerProfile,
+  type: "training-speedcheck" | "training-drill",
+  stats: LevelStats,
+): PlayerProfile {
+  const logEntry: ActivityLogEntry = {
+    date: new Date().toISOString().slice(0, 10),
+    levelNumber: 0,
+    wpm: stats.wpm,
+    accuracy: stats.accuracy,
+    passed: true,
+    type,
+  };
+  const next: PlayerProfile = {
+    ...profile,
+    activityLog: [...profile.activityLog, logEntry],
+  };
+  saveProfile(next);
+  return next;
+}
+
 /** Switch active team. Progress for both teams is always preserved. */
 export function selectTeam(profile: PlayerProfile, team: Team): PlayerProfile {
   const next: PlayerProfile = {

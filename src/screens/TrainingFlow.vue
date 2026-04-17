@@ -11,8 +11,17 @@
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useProfile } from "../composables/useProfile";
-import { generateDrillText } from "../data/wordLists";
+import { generateDrillText, getLevelText } from "../data/wordLists";
 import type { LevelStats } from "../types";
+
+function shuffleWords(text: string): string {
+  const words = text.split(" ");
+  for (let i = words.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [words[i], words[j]] = [words[j], words[i]];
+  }
+  return words.join(" ");
+}
 
 import LevelScreen from "./LevelScreen.vue";
 import DrillIntro from "./DrillIntro.vue";
@@ -21,7 +30,7 @@ import DrillComplete from "./DrillComplete.vue";
 type SubScreen = "speedcheck" | "drill-intro" | "drill" | "drill-complete";
 
 const router = useRouter();
-const { profile } = useProfile();
+const { profile, onTrainingActivity } = useProfile();
 
 const subScreen = ref<SubScreen>("speedcheck");
 const speedCheckStats = ref<LevelStats | null>(null);
@@ -35,6 +44,7 @@ const componentKey = computed(() => `${subScreen.value}-${runIndex.value}`);
 
 function onSpeedCheckComplete(stats: LevelStats): void {
   speedCheckStats.value = stats;
+  onTrainingActivity("training-speedcheck", stats);
   subScreen.value = "drill-intro";
 }
 
@@ -46,6 +56,7 @@ function onDrillStart(letters: string[]): void {
 
 function onDrillComplete(stats: LevelStats): void {
   drillStats.value = stats;
+  onTrainingActivity("training-drill", stats);
   subScreen.value = "drill-complete";
 }
 
@@ -62,6 +73,11 @@ function retryDrill(): void {
 const SPEED_CHECK_LEVEL = 21;
 const DRILL_LETTERS = computed(() => drillLetters.value.join("") + " ");
 const FOCUS_LETTERS = computed(() => drillLetters.value.slice(4).join(""));
+
+const speedCheckText = computed(() => {
+  runIndex.value; // re-shuffle on each new run
+  return shuffleWords(getLevelText(SPEED_CHECK_LEVEL));
+});
 
 const currentComponent = computed(() => {
   switch (subScreen.value) {
@@ -81,7 +97,13 @@ const currentProps = computed(() => {
   const difficulty = profile.value.difficulty;
   switch (subScreen.value) {
     case "speedcheck":
-      return { levelNumber: SPEED_CHECK_LEVEL, team, difficulty, noThreshold: true };
+      return {
+        levelNumber: SPEED_CHECK_LEVEL,
+        team,
+        difficulty,
+        noThreshold: true,
+        text: speedCheckText.value,
+      };
     case "drill-intro":
       return { stats: speedCheckStats.value!, team };
     case "drill":
@@ -113,6 +135,7 @@ const currentEvents = computed(() => {
       return {
         drill: onDrillStart,
         retry: restartSpeedCheck,
+        mainMenu: () => router.push("/"),
       };
     case "drill":
       return {

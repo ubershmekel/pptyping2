@@ -135,8 +135,7 @@ onMounted(() => {
     const svg = wrap?.querySelector("svg");
     if (!svg) return null;
     const entry = HAND_FINGER_IDS.find(
-      ({ right, left }) =>
-        (side === "right" ? right : left) === activeFinger,
+      ({ right, left }) => (side === "right" ? right : left) === activeFinger,
     );
     return entry
       ? (svg.querySelector(`#${entry.svgId}`) as SVGElement | null)

@@ -4,13 +4,20 @@
       <div class="di-header">
         <h2 class="di-title">Speed Check Complete</h2>
         <div class="di-summary">
-          <span><strong>{{ stats.wpm }}</strong> WPM</span>
-          <span><strong>{{ stats.accuracy }}</strong>% accuracy</span>
+          <span
+            ><strong>{{ stats.wpm }}</strong> WPM</span
+          >
+          <span
+            ><strong>{{ stats.accuracy }}</strong
+            >% accuracy</span
+          >
         </div>
       </div>
 
       <div>
-        <div class="di-section-label">Your keys by reaction time (slowest first)</div>
+        <div class="di-section-label">
+          Your keys by reaction time (slowest first)
+        </div>
         <div class="di-table-wrap">
           <table class="di-table">
             <thead>
@@ -40,8 +47,12 @@
         <span
           v-for="ch in drillLetters"
           :key="ch"
-          :class="['di-key-chip', focusLetters.has(ch) ? 'di-key-chip-focus' : '']"
-        >{{ ch.toUpperCase() }}</span>
+          :class="[
+            'di-key-chip',
+            focusLetters.has(ch) ? 'di-key-chip-focus' : '',
+          ]"
+          >{{ ch.toUpperCase() }}</span
+        >
       </div>
 
       <div class="di-actions">
@@ -50,6 +61,9 @@
         </button>
         <button class="di-btn-secondary" @click="emit('retry')">
           Retry Speed Check
+        </button>
+        <button class="di-btn-secondary" @click="emit('mainMenu')">
+          Main Menu
         </button>
       </div>
     </div>
@@ -69,6 +83,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   drill: [letters: string[]];
   retry: [];
+  mainMenu: [];
 }>();
 
 const ALPHABET = "abcdefghijklmnopqrstuvwxyz";

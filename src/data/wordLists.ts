@@ -64,7 +64,7 @@ export const LEVEL_TEXTS: Record<number, string> = {
   20: "fjvx qzfj vxqj zjvf fxqz jvqz xzfj qjvx fjvx qzfj vxqj zjvf fxqz jvqz xzfj qjvx",
 
   // Level 21: final review — all letters
-  21: "how vexingly daft jumping zebras pack my box with five dozen liquor jugs the quick brown fox jumps over the lazy dog",
+  21: "happy wizards and jumping zebras quickly mix bright fox cubs over woven jade quilts while tiny puppies frolic by charming green kiosks as jazzy velvet xylophones quiver softly",
 };
 
 // Helper: build a timed practice text for a level

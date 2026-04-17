@@ -133,7 +133,13 @@
       </div>
     </div>
 
-    <div class="ls-training-card" @click="router.push('/training')" role="button" tabindex="0" @keydown.enter.space.prevent="router.push('/training')">
+    <div
+      class="ls-training-card"
+      @click="router.push('/training')"
+      role="button"
+      tabindex="0"
+      @keydown.enter.space.prevent="router.push('/training')"
+    >
       <div class="ls-training-icon">🥋</div>
       <div class="ls-training-text">
         <div class="ls-training-name">Training Mode</div>

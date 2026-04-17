@@ -89,7 +89,15 @@
                   :class="entry.passed ? 'st-log-pass' : 'st-log-fail'"
                 >
                   <td>{{ entry.date }}</td>
-                  <td>Level {{ entry.levelNumber }}</td>
+                  <td>
+                    {{
+                      entry.type === "training-speedcheck"
+                        ? "Training: Speed Check"
+                        : entry.type === "training-drill"
+                          ? "Training: Drill"
+                          : `Level ${entry.levelNumber}`
+                    }}
+                  </td>
                   <td>{{ entry.wpm }}</td>
                   <td>{{ entry.accuracy }}%</td>
                   <td class="st-log-result">{{ entry.passed ? "✓" : "✗" }}</td>
