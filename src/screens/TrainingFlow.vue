@@ -34,7 +34,7 @@ const { profile, onTrainingActivity } = useProfile();
 
 const subScreen = ref<SubScreen>("speedcheck");
 const speedCheckStats = ref<LevelStats | null>(null);
-const drillLetters = ref<string[]>(["f", "j", "a", "l", "g", "m"]);
+const drillLetters = ref<string[]>([]);
 const drillText = ref<string>("");
 const drillStats = ref<LevelStats | null>(null);
 

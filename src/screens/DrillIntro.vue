@@ -43,7 +43,7 @@
       </div>
 
       <div class="di-drill-announce">
-        <strong>Today's drill:</strong>
+        <strong>Drill — your slowest keys:</strong>
         <span
           v-for="ch in drillLetters"
           :key="ch"
@@ -99,19 +99,19 @@ const sortedKeys = computed(() => {
     .sort((a, b) => b.avgMs - a.avgMs);
 });
 
-const ANCHORS = ["f", "j", "a", "l"];
+const ANCHORS = ["f", "j"];
 const ANCHOR_SET = new Set(ANCHORS);
 
-// fjal always included; add the 2 slowest non-anchor letters to reach 6.
+// fj always included; fill remaining 4 slots with the slowest non-anchor letters.
 const extraLetters = computed(() =>
   sortedKeys.value
     .filter((e) => !ANCHOR_SET.has(e.char))
-    .slice(0, 2)
+    .slice(0, 4)
     .map((e) => e.char),
 );
 
 const drillLetters = computed(() => [...ANCHORS, ...extraLetters.value]);
 
-// The 2 extra (non-anchor) letters get visual emphasis.
+// The slow non-anchor letters get visual emphasis.
 const focusLetters = computed(() => new Set(extraLetters.value));
 </script>
