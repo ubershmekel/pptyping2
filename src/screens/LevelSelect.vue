@@ -99,7 +99,7 @@
                 v-for="letter in newLettersFor(lvl)"
                 :key="letter"
                 class="ls-chip"
-                >{{ letter === ' ' ? 'SPACE' : letter.toUpperCase() }}</span
+                >{{ letter === " " ? "SPACE" : letter.toUpperCase() }}</span
               >
             </div>
           </div>

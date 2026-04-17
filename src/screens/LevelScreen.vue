@@ -1,5 +1,8 @@
 <template>
-  <div ref="screenEl" :class="`screen level-screen team-${team} ${envClass}${def.isFinale ? ' level-finale' : ''}`">
+  <div
+    ref="screenEl"
+    :class="`screen level-screen team-${team} ${envClass}${def.isFinale ? ' level-finale' : ''}`"
+  >
     <div class="level-topbar">
       <div class="level-stats" aria-live="polite">
         <span class="stat-chip">

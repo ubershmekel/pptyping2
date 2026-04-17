@@ -76,8 +76,9 @@ export function getLevelText(levelNumber: number): string {
 // Learn levels stay narrow: f/j anchors plus the current pair.
 // Finale levels expand to the cumulative set for that arc.
 // Space is included from level 4 onwards (taught at level 4).
+export const ALL_LETTERS = "abcdefghijklmnopqrstuvwxyz ";
 export const LEVEL_LETTERS: Record<number, string> = {
-  1: "abcdefghijklmnopqrstuvwxyz", // speed test: full alphabet (no space needed)
+  1: ALL_LETTERS, // speed test: full alphabet
   2: "fj", // no space
   3: "fjet", // no space
   4: "fj ", // space introduced
@@ -97,5 +98,5 @@ export const LEVEL_LETTERS: Record<number, string> = {
   18: "fjvx ",
   19: "fjqz ",
   20: "fjvxqz ", // arc 5 finale
-  21: "abcdefghijklmnopqrstuvwxyz ", // final review: full alphabet + space
+  21: ALL_LETTERS, // final review: full alphabet
 };

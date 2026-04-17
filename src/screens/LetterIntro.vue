@@ -10,12 +10,19 @@
       </div>
       <div class="li-badge">
         Level {{ levelNumber }} &mdash;
-        <template v-if="letter === ' '">learn which finger presses <strong>Space</strong></template>
-        <template v-else>learn which finger types the letter <strong>{{ letter.toUpperCase() }}</strong></template>
+        <template v-if="letter === ' '"
+          >learn which finger presses <strong>Space</strong></template
+        >
+        <template v-else
+          >learn which finger types the letter
+          <strong>{{ letter.toUpperCase() }}</strong></template
+        >
       </div>
 
       <div class="li-letter-area">
-        <div class="li-letter">{{ letter === ' ' ? '[SPACE]' : letter.toUpperCase() }}</div>
+        <div class="li-letter">
+          {{ letter === " " ? "[SPACE]" : letter.toUpperCase() }}
+        </div>
       </div>
 
       <div class="li-finger-label">{{ fingerLabel }}</div>
@@ -42,8 +49,13 @@
       </div>
 
       <div class="li-prompt" ref="promptEl">
-        <template v-if="letter === ' '">Press <kbd>Space</kbd> three times to continue</template>
-        <template v-else>Press <kbd>{{ letter.toUpperCase() }}</kbd> three times to continue</template>
+        <template v-if="letter === ' '"
+          >Press <kbd>Space</kbd> three times to continue</template
+        >
+        <template v-else
+          >Press <kbd>{{ letter.toUpperCase() }}</kbd> three times to
+          continue</template
+        >
       </div>
     </div>
   </div>
@@ -90,7 +102,11 @@ const activeHandWrap = computed(() =>
   side.value === "left" ? leftHandWrap.value : rightHandWrap.value,
 );
 const ghostHandWrap = computed(() =>
-  isThumb.value ? null : side.value === "left" ? rightHandWrap.value : leftHandWrap.value,
+  isThumb.value
+    ? null
+    : side.value === "left"
+      ? rightHandWrap.value
+      : leftHandWrap.value,
 );
 
 const pressCount = ref(0);

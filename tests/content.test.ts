@@ -2,12 +2,10 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { LEVELS } from "../src/data/levels";
-import { LEVEL_LETTERS, LEVEL_TEXTS } from "../src/data/wordLists";
+import { ALL_LETTERS, LEVEL_LETTERS, LEVEL_TEXTS } from "../src/data/wordLists";
 
-// All letters with a defined touch-typing finger assignment (see design/teaching-touch-typing.md)
-const FINGER_ASSIGNED = new Set(
-  "q a z w s x e d c r f v t g b y h n u j m i k o l p".split(" "),
-);
+// All letters with a defined touch-typing finger assignment: full alphabet + space (level 21 covers all).
+const FINGER_ASSIGNED = new Set(ALL_LETTERS);
 
 // Must match the maxLength default in buildLines() in src/screens/levelScreen.ts
 const MAX_LINE_CHARS = 32;
@@ -44,6 +42,8 @@ test("no level word contains letters outside availableLetters", () => {
 
 test("no word exceeds 15 characters", () => {
   for (const level of LEVELS) {
+    // Levels before spacebar is taught have no spaces by design — skip word-length check
+    if (!LEVEL_LETTERS[level.number]?.includes(" ")) continue;
     for (const word of levelWords(level.number)) {
       assert.ok(
         word.length <= MAX_WORD_LEN,
@@ -76,6 +76,8 @@ test("no generated line exceeds MAX_LINE_CHARS", () => {
 
 test("every level has at least 5 distinct words", () => {
   for (const level of LEVELS) {
+    // Levels before spacebar is taught have no spaces by design — skip distinct-words check
+    if (!LEVEL_LETTERS[level.number]?.includes(" ")) continue;
     const distinct = new Set(levelWords(level.number));
     assert.ok(
       distinct.size >= 5,
