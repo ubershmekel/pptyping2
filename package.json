@@ -8,9 +8,10 @@
     "build": "vite build && tsx scripts/generate-static-routes.ts",
     "preview": "vite preview",
     "check:screen-lifecycle": "tsx scripts/check-screen-lifecycle.ts",
+    "test:format": "prettier --check .",
     "test:unit": "node --import tsx --test tests/unit.tests.ts",
     "test:playwright": "playwright test",
-    "test:all": "npm run typecheck && npm run test:unit && npm run test:playwright",
+    "test:all": "npm run test:format && npm run typecheck && npm run test:unit && npm run test:playwright",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit && npm run check:screen-lifecycle",
     "format": "prettier --write ."
   },
