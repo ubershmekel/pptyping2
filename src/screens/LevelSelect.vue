@@ -8,7 +8,7 @@
       <h2 class="ls-title">Choose Level</h2>
       <div class="ls-progress-pill">
         <span class="ls-prog-count">{{ totalCompleted }}</span>
-        <span class="ls-prog-denom"> / 20</span>
+        <span class="ls-prog-denom"> / 21</span>
       </div>
     </div>
 
@@ -54,6 +54,7 @@
             :class="[
               'ls-level-card',
               levelStateClass(lvl.number),
+              lvl.isFinale ? 'ls-card-finale' : '',
               lvl.number === attempted ? 'ls-attempted' : '',
             ]"
             :data-level="lvl.number"
@@ -68,6 +69,7 @@
               <span v-if="lvl.isSpeedTest" class="ls-speed-badge"
                 >⚡ Speed check</span
               >
+              <span v-if="lvl.isFinale" class="ls-boss-badge">🐉 Boss</span>
               <span v-if="isCompleted(lvl.number)" class="ls-status ls-done"
                 >✓</span
               >
@@ -97,7 +99,7 @@
                 v-for="letter in newLettersFor(lvl)"
                 :key="letter"
                 class="ls-chip"
-                >{{ letter.toUpperCase() }}</span
+                >{{ letter === ' ' ? 'SPACE' : letter.toUpperCase() }}</span
               >
             </div>
           </div>
@@ -155,11 +157,11 @@ const ARC_ICONS: Record<number, string> = {
 };
 const ARC_OUTRO_CS: Record<number, number> = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 };
 const CS_TRIGGER_LEVEL: Record<number, number> = {
-  1: 4,
-  2: 8,
-  3: 12,
-  4: 16,
-  5: 20,
+  1: 5,
+  2: 9,
+  3: 13,
+  4: 17,
+  5: 21,
 };
 
 const router = useRouter();
@@ -284,6 +286,7 @@ onMounted(() => {
       el.addEventListener(
         "animationend",
         () => {
+          el.classList.remove("ls-entering");
           el.style.opacity = "1";
           el.style.transform = "translateY(0)";
         },

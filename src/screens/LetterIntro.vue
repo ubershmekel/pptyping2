@@ -9,12 +9,13 @@
         <button class="li-back-btn" @click="emit('back')">Back</button>
       </div>
       <div class="li-badge">
-        Level {{ levelNumber }} &mdash; learn which finger types the letter
-        <strong>{{ letter.toUpperCase() }}</strong>
+        Level {{ levelNumber }} &mdash;
+        <template v-if="letter === ' '">learn which finger presses <strong>Space</strong></template>
+        <template v-else>learn which finger types the letter <strong>{{ letter.toUpperCase() }}</strong></template>
       </div>
 
       <div class="li-letter-area">
-        <div class="li-letter">{{ letter.toUpperCase() }}</div>
+        <div class="li-letter">{{ letter === ' ' ? '[SPACE]' : letter.toUpperCase() }}</div>
       </div>
 
       <div class="li-finger-label">{{ fingerLabel }}</div>
@@ -22,11 +23,11 @@
       <div class="li-hand-wrap">
         <div
           ref="leftHandWrap"
-          :class="`li-hand-svg li-hand-flip${side === 'right' ? ' li-hand-shadow' : ''}`"
+          :class="`li-hand-svg li-hand-flip${!isThumb && side === 'right' ? ' li-hand-shadow' : ''}`"
         ></div>
         <div
           ref="rightHandWrap"
-          :class="`li-hand-svg${side === 'left' ? ' li-hand-shadow' : ''}`"
+          :class="`li-hand-svg${!isThumb && side === 'left' ? ' li-hand-shadow' : ''}`"
         ></div>
       </div>
       <canvas ref="canvas" class="li-canvas"></canvas>
@@ -41,7 +42,8 @@
       </div>
 
       <div class="li-prompt" ref="promptEl">
-        Press <kbd>{{ letter.toUpperCase() }}</kbd> three times to continue
+        <template v-if="letter === ' '">Press <kbd>Space</kbd> three times to continue</template>
+        <template v-else>Press <kbd>{{ letter.toUpperCase() }}</kbd> three times to continue</template>
       </div>
     </div>
   </div>
@@ -80,6 +82,7 @@ const fingerColor = computed(
 const fingerLabel = computed(
   () => FINGER_LABELS[fingerName.value] ?? fingerName.value,
 );
+const isThumb = computed(() => fingerName.value === "thumb");
 const side = computed<"left" | "right">(() =>
   fingerName.value.startsWith("left") ? "left" : "right",
 );
@@ -87,7 +90,7 @@ const activeHandWrap = computed(() =>
   side.value === "left" ? leftHandWrap.value : rightHandWrap.value,
 );
 const ghostHandWrap = computed(() =>
-  side.value === "left" ? rightHandWrap.value : leftHandWrap.value,
+  isThumb.value ? null : side.value === "left" ? rightHandWrap.value : leftHandWrap.value,
 );
 
 const pressCount = ref(0);
@@ -216,10 +219,18 @@ function colorFocusedHand(
   }
   const thumb = svg.querySelector("#Thumb") as SVGElement | null;
   if (thumb) {
-    thumb.style.fill = "#7a7268";
-    thumb.style.opacity = "0.45";
-    thumb.style.filter = "";
-    thumb.classList.remove("li-finger-pulse", "li-finger-tap");
+    if (fingerName.value === "thumb") {
+      thumb.style.fill = fingerColor.value;
+      thumb.style.opacity = "1";
+      thumb.style.filter = `drop-shadow(0 0 14px ${fingerColor.value}) drop-shadow(0 0 7px ${fingerColor.value}90)`;
+      thumb.classList.add("li-finger-pulse");
+      thumb.classList.remove("li-finger-tap");
+    } else {
+      thumb.style.fill = "#7a7268";
+      thumb.style.opacity = "0.45";
+      thumb.style.filter = "";
+      thumb.classList.remove("li-finger-pulse", "li-finger-tap");
+    }
   }
   const palm = svg.querySelector("#Hand") as SVGElement | null;
   if (palm) {
@@ -243,6 +254,27 @@ function prepareGhostHand(container: HTMLElement): void {
 let tapTimer: ReturnType<typeof setTimeout> | null = null;
 
 function flashFocusedFinger(): void {
+  if (isThumb.value) {
+    // Flash both thumbs
+    for (const wrap of [leftHandWrap.value, rightHandWrap.value]) {
+      if (!wrap) continue;
+      const svg = wrap.querySelector("svg");
+      const el = svg?.querySelector("#Thumb") as SVGElement | null;
+      if (!el) continue;
+      el.classList.remove("li-finger-pulse", "li-finger-tap");
+      void el.getBoundingClientRect();
+      el.classList.add("li-finger-tap");
+      el.style.fill = "#ffffff";
+      el.style.filter = `drop-shadow(0 0 28px #fff) drop-shadow(0 0 16px ${fingerColor.value})`;
+      el.style.opacity = "1";
+    }
+    tapTimer = setTimeout(() => {
+      tapTimer = null;
+      if (leftHandWrap.value) colorFocusedHand(leftHandWrap.value, "left");
+      if (rightHandWrap.value) colorFocusedHand(rightHandWrap.value, "right");
+    }, 300);
+    return;
+  }
   if (!activeHandWrap.value) return;
   const svg = activeHandWrap.value.querySelector("svg");
   if (!svg) return;
@@ -281,11 +313,12 @@ function onCorrectPress(): void {
     spawnBurst(x, y, fingerColor.value);
   }
   const remaining = REQUIRED_PRESSES - pressCount.value;
+  const keyLabel = props.letter === " " ? "Space" : props.letter.toUpperCase();
   if (promptEl.value) {
     if (remaining === 2)
-      promptEl.value.innerHTML = `Press <kbd>${props.letter.toUpperCase()}</kbd> two more times`;
+      promptEl.value.innerHTML = `Press <kbd>${keyLabel}</kbd> two more times`;
     else if (remaining === 1)
-      promptEl.value.innerHTML = `Press <kbd>${props.letter.toUpperCase()}</kbd> one more time`;
+      promptEl.value.innerHTML = `Press <kbd>${keyLabel}</kbd> one more time`;
     else if (remaining <= 0) {
       advancing = true;
       promptEl.value.innerHTML = "";
@@ -315,11 +348,17 @@ onMounted(() => {
   if (rightHandWrap.value) {
     rightHandWrap.value.innerHTML = handSvgRaw;
   }
-  if (ghostHandWrap.value) {
-    prepareGhostHand(ghostHandWrap.value);
-  }
-  if (activeHandWrap.value) {
-    colorFocusedHand(activeHandWrap.value, side.value);
+  if (isThumb.value) {
+    // Both hands are active for spacebar — color both, no ghost
+    if (leftHandWrap.value) colorFocusedHand(leftHandWrap.value, "left");
+    if (rightHandWrap.value) colorFocusedHand(rightHandWrap.value, "right");
+  } else {
+    if (ghostHandWrap.value) {
+      prepareGhostHand(ghostHandWrap.value);
+    }
+    if (activeHandWrap.value) {
+      colorFocusedHand(activeHandWrap.value, side.value);
+    }
   }
 
   // RAF particle loop

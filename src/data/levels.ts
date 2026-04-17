@@ -28,17 +28,17 @@ export const LEVELS: LevelDefinition[] = [
     number: 4,
     arc: 1,
     isSpeedTest: false,
-    isFinale: true,
+    isFinale: false,
     availableLetters: LEVEL_LETTERS[4],
   },
-  // Arc 2 — The Thunder Shrine
   {
     number: 5,
-    arc: 2,
+    arc: 1,
     isSpeedTest: false,
-    isFinale: false,
+    isFinale: true,
     availableLetters: LEVEL_LETTERS[5],
   },
+  // Arc 2 — The Thunder Shrine
   {
     number: 6,
     arc: 2,
@@ -57,17 +57,17 @@ export const LEVELS: LevelDefinition[] = [
     number: 8,
     arc: 2,
     isSpeedTest: false,
-    isFinale: true,
+    isFinale: false,
     availableLetters: LEVEL_LETTERS[8],
   },
-  // Arc 3 — The Crystal Cavern
   {
     number: 9,
-    arc: 3,
+    arc: 2,
     isSpeedTest: false,
-    isFinale: false,
+    isFinale: true,
     availableLetters: LEVEL_LETTERS[9],
   },
+  // Arc 3 — The Crystal Cavern
   {
     number: 10,
     arc: 3,
@@ -86,17 +86,17 @@ export const LEVELS: LevelDefinition[] = [
     number: 12,
     arc: 3,
     isSpeedTest: false,
-    isFinale: true,
+    isFinale: false,
     availableLetters: LEVEL_LETTERS[12],
   },
-  // Arc 4 — The Stardrift Coast
   {
     number: 13,
-    arc: 4,
+    arc: 3,
     isSpeedTest: false,
-    isFinale: false,
+    isFinale: true,
     availableLetters: LEVEL_LETTERS[13],
   },
+  // Arc 4 — The Stardrift Coast
   {
     number: 14,
     arc: 4,
@@ -115,17 +115,17 @@ export const LEVELS: LevelDefinition[] = [
     number: 16,
     arc: 4,
     isSpeedTest: false,
-    isFinale: true,
+    isFinale: false,
     availableLetters: LEVEL_LETTERS[16],
   },
-  // Arc 5 — The Apex Summit
   {
     number: 17,
-    arc: 5,
+    arc: 4,
     isSpeedTest: false,
-    isFinale: false,
+    isFinale: true,
     availableLetters: LEVEL_LETTERS[17],
   },
+  // Arc 5 — The Apex Summit
   {
     number: 18,
     arc: 5,
@@ -137,7 +137,7 @@ export const LEVELS: LevelDefinition[] = [
     number: 19,
     arc: 5,
     isSpeedTest: false,
-    isFinale: true,
+    isFinale: false,
     availableLetters: LEVEL_LETTERS[19],
   },
   {
@@ -146,6 +146,13 @@ export const LEVELS: LevelDefinition[] = [
     isSpeedTest: false,
     isFinale: true,
     availableLetters: LEVEL_LETTERS[20],
+  },
+  {
+    number: 21,
+    arc: 5,
+    isSpeedTest: true,
+    isFinale: true,
+    availableLetters: LEVEL_LETTERS[21],
   },
 ];
 
@@ -157,17 +164,18 @@ export const MAX_LEVEL = LEVELS[LEVELS.length - 1].number;
 const LEARN_LEVEL_CHARS: Array<{ level: number; chars: string }> = [
   { level: 2, chars: "fj" },
   { level: 3, chars: "et" },
-  { level: 5, chars: "oa" },
-  { level: 6, chars: "in" },
-  { level: 7, chars: "hs" },
-  { level: 9, chars: "rl" },
-  { level: 10, chars: "ud" },
-  { level: 11, chars: "yw" },
-  { level: 13, chars: "mg" },
-  { level: 14, chars: "cp" },
-  { level: 15, chars: "kb" },
-  { level: 17, chars: "vx" },
-  { level: 18, chars: "qz" },
+  { level: 4, chars: " " }, // spacebar
+  { level: 6, chars: "oa" },
+  { level: 7, chars: "in" },
+  { level: 8, chars: "hs" },
+  { level: 10, chars: "rl" },
+  { level: 11, chars: "ud" },
+  { level: 12, chars: "yw" },
+  { level: 14, chars: "mg" },
+  { level: 15, chars: "cp" },
+  { level: 16, chars: "kb" },
+  { level: 18, chars: "vx" },
+  { level: 19, chars: "qz" },
 ];
 
 export const CHAR_TO_LEARN_LEVEL: Record<string, number> = {};
@@ -182,21 +190,21 @@ export function getLevelDef(number: number): LevelDefinition {
 }
 
 // Navigation helpers
-// Cutscenes fire after levels: 4, 8, 12, 16, 20
+// Cutscenes fire after arc finale levels: 5, 9, 13, 17, 21
 const CUTSCENE_AFTER_LEVEL: Record<number, number> = {
-  4: 1,
-  8: 2,
-  12: 3,
-  16: 4,
-  20: 5,
+  5: 1,
+  9: 2,
+  13: 3,
+  17: 4,
+  21: 5,
 };
 // Cutscene 0 fires before level 1 (opening)
 const LEVEL_AFTER_CUTSCENE: Record<number, number | null> = {
   0: 1,
-  1: 5,
-  2: 9,
-  3: 13,
-  4: 17,
+  1: 6,
+  2: 10,
+  3: 14,
+  4: 18,
   5: null,
 };
 

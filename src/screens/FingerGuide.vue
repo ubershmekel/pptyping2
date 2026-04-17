@@ -9,7 +9,7 @@
         <span class="fg-tip-icon" aria-hidden="true">{{ tip.icon }}</span>
         <span class="fg-tip-text" v-html="tip.html"></span>
       </div>
-      <div v-if="levelNumber === 2" class="fg-tip-supplement">
+      <div v-if="levelNumber === 4" class="fg-tip-supplement">
         <span class="fg-tip-icon" aria-hidden="true">👍</span>
         <span>Thumbs press <kbd>Space</kbd> between words</span>
       </div>

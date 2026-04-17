@@ -1,5 +1,5 @@
 <template>
-  <div ref="screenEl" :class="`screen level-screen team-${team} ${envClass}`">
+  <div ref="screenEl" :class="`screen level-screen team-${team} ${envClass}${def.isFinale ? ' level-finale' : ''}`">
     <div class="level-topbar">
       <div class="level-stats" aria-live="polite">
         <span class="stat-chip">
@@ -182,7 +182,7 @@ class TypingEngine {
     this.renderCurrentLine(container);
   }
 
-  handleKey(key: string, container: HTMLElement): void {
+  handleKey(key: string): void {
     if (
       this.pausedAt !== null ||
       this.index >= this.text.length ||
@@ -615,7 +615,7 @@ onMounted(() => {
       e.preventDefault();
       return;
     }
-    engine?.handleKey(e.key, textDisplay.value!);
+    engine?.handleKey(e.key);
   };
   document.addEventListener("keydown", keydownHandler);
 

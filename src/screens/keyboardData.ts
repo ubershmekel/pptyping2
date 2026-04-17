@@ -45,6 +45,7 @@ export const FINGER_COLORS: Record<string, string> = {
   "right-middle": "#93c7ef",
   "right-ring": "#b6b7ef",
   "right-pinky": "#dbb0e8",
+  thumb: "#d4c9f0",
 };
 
 export const FINGER_LABELS: Record<string, string> = {
@@ -56,6 +57,7 @@ export const FINGER_LABELS: Record<string, string> = {
   "right-middle": "Right middle",
   "right-ring": "Right ring",
   "right-pinky": "Right pinky",
+  thumb: "Any thumb",
 };
 
 // SVG path IDs in right-hand.svg → the matching keyboard finger name.

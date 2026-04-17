@@ -36,14 +36,16 @@ to the home row.
 ### Level roles
 
 - Level 1 is a full-keyboard speed-test baseline.
-- Level 2 introduces the home-row anchors `f` and `j`.
+- Level 2 introduces the home-row anchors `f` and `j` (no spacebar).
+- Level 3 introduces `e` and `t` (no spacebar).
+- Level 4 introduces the spacebar (thumbs).
 - Later levels teach the alphabet in two-letter pairs.
 - `f` and `j` remain the visual anchors for all teaching content.
 - Learn levels use only `f`, `j`, and that level's active pair. Earlier pairs do
   not carry into learn-level word lists or the finger guide.
 - Arc finale levels are cumulative review levels, but only within their own arc.
   They use the arc's learned letters plus `f` and `j`.
-- Level 20 is the only full-alphabet cumulative review.
+- Level 21 is the only full-alphabet cumulative review.
 
 The important rule is that learn levels behave like narrow drills, while finale
 levels behave like review levels.
@@ -57,37 +59,38 @@ correct and this document should be updated to match.
 **Arc 1 — The Digital Grove**
 
 1. Speed test — full keyboard baseline
-2. Learn `f j`
-3. Learn `f j e t`
-4. Arc finale review — `f j e t`
+2. Learn `fj` (no spacebar)
+3. Learn `fjet` (no spacebar)
+4. Learn `fj ` — introduces spacebar (both thumbs)
+5. Arc finale review — `fjet `
 
 **Arc 2 — The Thunder Shrine**
 
-5. Learn `f j o a`
-6. Learn `f j i n`
-7. Learn `f j h s`
-8. Arc finale review — `f j o a i n h s`
+6. Learn `f j o a`
+7. Learn `f j i n`
+8. Learn `f j h s`
+9. Arc finale review — `f j o a i n h s`
 
 **Arc 3 — The Crystal Cavern**
 
-9. Learn `f j r l`
-10. Learn `f j u d`
-11. Learn `f j y w`
-12. Arc finale review — `f j r l u d y w`
+10. Learn `f j r l`
+11. Learn `f j u d`
+12. Learn `f j y w`
+13. Arc finale review — `f j r l u d y w`
 
 **Arc 4 — The Stardrift Coast**
 
-13. Learn `f j m g`
-14. Learn `f j c p`
-15. Learn `f j k b`
-16. Arc finale review — `f j m g c p k b`
+14. Learn `f j m g`
+15. Learn `f j c p`
+16. Learn `f j k b`
+17. Arc finale review — `f j m g c p k b`
 
 **Arc 5 — The Apex Summit**
 
-17. Learn `f j v x`
-18. Learn `f j q z`
-19. Arc finale review — `f j v x q z`
-20. Final review — all letters full alphabet
+18. Learn `f j v x`
+19. Learn `f j q z`
+20. Arc finale review — `f j v x q z`
+21. Final review — all letters full alphabet
 
 ## Speed Test Intro Screen (Level 1 Only)
 
@@ -163,9 +166,10 @@ order, cycling back to tip 1 after tip 3:
 | 6     | Always return to F and J                |
 | …     | (continues cycling)                     |
 
-Additionally, level 2 also shows "Thumbs press Space between words" as a
-one-time supplement — this is the only level where the space bar is first
-relevant.
+Additionally, level 4 also shows "Thumbs press Space between words" as a
+one-time supplement — this is the level where the space bar is first
+introduced. Level 4 also uses a dedicated letter-intro screen (press Space
+three times) before the finger guide, showing both thumbs highlighted.
 
 The tip should be visually prominent on the screen, not buried in a strip. Think
 of it as the headline of the pre-level screen, not a footnote.
@@ -284,11 +288,11 @@ The current implementation primarily affects:
 - `src/data/wordLists.ts`
 - `src/data/levels.ts`
 - `src/types.ts`
-- `src/screens/speedTestIntro.ts`
-- `src/screens/letterIntro.ts`
-- `src/screens/fjIntro.ts`
-- `src/screens/fingerGuide.ts`
-- `src/screens/levelScreen.ts`
-- `src/screens/levelComplete.ts`
+- `src/screens/SpeedTestIntro.vue`
+- `src/screens/LetterIntro.vue`
+- `src/screens/FjIntro.vue`
+- `src/screens/FingerGuide.vue`
+- `src/screens/LevelScreen.vue`
+- `src/screens/LevelComplete.vue`
 
 This document should stay aligned with those files.

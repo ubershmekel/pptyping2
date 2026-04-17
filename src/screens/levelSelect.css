@@ -357,6 +357,76 @@
   white-space: nowrap;
 }
 
+.ls-boss-badge {
+  font-size: 0.58rem;
+  padding: 1px 5px;
+  background: rgba(255, 80, 40, 0.15);
+  color: #ff9060;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 80, 40, 0.3);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ── Finale / Boss card ───────────────────────────────────────────────────── */
+.ls-card-finale {
+  border-color: rgba(255, 90, 40, 0.35) !important;
+  border-left: 3px solid rgba(255, 90, 40, 0.7) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(40, 5, 0, 0.55),
+    rgba(30, 8, 0, 0.4)
+  ) !important;
+}
+
+.ls-card-finale:not(.ls-card-locked)::before {
+  background: #ff6030;
+  box-shadow: 0 0 8px #ff4020;
+}
+
+.ls-card-finale.ls-card-done {
+  background: linear-gradient(
+    135deg,
+    rgba(50, 10, 0, 0.6),
+    color-mix(in srgb, var(--arc-col, #ff6030) 10%, rgba(40, 5, 0, 0.5))
+  ) !important;
+  border-color: color-mix(in srgb, #ff6030 50%, var(--arc-col, #ff6030) 50%) !important;
+  border-left-color: color-mix(in srgb, #ff6030 80%, transparent) !important;
+  box-shadow:
+    0 2px 14px rgba(255, 80, 20, 0.18),
+    0 0 0 1px rgba(255, 80, 20, 0.12);
+}
+
+.ls-card-finale.ls-card-open:hover,
+.ls-card-finale.ls-card-open:focus-visible {
+  border-color: rgba(255, 100, 40, 0.75) !important;
+  border-left-color: #ff6030 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(60, 10, 0, 0.7),
+    rgba(40, 8, 0, 0.55)
+  ) !important;
+  box-shadow: 0 4px 22px rgba(255, 80, 20, 0.3) !important;
+}
+
+.ls-card-finale.ls-card-next:not(.ls-entering) {
+  animation: ls-boss-pulse 2s ease-in-out infinite !important;
+}
+
+@keyframes ls-boss-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(255, 80, 20, 0.4),
+      0 4px 18px rgba(255, 80, 20, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px rgba(255, 80, 20, 0.7),
+      0 6px 28px rgba(255, 80, 20, 0.38);
+  }
+}
+
 .ls-status {
   font-size: 0.75rem;
   font-weight: 900;
