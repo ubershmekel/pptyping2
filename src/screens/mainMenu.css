@@ -192,21 +192,38 @@
   gap: 0.65rem;
   flex-shrink: 0;
   width: 100%;
-  max-width: 280px;
+  max-width: 320px;
 }
 
 .mm-btn {
   width: 100%;
-  padding: 0.7rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   border-radius: var(--radius-md);
   font-family: var(--font-ui);
-  font-size: 0.95rem;
+  font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: 0.4px;
   cursor: pointer;
   transition:
     transform var(--transition-fast),
     box-shadow var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.mm-btn-label {
+  display: block;
+}
+
+.mm-btn-sub {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  opacity: 0.7;
+  text-transform: lowercase;
 }
 
 .mm-btn:hover {
@@ -239,13 +256,6 @@
   background: rgba(255, 255, 255, 0.11);
   color: #fff;
   border-color: rgba(255, 255, 255, 0.28);
-}
-
-.mm-btn-settings {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #888;
-  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .mm-btn-settings:hover {

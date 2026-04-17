@@ -63,7 +63,8 @@ router.beforeEach((to) => {
     const isGameplay = GAMEPLAY_PATHS.some(
       (p) => to.path === p || to.path.startsWith(p + "/"),
     );
-    if (isGameplay) return "/team-select";
+    if (isGameplay)
+      return { path: "/team-select", query: { redirect: to.fullPath } };
   }
 
   // Guard: locked level → level-select with attempted query param

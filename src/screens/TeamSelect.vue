@@ -92,7 +92,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import "./teamSelect.css";
 import { useProfile } from "../composables/useProfile";
 import { activeProgress, selectTeam as selectTeamFn } from "../state/gameState";
@@ -101,6 +101,7 @@ import { createCharacterPortraitElement } from "../components/characterPortrait"
 import type { Team } from "../types";
 
 const router = useRouter();
+const route = useRoute();
 const { profile, onSelectTeam } = useProfile();
 
 const screenEl = ref<HTMLElement | null>(null);
@@ -125,6 +126,12 @@ function selectTeam(team: Team): void {
   cancelSelect = setTimeout(() => {
     cancelSelect = null;
     onSelectTeam(team);
+    // Honour a redirect param (e.g. when the training guard sent us here).
+    const redirectTo = route.query.redirect as string | undefined;
+    if (redirectTo && redirectTo.startsWith("/")) {
+      router.push(redirectTo);
+      return;
+    }
     // Navigate: new team or existing progress
     const updatedProfile = selectTeamFn(profile.value, team);
     if (activeProgress(updatedProfile).highestUnlockedLevel > 1) {

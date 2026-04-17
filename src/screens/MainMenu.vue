@@ -16,30 +16,25 @@
     </div>
 
     <nav class="mm-nav">
-      <template v-if="hasSave">
-        <button
-          class="mm-btn mm-btn-primary"
-          @click="router.push('/level-select')"
-        >
-          ▶ Continue
-        </button>
-        <button
-          class="mm-btn mm-btn-ghost"
-          @click="router.push('/team-select')"
-        >
-          Switch Teams
-        </button>
-      </template>
-      <template v-else>
-        <button
-          class="mm-btn mm-btn-primary"
-          @click="router.push('/team-select')"
-        >
-          Start Game
-        </button>
-      </template>
+      <button
+        class="mm-btn mm-btn-primary"
+        @click="router.push(hasSave ? '/level-select' : '/team-select')"
+      >
+        <span class="mm-btn-label">{{
+          hasSave ? "▶ Continue" : "▶ Start Game"
+        }}</span>
+        <span class="mm-btn-sub">levels to learn finger placement</span>
+      </button>
+      <button
+        v-if="hasSave"
+        class="mm-btn mm-btn-ghost"
+        @click="router.push('/team-select')"
+      >
+        Switch Teams
+      </button>
       <button class="mm-btn mm-btn-ghost" @click="router.push('/training')">
-        Training Mode
+        <span class="mm-btn-label">Training Mode</span>
+        <span class="mm-btn-sub">speed check + drill on slow keys</span>
       </button>
       <button
         class="mm-btn mm-btn-ghost mm-btn-settings"

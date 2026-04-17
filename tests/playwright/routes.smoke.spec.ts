@@ -102,7 +102,7 @@ const freshRouteCases = [
   {
     name: "level-select guard redirect",
     path: "/level-select",
-    url: /\/team-select$/,
+    url: /\/team-select/,
     selector: ".team-select-screen",
   },
 ] as const;
@@ -152,10 +152,10 @@ for (const route of savedRouteCases) {
 // LevelFlow.vue, the second letter-intro never re-mounted, so the "a" screen
 // stayed broken and the player could not proceed to the finger guide.
 
-function buildLevel5Profile(): PlayerProfile {
-  // Levels 1–4 completed so level 5 is unlocked.
+function buildLevel6Profile(): PlayerProfile {
+  // Levels 1–5 completed so level 6 is unlocked.
   const levelRecords: PlayerProfile["teams"]["pokemon"]["levelRecords"] = {};
-  for (let n = 1; n <= 4; n++) {
+  for (let n = 1; n <= 5; n++) {
     levelRecords[n] = { bestWpm: 30, bestAccuracy: 95, completed: true };
   }
   return {
@@ -163,7 +163,7 @@ function buildLevel5Profile(): PlayerProfile {
     teamSelected: true,
     difficulty: "easy",
     teams: {
-      pokemon: { levelRecords, highestUnlockedLevel: 5 },
+      pokemon: { levelRecords, highestUnlockedLevel: 6 },
       mlp: { levelRecords: {}, highestUnlockedLevel: 1 },
     },
     speedTestHistory: [],
@@ -171,11 +171,11 @@ function buildLevel5Profile(): PlayerProfile {
   };
 }
 
-test("level 5 letter-intro: both letters advance and reach finger guide", async ({
+test("level 6 letter-intro: both letters advance and reach finger guide", async ({
   page,
 }) => {
-  await seedProfile(page, buildLevel5Profile());
-  await page.goto("/level/5");
+  await seedProfile(page, buildLevel6Profile());
+  await page.goto("/level/6");
 
   // ── First letter intro ("o") ──────────────────────────────────────────────
   await expect(page.locator(".letter-intro-screen")).toBeVisible();
