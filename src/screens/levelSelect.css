@@ -651,6 +651,53 @@
   animation-delay: 2.4s;
 }
 
+/* ── Training Mode card ──────────────────────────────────────────────────── */
+
+.ls-training-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 1rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.ls-training-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ls-training-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.ls-training-text {
+  flex: 1;
+}
+
+.ls-training-name {
+  font-family: var(--font-game);
+  font-size: 0.9rem;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.ls-training-sub {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.15rem;
+}
+
+.ls-training-arrow {
+  color: #555;
+  font-size: 1.1rem;
+}
+
 /* ── Particles ────────────────────────────────────────────────────────────── */
 .ls-particles {
   position: fixed;

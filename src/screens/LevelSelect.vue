@@ -133,6 +133,15 @@
       </div>
     </div>
 
+    <div class="ls-training-card" @click="router.push('/training')" role="button" tabindex="0" @keydown.enter.space.prevent="router.push('/training')">
+      <div class="ls-training-icon">🥋</div>
+      <div class="ls-training-text">
+        <div class="ls-training-name">Training Mode</div>
+        <div class="ls-training-sub">Speed check → targeted drill → repeat</div>
+      </div>
+      <div class="ls-training-arrow">→</div>
+    </div>
+
     <div class="ls-particles" aria-hidden="true">
       <span v-for="n in 20" :key="n" class="ls-particle"></span>
     </div>

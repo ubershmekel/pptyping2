@@ -72,6 +72,35 @@ export function getLevelText(levelNumber: number): string {
   return LEVEL_TEXTS[levelNumber] ?? LEVEL_TEXTS[1];
 }
 
+// Generate a drill text for training mode.
+// Takes 6 drill letters, builds all full permutations (6! = 720), shuffles them,
+// and picks 20 — giving a varied ~140-char text that changes each drill session.
+function allPerms(arr: string[]): string[][] {
+  if (arr.length <= 1) return [arr.slice()];
+  return arr.flatMap((item, i) =>
+    allPerms([...arr.slice(0, i), ...arr.slice(i + 1)]).map((rest) => [
+      item,
+      ...rest,
+    ]),
+  );
+}
+
+function shuffle<T>(arr: T[]): T[] {
+  const out = arr.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+export function generateDrillText(letters: string[]): string {
+  return shuffle(allPerms(letters))
+    .slice(0, 20)
+    .map((p) => p.join(""))
+    .join(" ");
+}
+
 // Letters active at each level.
 // Learn levels stay narrow: f/j anchors plus the current pair.
 // Finale levels expand to the cumulative set for that arc.

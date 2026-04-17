@@ -42,6 +42,10 @@ const router = createRouter({
         if (isNaN(n) || n < 1 || n > MAX_LEVEL) return "/";
       },
     },
+    {
+      path: "/training",
+      component: () => import("../screens/TrainingFlow.vue"),
+    },
     // Unknown routes → main menu
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
@@ -49,7 +53,7 @@ const router = createRouter({
 
 // ─── Global guards ────────────────────────────────────────────────────────────
 
-const GAMEPLAY_PATHS = ["/level-select", "/cutscene", "/level"];
+const GAMEPLAY_PATHS = ["/level-select", "/cutscene", "/level", "/training"];
 
 router.beforeEach((to) => {
   const { profile } = useProfile();

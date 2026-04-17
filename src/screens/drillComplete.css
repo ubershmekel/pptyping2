@@ -1,0 +1,90 @@
+.drill-complete-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #000008 0%, #060615 40%, #0c0c20 100%);
+}
+
+.dc-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 480px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.dc-title {
+  margin: 0;
+  font-family: var(--font-game);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.dc-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+}
+
+.dc-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.dc-stat-val {
+  font-family: var(--font-game);
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  color: var(--team-primary, #ffd700);
+  line-height: 1;
+}
+
+.dc-stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #666;
+}
+
+.dc-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.dc-btn-primary,
+.dc-btn-secondary {
+  padding: 0.65rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-xl);
+  font-family: var(--font-game);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.dc-btn-primary {
+  background: var(--team-primary, #ffd700);
+  color: #1a1a1a;
+  box-shadow: 0 4px 16px var(--team-glow, rgba(255, 215, 0, 0.3));
+}
+
+.dc-btn-primary:hover {
+  transform: scale(1.04);
+}
+
+.dc-btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #888;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dc-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #bbb;
+}

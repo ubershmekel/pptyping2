@@ -37,7 +37,7 @@ No schema change required for the stats themselves.
 
 - Label: "SpeedCheck" (not a numbered level).
 - Show the animated character portraits as usual.
-- **Do not** show the finger guide during the benchmark — it's a pure speed measurement.
+- **Do not** show the finger guide during the speed check — it's a pure speed measurement.
 - Same `LevelScreen.vue` component, just with a different framing/label.
 
 ## End of Speed Check Screen
@@ -69,8 +69,8 @@ fgmj gmfj mjfg gfmj jgmf alfg lmaj fgml gjal mjaf gfal
 
 Generation algorithm:
 
-- Take all 4-6 letters, build permutations of them.
-- Keep the string to ~60–80 characters.
+- Take all 4-6 letters, build groups of them separated by spaces.
+- No fixed length limit — all groups are included, padded if too short.
 
 ### Finger guide
 
@@ -127,8 +127,6 @@ It receives the speed check stats, computes the two weak letters, and passes the
 
 LevelStats can be reused.
 
-This lets us show progress over time ("Your benchmark WPM over your last 10 cycles").
-
 ### No new level in `LEVELS`
 
 Training levels are ephemeral — they don't have level numbers, don't appear on the level select, and don't count toward `highestUnlockedLevel`. They're tracked separately via `trainingHistory`.
@@ -140,7 +138,7 @@ Training levels are ephemeral — they don't have level numbers, don't appear on
 Add two new routes in `router/index.ts`:
 
 ```
-/training           → training-benchmark screen
+/training           → training-speedcheck screen
 /training/drill     → training-drill screen (state passed via router state or store)
 ```
 
@@ -152,10 +150,10 @@ The "Training Mode" main-menu button navigates to `/training`.
 
 | Screen           | File                      | Notes                                              |
 | ---------------- | ------------------------- | -------------------------------------------------- |
-| SpeedCheck level | Reuse `LevelScreen.vue`   | Pass `isTrainingBenchmark` prop to adjust label    |
+| SpeedCheck level | Reuse `LevelScreen.vue`   |                                                    |
 | Drill intro      | `DrillIntro.vue`          | New. Shows weak-key diagnosis and drill letter set |
 | Drill level      | Reuse `LevelScreen.vue`   | Pass `alwaysShowFingerGuide: true` prop            |
-| Drill complete   | Reuse `LevelComplete.vue` | "Next Benchmark →" instead of "Next Level →"       |
+| Drill complete   | Reuse `LevelComplete.vue` | "SpeedCheck again →" instead of "Next Level →"     |
 
 ---
 

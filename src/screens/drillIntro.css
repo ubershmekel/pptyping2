@@ -1,0 +1,176 @@
+.drill-intro-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  background: linear-gradient(160deg, #000008 0%, #060615 40%, #0c0c20 100%);
+}
+
+.di-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem 1.5rem;
+}
+
+.di-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.di-title {
+  margin: 0;
+  font-family: var(--font-game);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.di-summary {
+  display: flex;
+  gap: 1.5rem;
+  color: #aaa;
+  font-size: 0.88rem;
+}
+
+.di-summary strong {
+  color: var(--team-primary, #ffd700);
+  font-family: var(--font-game);
+}
+
+.di-section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #666;
+  margin-bottom: 0.3rem;
+}
+
+.di-table-wrap {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.di-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.di-table th {
+  text-align: left;
+  padding: 0.45rem 0.85rem;
+  color: #666;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  position: sticky;
+  top: 0;
+  background: #0c0c1a;
+}
+
+.di-table td {
+  padding: 0.4rem 0.85rem;
+  color: #bbb;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.di-table tr:last-child td {
+  border-bottom: none;
+}
+
+.di-row-target td {
+  color: #fff;
+  background: rgba(255, 215, 0, 0.06);
+}
+
+.di-row-target .di-key-cell {
+  color: var(--team-primary, #ffd700);
+  font-weight: 800;
+}
+
+.di-key-cell {
+  font-family: var(--font-game);
+  font-size: 1rem;
+  width: 2rem;
+}
+
+.di-drill-announce {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.88rem;
+  color: #ccc;
+  flex-wrap: wrap;
+}
+
+.di-drill-announce strong {
+  color: #fff;
+}
+
+.di-key-chip {
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-family: var(--font-game);
+  font-size: 0.85em;
+  color: #fff;
+}
+
+.di-key-chip-focus {
+  background: rgba(255, 215, 0, 0.18);
+  border-color: rgba(255, 215, 0, 0.4);
+  color: var(--team-primary, #ffd700);
+}
+
+.di-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.di-btn-primary,
+.di-btn-secondary {
+  padding: 0.65rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-xl);
+  font-family: var(--font-game);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.di-btn-primary {
+  background: var(--team-primary, #ffd700);
+  color: #1a1a1a;
+  box-shadow: 0 4px 16px var(--team-glow, rgba(255, 215, 0, 0.3));
+}
+
+.di-btn-primary:hover {
+  transform: scale(1.04);
+}
+
+.di-btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #888;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.di-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #bbb;
+}

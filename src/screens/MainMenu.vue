@@ -39,6 +39,12 @@
         </button>
       </template>
       <button
+        class="mm-btn mm-btn-ghost"
+        @click="router.push('/training')"
+      >
+        Training Mode
+      </button>
+      <button
         class="mm-btn mm-btn-ghost mm-btn-settings"
         @click="router.push('/settings')"
       >

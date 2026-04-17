@@ -377,6 +377,17 @@
   animation-play-state: paused;
 }
 
+.level-keyboard {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem 0.5rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .progress-beam {
   position: absolute;
   left: 0;

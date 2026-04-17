@@ -88,6 +88,13 @@
       </div>
     </div>
 
+    <div v-if="showKeyboard && availableLetters" class="level-keyboard">
+      <KeyboardDisplay
+        :availableLetters="availableLetters"
+        :focusLetters="focusLetters"
+      />
+    </div>
+
     <div ref="progressBeam" class="progress-beam" aria-hidden="true"></div>
 
     <div class="env-bg-deco" aria-hidden="true">
@@ -105,6 +112,7 @@ import { getLevelText } from "../data/wordLists";
 import { getLevelDef, ARC_ENVIRONMENTS } from "../data/levels";
 import { CharacterCompanion } from "../components/character";
 import { ParticleManager } from "../particles/particleManager";
+import KeyboardDisplay from "./KeyboardDisplay.vue";
 
 // ─── TypingEngine (unchanged from original) ────────────────────────────────────
 
@@ -380,6 +388,11 @@ const props = defineProps<{
   levelNumber: number;
   team: Team;
   difficulty: Difficulty;
+  text?: string;
+  availableLetters?: string;
+  focusLetters?: string;
+  showKeyboard?: boolean;
+  noThreshold?: boolean;
 }>();
 const emit = defineEmits<{
   complete: [stats: LevelStats];
@@ -517,7 +530,7 @@ onMounted(() => {
     );
   }
 
-  const levelText = getLevelText(props.levelNumber);
+  const levelText = props.text ?? getLevelText(props.levelNumber);
   const thresholds = DIFFICULTY_THRESHOLDS[props.difficulty];
   engine = new TypingEngine(levelText);
 
@@ -588,7 +601,8 @@ onMounted(() => {
 
   engine.onComplete = (stats) => {
     const passed =
-      stats.accuracy >= thresholds.accuracy && stats.wpm >= thresholds.wpm;
+      props.noThreshold ||
+      (stats.accuracy >= thresholds.accuracy && stats.wpm >= thresholds.wpm);
     const finalStats: LevelStats = { ...stats, passed };
     syncStats();
     character?.celebrate();

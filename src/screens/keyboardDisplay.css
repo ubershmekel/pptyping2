@@ -1,0 +1,62 @@
+.kd-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.kd-keyboard-wrap {
+  width: 100%;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  overflow: hidden;
+  background: #12181f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: none;
+  padding: 0.5rem 0.5rem 0.25rem;
+}
+
+.kd-keyboard-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.kd-hands {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  background: #12181f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 0.35rem 1.5rem 0.5rem;
+}
+
+.kd-hand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.kd-hand-left .kd-hand-svg {
+  transform: scaleX(-1);
+}
+
+.kd-hand-svg {
+  width: clamp(60px, 9vw, 100px);
+}
+
+.kd-hand-svg svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.kd-hand-label {
+  font-size: 0.65rem;
+  color: #555;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
