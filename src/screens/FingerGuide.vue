@@ -98,6 +98,65 @@ function onStart(): void {
 
 // ─── Keyboard interaction helpers ─────────────────────────────────────────────
 
+// On mount, hands start over the F/J keys on the keyboard and slide to their
+// resting positions, then finger colors cross-fade to the level's actual keys.
+function animateHandsFromHomeRow(
+  kbSvg: SVGSVGElement,
+  leftWrap: HTMLElement | null,
+  rightWrap: HTMLElement | null,
+  usedFingers: Set<string>,
+  cleanups: (() => void)[],
+): void {
+  const leftHandEl = leftWrap?.parentElement as HTMLElement | null;
+  const rightHandEl = rightWrap?.parentElement as HTMLElement | null;
+  if (!leftHandEl || !rightHandEl) return;
+
+  // Color index fingers only (home row starting position)
+  colorHandSvg(leftWrap!, "left", new Set(["left-index"]));
+  colorHandSvg(rightWrap!, "right", new Set(["right-index"]));
+
+  // F center = x:315 y:150, J center = x:495 y:150 in the 900×300 SVG viewBox
+  const kbRect = kbSvg.getBoundingClientRect();
+  const fCenterX = kbRect.left + (315 / 900) * kbRect.width;
+  const jCenterX = kbRect.left + (495 / 900) * kbRect.width;
+  const keyCenterY = kbRect.top + 0.5 * kbRect.height;
+
+  const leftRect = leftHandEl.getBoundingClientRect();
+  const rightRect = rightHandEl.getBoundingClientRect();
+
+  leftHandEl.style.transform = `translateX(${fCenterX - (leftRect.left + leftRect.width / 2)}px) translateY(${keyCenterY - (leftRect.top + leftRect.height / 2)}px)`;
+  rightHandEl.style.transform = `translateX(${jCenterX - (rightRect.left + rightRect.width / 2)}px) translateY(${keyCenterY - (rightRect.top + rightRect.height / 2)}px)`;
+
+  // Two rAFs ensure the initial transform is painted before the transition starts
+  requestAnimationFrame(() =>
+    requestAnimationFrame(() => {
+      leftHandEl.style.transition = "transform 0.5s ease-out";
+      rightHandEl.style.transition = "transform 0.5s ease-out";
+      leftHandEl.style.transform = "";
+      rightHandEl.style.transform = "";
+    }),
+  );
+
+  // After hands settle, cross-fade finger colors to the actual level state
+  const timer = setTimeout(() => {
+    for (const wrap of [leftWrap!, rightWrap!]) {
+      const svg = wrap.querySelector("svg");
+      if (!svg) continue;
+      for (const el of svg.querySelectorAll<SVGElement>("#Pinky,#Ring,#Middle,#Index,#Thumb"))
+        el.style.transition = "fill 0.4s ease, opacity 0.4s ease";
+      (svg.querySelector("#Hand") as SVGElement | null)?.style.setProperty("transition", "opacity 0.4s ease");
+    }
+    if (leftWrap) colorHandSvg(leftWrap, "left", usedFingers);
+    if (rightWrap) colorHandSvg(rightWrap, "right", usedFingers);
+  }, 600);
+
+  cleanups.push(
+    () => clearTimeout(timer),
+    () => { leftHandEl.style.transition = leftHandEl.style.transform = ""; },
+    () => { rightHandEl.style.transition = rightHandEl.style.transform = ""; },
+  );
+}
+
 function colorHandSvg(
   container: HTMLElement,
   side: "left" | "right",
@@ -191,15 +250,9 @@ onMounted(() => {
     }
 
     // Hand SVGs
-    if (leftHandWrap.value) {
-      leftHandWrap.value.innerHTML = handSvgRaw;
-      colorHandSvg(leftHandWrap.value, "left", usedFingers);
-    }
-    if (rightHandWrap.value) {
-      rightHandWrap.value.innerHTML = handSvgRaw;
-      colorHandSvg(rightHandWrap.value, "right", usedFingers);
-    }
-
+    if (leftHandWrap.value) leftHandWrap.value.innerHTML = handSvgRaw;
+    if (rightHandWrap.value) rightHandWrap.value.innerHTML = handSvgRaw;
+    animateHandsFromHomeRow(kbSvg, leftHandWrap.value, rightHandWrap.value, usedFingers, cleanups);
     // Interactive key highlighting
     const capIdToKey: Record<string, string> = {};
     for (const [key, meta] of Object.entries(KEY_DATA))
