@@ -213,6 +213,7 @@ function goLevelSelect(): void {
 }
 
 onMounted(() => {
+  document.title = "Cutscene";
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>

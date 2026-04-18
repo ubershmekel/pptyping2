@@ -71,6 +71,7 @@ const hasSave = computed(() => {
 let portraitCleanup: (() => void) | null = null;
 
 onMounted(() => {
+  document.title = "Main Menu";
   // Screen enter animation
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");

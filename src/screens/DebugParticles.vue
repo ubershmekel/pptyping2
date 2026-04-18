@@ -160,6 +160,7 @@ function keyHandler(e: KeyboardEvent): void {
 }
 
 onMounted(() => {
+  document.title = "Debug Particles";
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>

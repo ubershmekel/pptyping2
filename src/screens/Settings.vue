@@ -132,6 +132,7 @@ function changeDifficulty(d: Difficulty): void {
 }
 
 onMounted(() => {
+  document.title = "Settings";
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>

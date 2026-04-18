@@ -30,8 +30,13 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
 import "./drillComplete.css";
 import type { LevelStats, Team } from "../types";
+
+onMounted(() => {
+  document.title = "Drill Complete";
+});
 
 defineProps<{
   stats: LevelStats;

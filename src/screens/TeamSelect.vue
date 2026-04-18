@@ -145,6 +145,7 @@ function selectTeam(team: Team): void {
 const portraitCleanups: (() => void)[] = [];
 
 onMounted(() => {
+  document.title = "Team Select";
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>

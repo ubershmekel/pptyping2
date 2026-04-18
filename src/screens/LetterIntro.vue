@@ -350,6 +350,7 @@ function keyHandler(e: KeyboardEvent): void {
 }
 
 onMounted(() => {
+  document.title = "Letter Intro";
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>

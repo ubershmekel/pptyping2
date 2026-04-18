@@ -134,6 +134,7 @@ function colorHandSvg(
 const cleanups: (() => void)[] = [];
 
 onMounted(() => {
+  document.title = "Finger Guide";
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>

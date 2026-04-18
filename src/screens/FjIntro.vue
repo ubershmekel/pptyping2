@@ -49,6 +49,7 @@ function keyHandler(e: KeyboardEvent): void {
 }
 
 onMounted(() => {
+  document.title = "FJ Intro";
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>

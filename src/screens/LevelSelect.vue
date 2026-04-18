@@ -283,6 +283,7 @@ function onLevelClick(n: number): void {
 }
 
 onMounted(() => {
+  document.title = "Level Select";
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>

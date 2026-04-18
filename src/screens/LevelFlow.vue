@@ -213,4 +213,5 @@ const currentEvents = computed(() => {
       };
   }
 });
+
 </script>

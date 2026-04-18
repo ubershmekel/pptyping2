@@ -521,6 +521,7 @@ function spawnEffect(
 }
 
 onMounted(() => {
+  document.title = `Level ${props.levelNumber}`;
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>

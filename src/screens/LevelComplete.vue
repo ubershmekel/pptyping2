@@ -343,6 +343,7 @@ function formatTime(seconds: number): string {
 }
 
 onMounted(() => {
+  document.title = "Level Complete";
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>
