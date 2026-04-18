@@ -67,7 +67,12 @@ export class CharacterCompanion {
 
   celebrate(): void {
     this.setState("celebrating");
-    setTimeout(() => this.setState("idle"), 1200);
+    setTimeout(() => this.setState("idle"), 1500);
+  }
+
+  celebrateForever(): void {
+    this.targetX = this.currentX;
+    this.setState("celebrating");
   }
 
   flinch(): void {

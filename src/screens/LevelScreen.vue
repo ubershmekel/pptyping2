@@ -27,7 +27,6 @@
     </div>
 
     <div class="level-body">
-      <div ref="charTrack" class="char-track"></div>
       <div class="text-stage">
         <div
           ref="textDisplay"
@@ -87,6 +86,8 @@
         </div>
       </div>
     </div>
+
+    <div ref="charTrack" class="char-track"></div>
 
     <div v-if="showKeyboard && availableLetters" class="level-keyboard">
       <KeyboardDisplay
@@ -384,6 +385,8 @@ function formatSeconds(timeSeconds: number): string {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
+const LEVEL_COMPLETE_DELAY_MS = 2500;
+
 const props = defineProps<{
   levelNumber: number;
   team: Team;
@@ -421,6 +424,7 @@ let engine: TypingEngine | null = null;
 let character: CharacterCompanion | null = null;
 let particles: ParticleManager | null = null;
 let isPaused = false;
+let levelComplete = false;
 let cancelComplete: ReturnType<typeof setTimeout> | null = null;
 let statsInterval: ReturnType<typeof setInterval> | null = null;
 let keydownHandler: ((e: KeyboardEvent) => void) | null = null;
@@ -438,17 +442,11 @@ function syncStats(): void {
     progressBeam.value.style.width = `${Math.round(progress * 100)}%`;
 }
 
-function updateCharacterPosition(reset = false): void {
-  if (!character || !charTrack.value || !engine) return;
-  if (reset) {
-    character.moveTo(28);
-    return;
-  }
-  const span = engine.getCurrentSpan();
-  if (!span) return;
-  const trackRect = charTrack.value.getBoundingClientRect();
-  const spanRect = span.getBoundingClientRect();
-  character.moveTo(spanRect.left - trackRect.left + spanRect.width * 0.5);
+function updateCharacterPosition(): void {
+  if (!character || !charTrack.value || !engine || levelComplete) return;
+  const { progress } = engine.getLiveStats();
+  const trackWidth = charTrack.value.getBoundingClientRect().width;
+  character.moveTo(Math.min(progress, 0.85) * trackWidth);
 }
 
 function playLineEnter(container: HTMLElement): void {
@@ -562,7 +560,6 @@ onMounted(() => {
       const cx = r.left + r.width / 2;
       const cy = r.top + r.height / 2;
       if (comboCount > 0 && comboCount % 10 === 0) {
-        character?.celebrate();
         particles?.triggerBurst("combo", cx, cy);
       } else {
         particles?.triggerBurst("correct", cx, cy);
@@ -595,8 +592,7 @@ onMounted(() => {
       engine.renderNextLine(textDisplay.value);
       playLineEnter(textDisplay.value);
     }
-    updateCharacterPosition(true);
-    requestAnimationFrame(() => updateCharacterPosition());
+    updateCharacterPosition();
   };
 
   engine.onComplete = (stats) => {
@@ -604,8 +600,16 @@ onMounted(() => {
       props.noThreshold ||
       (stats.accuracy >= thresholds.accuracy && stats.wpm >= thresholds.wpm);
     const finalStats: LevelStats = { ...stats, passed };
+    levelComplete = true;
+    if (statsInterval !== null) {
+      clearInterval(statsInterval);
+      statsInterval = null;
+    }
     syncStats();
-    character?.celebrate();
+    if (character && charTrack.value) {
+      character.moveTo(charTrack.value.getBoundingClientRect().width * 0.8);
+    }
+    character?.celebrateForever();
     particles?.triggerBurst("victory");
     screenEl.value?.classList.add("level-complete-flash");
     if (keydownHandler) document.removeEventListener("keydown", keydownHandler);
@@ -613,7 +617,7 @@ onMounted(() => {
     cancelComplete = setTimeout(() => {
       cancelComplete = null;
       emit("complete", finalStats);
-    }, 800);
+    }, LEVEL_COMPLETE_DELAY_MS);
   };
 
   statsInterval = setInterval(() => {
