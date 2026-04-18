@@ -10,9 +10,9 @@ export interface DifficultyThreshold {
 }
 
 export const DIFFICULTY_THRESHOLDS: Record<Difficulty, DifficultyThreshold> = {
-  easy: { accuracy: 70, wpm: 15 },
-  medium: { accuracy: 80, wpm: 25 },
-  hard: { accuracy: 90, wpm: 35 },
+  easy: { accuracy: 80, wpm: 15 },
+  medium: { accuracy: 90, wpm: 25 },
+  hard: { accuracy: 95, wpm: 35 },
 };
 
 export const DIFFICULTY_DISPLAY: Record<Team, Record<Difficulty, string>> = {
