@@ -24,14 +24,11 @@ is their baseline, and future speed tests will show how far they've come.
 
 ### Core order
 
-The teaching order is:
+The teaching order is described in `src/data/levels.ts`.
 
-`fjetoainhsrludywmgcpkbvxqz`
+It initially was `fjetoainhsrludywmgcpkbvxqz` because `fj` was used as an anchor to return fingers to the homerow, then the rest were based on letter frequency in Pokémon and My Little Pony movies. But because the difficulty level is constant (25 wpm) `et` was too difficult to beat in the first 1-5 levels. So instead the first arc focuses on home row letters.
 
-This order is the source of truth for curriculum planning, `wordLists.ts`, and
-any future generated helper data. It is based on letter frequency in Pokémon and
-My Little Pony movies. The `fj` start is used as an anchor for returning fingers
-to the home row.
+The level texts which need to match the order are in `src/data/wordLists.ts`.
 
 ### Level roles
 

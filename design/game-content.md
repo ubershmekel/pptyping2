@@ -16,10 +16,6 @@ is unused in testing.
 20 levels. Each level is defined as a `LevelDefinition` object (see
 `data-model.md`).
 
-**Letter introduction order** follows the curriculum order
-`fjetoainhsrludywmgcpkbvxqz` so that real words are available as early as
-possible. Level 1 is a speed test using the full keyboard.
-
 See `teaching-touch-typing.md` for the list of levels and focus letters.
 
 The word pool for each learn level is pre-filtered to only include words

@@ -252,7 +252,9 @@ const wpmThresholdLeft = computed(() =>
   ),
 );
 
-const CURRICULUM_ORDER = "fjetoainhsrludywmgcpkbvxqz";
+const CURRICULUM_ORDER = Object.entries(CHAR_TO_LEARN_LEVEL)
+  .sort((a, b) => a[1] - b[1])
+  .map(([c]) => c);
 
 const retryRec = computed((): string | null => {
   if (!levelDef.value.isFinale) return null;
