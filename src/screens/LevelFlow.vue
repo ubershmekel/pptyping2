@@ -67,12 +67,14 @@ function computeInitialSubScreen(n: number): SubScreen {
 const subScreen = ref<SubScreen>(computeInitialSubScreen(levelNumber.value));
 const letterIndex = ref(0);
 const levelStats = ref<LevelStats | null>(null);
+const levelAttempt = ref(0);
 
 // Reset sub-screen state when the level number changes (back-nav to same route).
 watch(levelNumber, (n) => {
   subScreen.value = computeInitialSubScreen(n);
   letterIndex.value = 0;
   levelStats.value = null;
+  levelAttempt.value = 0;
 });
 
 // ─── Sub-screen transitions ───────────────────────────────────────────────────
@@ -118,8 +120,22 @@ function onLevelCompleteNext(): void {
   }
 }
 
-function onRetry(): void {
-  router.push(`/level/${levelNumber.value}`);
+function restartLevelAttempt(): void {
+  levelStats.value = null;
+  levelAttempt.value++;
+  subScreen.value = "level";
+}
+
+function onPauseRetry(): void {
+  restartLevelAttempt();
+}
+
+function onCompleteRetry(): void {
+  levelStats.value = null;
+  letterIndex.value = 0;
+  levelAttempt.value = 0;
+  subScreen.value =
+    levelNumber.value === 1 ? "speed-test-intro" : "finger-guide";
 }
 
 function onLevelSelect(): void {
@@ -141,7 +157,9 @@ function onQuit(): void {
 const componentKey = computed(() =>
   subScreen.value === "letter-intro"
     ? `letter-intro-${letterIndex.value}`
-    : subScreen.value,
+    : subScreen.value === "level"
+      ? `level-${levelAttempt.value}`
+      : subScreen.value,
 );
 
 const currentComponent = computed(() => {
@@ -201,17 +219,16 @@ const currentEvents = computed(() => {
     case "level":
       return {
         complete: onLevelComplete,
-        retry: onRetry,
+        retry: onPauseRetry,
         levelSelect: onLevelSelect,
         quit: onQuit,
       };
     case "level-complete":
       return {
         next: onLevelCompleteNext,
-        retry: onRetry,
+        retry: onCompleteRetry,
         levelSelect: onLevelSelect,
       };
   }
 });
-
 </script>

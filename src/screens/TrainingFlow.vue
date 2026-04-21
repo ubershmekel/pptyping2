@@ -152,5 +152,4 @@ const currentEvents = computed(() => {
       };
   }
 });
-
 </script>

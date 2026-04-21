@@ -29,7 +29,11 @@
     <div class="level-body">
       <div class="text-stage">
         <div class="typing-lane">
-          <div ref="progressBeam" class="progress-beam" aria-hidden="true"></div>
+          <div
+            ref="progressBeam"
+            class="progress-beam"
+            aria-hidden="true"
+          ></div>
           <div ref="charTrack" class="char-track"></div>
           <div
             ref="textDisplay"

@@ -74,6 +74,43 @@ async function seedProfile(page: Page, profile?: PlayerProfile) {
   );
 }
 
+async function pressCurrentCharacter(
+  page: Page,
+  options: { makeMistake?: boolean } = {},
+) {
+  const currentChar = page
+    .locator('.level-screen .char[data-state="current"]')
+    .first();
+  await expect(currentChar).toBeVisible();
+
+  const raw = ((await currentChar.textContent()) ?? "").replace(/\u00a0/g, " ");
+  const key = raw.toLowerCase();
+  const keyPress = key === " " ? "Space" : key;
+
+  if (options.makeMistake) {
+    const wrongKey = key === "x" ? "z" : "x";
+    await page.keyboard.press(wrongKey);
+  }
+
+  await page.keyboard.press(keyPress);
+}
+
+async function completeLevelWithMistakes(page: Page) {
+  for (let i = 0; i < 400; i++) {
+    if (await page.locator(".level-complete-screen").isVisible()) return;
+    if (
+      (await page
+        .locator('.level-screen .char[data-state="current"]')
+        .count()) === 0
+    ) {
+      await page.waitForTimeout(50);
+      continue;
+    }
+    await pressCurrentCharacter(page, { makeMistake: true });
+  }
+  throw new Error("Level did not complete within the safety bound.");
+}
+
 const freshRouteCases = [
   {
     name: "main menu",
@@ -204,4 +241,46 @@ test("level 6 letter-intro: both letters advance and reach finger guide", async 
   await expect(page.locator(".finger-guide-screen")).toBeVisible({
     timeout: 2000,
   });
+});
+
+test("pause menu retry restarts the current level attempt", async ({
+  page,
+}) => {
+  await seedProfile(page, buildLevel6Profile());
+  await page.goto("/level/5");
+
+  await expect(page.locator(".finger-guide-screen")).toBeVisible();
+  await page.getByRole("button", { name: /start level/i }).click();
+  await expect(page.locator(".level-screen")).toBeVisible();
+
+  await pressCurrentCharacter(page);
+  await expect(
+    page.locator('.level-screen .char[data-state="done"]'),
+  ).toHaveCount(1);
+
+  await page.getByRole("button", { name: "Pause" }).click();
+  await expect(page.getByRole("dialog", { name: "Paused" })).toBeVisible();
+  await page.getByRole("button", { name: "Retry" }).click();
+
+  await expect(page.locator(".level-screen")).toBeVisible();
+  await expect(
+    page.locator('.level-screen .char[data-state="done"]'),
+  ).toHaveCount(0);
+});
+
+test("failed level try again returns to the finger guide", async ({ page }) => {
+  await seedProfile(page, buildLevel6Profile());
+  await page.goto("/level/5");
+
+  await expect(page.locator(".finger-guide-screen")).toBeVisible();
+  await page.getByRole("button", { name: /start level/i }).click();
+  await expect(page.locator(".level-screen")).toBeVisible();
+
+  await completeLevelWithMistakes(page);
+
+  await expect(page.locator(".level-complete-screen.lc-failed")).toBeVisible();
+  await page.getByRole("button", { name: /try again/i }).click();
+
+  await expect(page).toHaveURL(/\/level\/5$/);
+  await expect(page.locator(".finger-guide-screen")).toBeVisible();
 });

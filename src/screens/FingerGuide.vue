@@ -142,9 +142,14 @@ function animateHandsFromHomeRow(
     for (const wrap of [leftWrap!, rightWrap!]) {
       const svg = wrap.querySelector("svg");
       if (!svg) continue;
-      for (const el of svg.querySelectorAll<SVGElement>("#Pinky,#Ring,#Middle,#Index,#Thumb"))
+      for (const el of svg.querySelectorAll<SVGElement>(
+        "#Pinky,#Ring,#Middle,#Index,#Thumb",
+      ))
         el.style.transition = "fill 0.4s ease, opacity 0.4s ease";
-      (svg.querySelector("#Hand") as SVGElement | null)?.style.setProperty("transition", "opacity 0.4s ease");
+      (svg.querySelector("#Hand") as SVGElement | null)?.style.setProperty(
+        "transition",
+        "opacity 0.4s ease",
+      );
     }
     if (leftWrap) colorHandSvg(leftWrap, "left", usedFingers);
     if (rightWrap) colorHandSvg(rightWrap, "right", usedFingers);
@@ -152,8 +157,12 @@ function animateHandsFromHomeRow(
 
   cleanups.push(
     () => clearTimeout(timer),
-    () => { leftHandEl.style.transition = leftHandEl.style.transform = ""; },
-    () => { rightHandEl.style.transition = rightHandEl.style.transform = ""; },
+    () => {
+      leftHandEl.style.transition = leftHandEl.style.transform = "";
+    },
+    () => {
+      rightHandEl.style.transition = rightHandEl.style.transform = "";
+    },
   );
 }
 
@@ -252,7 +261,13 @@ onMounted(() => {
     // Hand SVGs
     if (leftHandWrap.value) leftHandWrap.value.innerHTML = handSvgRaw;
     if (rightHandWrap.value) rightHandWrap.value.innerHTML = handSvgRaw;
-    animateHandsFromHomeRow(kbSvg, leftHandWrap.value, rightHandWrap.value, usedFingers, cleanups);
+    animateHandsFromHomeRow(
+      kbSvg,
+      leftHandWrap.value,
+      rightHandWrap.value,
+      usedFingers,
+      cleanups,
+    );
     // Interactive key highlighting
     const capIdToKey: Record<string, string> = {};
     for (const [key, meta] of Object.entries(KEY_DATA))
