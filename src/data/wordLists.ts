@@ -9,14 +9,14 @@ export const LEVEL_TEXTS: Record<number, string> = {
   // Level 2: f + j only — no spaces
   2: "fjfjffjjfffjjjffffjjjjfjfjjjfff",
 
-  // Level 3: f j e t — no spaces
-  3: "jetfeeteefetefejeffeftjefejetteefeetejetjetefjetjtefeftejefetfeje",
+  // Level 3: f j d k — no spaces
+  3: "fjdkfjkdfkdjdkjfjkdfkdfjkdjfkjdkfjdkfjkdfkdjdkjfjkdfkdfjkdjfkjd",
 
   // Level 4: f j + spacebar — introduces the spacebar
   4: "fjf jfj fff jjj fj jf fjfj jfjf fffj jjjf fjfjf jfjfj fjj jff jjjfff fjfjfjfj jfjfjfjf ffffjjjj jjjjffff ffjj",
 
-  // Level 5: arc 1 finale — review f j e t + space
-  5: "feet jet fee tee fete jeff eft feet jet fee tee fete jeff eft feet jet fee tee fete eft jet feet fee tee jeff eft fete jet",
+  // Level 5: arc 1 finale — review f j d k + space
+  5: "fjd jdk kfj djk jfd fkd djf kjd fkj dkf fjdk jkdf kdfj dfjk fjd jdk kfj djk jfd fkd djf kjd fkj dkf fjdk jkdf kdfj dfjk",
 
   // Level 6: learn o a with f j anchors
   6: "foj joa oaf afo fjoa jofa foaf jajo foj joa oaf afo fjoa jofa foaf jajo",
@@ -33,14 +33,14 @@ export const LEVEL_TEXTS: Record<number, string> = {
   // Level 10: learn r l with f j anchors
   10: "fjrl jrfl rljf lfjr frjl jrlf llfj rrjf fjrl jrfl rljf lfjr frjl jrlf llfj rrjf",
 
-  // Level 11: learn u d with f j anchors
-  11: "fjud judf dujf fudj jufu duud judd fujd fjud judf dujf fudj jufu duud judd fujd",
+  // Level 11: learn u e with f j anchors
+  11: "fjue juef eujf fuje jufe eeuj feuf ujfe fjue juef eujf fuje jufe eeuj feuf ujfe",
 
   // Level 12: learn y w with f j anchors
   12: "fjwy wyfj jywf wfyj fwyj jyyf wwfj yjfw fjwy wyfj jywf wfyj fwyj jyyf wwfj yjfw",
 
-  // Level 13: arc 3 finale — review f j r l u d y w
-  13: "jury july fury duly wryly drury jury july fury duly wryly drury",
+  // Level 13: arc 3 finale — review f j r l u e y w
+  13: "jury july fury rule fuel lure flew jelly jewel yell wry jury july fury rule fuel lure flew jelly jewel",
 
   // Level 14: learn m g with f j anchors
   14: "fjmg gmfj mjfg gfmj jgmf ffgm jjmg mgfj fjmg gmfj mjfg gfmj jgmf ffgm jjmg mgfj",
@@ -48,11 +48,11 @@ export const LEVEL_TEXTS: Record<number, string> = {
   // Level 15: learn c p with f j anchors
   15: "fjcp pcfj cjpf pfcj jcpf ffcp jjpc cpfj fjcp pcfj cjpf pfcj jcpf ffcp jjpc cpfj",
 
-  // Level 16: learn k b with f j anchors
-  16: "fjkb bkfj kjbf bfjk jkbf ffkb jjbk kbfj fjkb bkfj kjbf bfjk jkbf ffkb jjbk kbfj",
+  // Level 16: learn t b with f j anchors
+  16: "fjtb btfj tjbf bfjt jtbf fftb jjbt tbfj fjtb btfj tjbf bfjt jtbf fftb jjbt tbfj",
 
-  // Level 17: arc 4 finale — review f j m g c p k b
-  17: "fjmg gcmp pcbg kbfj mgcp jbfg pcfj mgkb fjmg gcmp pcbg kbfj mgcp jbfg pcfj mgkb",
+  // Level 17: arc 4 finale — review f j m g c p t b
+  17: "fjmg gcmp pctg tbfj mgcp jbtg pcfj mgtb fjmg gcmp pctg tbfj mgcp jbtg pcfj mgtb",
 
   // Level 18: learn v x with f j anchors
   18: "fjvx vxfj jvxf xfvj fvjx jjvx ffxv xjfv fjvx vxfj jvxf xfvj fvjx jjvx ffxv xjfv",
@@ -109,21 +109,21 @@ export const ALL_LETTERS = "abcdefghijklmnopqrstuvwxyz ";
 export const LEVEL_LETTERS: Record<number, string> = {
   1: ALL_LETTERS, // speed test: full alphabet
   2: "fj", // no space
-  3: "fjet", // no space
+  3: "fjdk", // no space
   4: "fj ", // space introduced
-  5: "fjet ", // arc 1 finale
+  5: "fjdk ", // arc 1 finale
   6: "fjoa ",
   7: "fjin ",
   8: "fjhs ",
   9: "fjoainhs ", // arc 2 finale
   10: "fjrl ",
-  11: "fjud ",
+  11: "fjue ",
   12: "fjyw ",
-  13: "fjrludyw ", // arc 3 finale
+  13: "fjrlueyw ", // arc 3 finale
   14: "fjmg ",
   15: "fjcp ",
-  16: "fjkb ",
-  17: "fjmgcpkb ", // arc 4 finale
+  16: "fjtb ",
+  17: "fjmgcptb ", // arc 4 finale
   18: "fjvx ",
   19: "fjqz ",
   20: "fjvxqz ", // arc 5 finale

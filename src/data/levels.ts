@@ -163,17 +163,17 @@ export const MAX_LEVEL = LEVELS[LEVELS.length - 1].number;
 // Finales and the speed-test levels are excluded — only the drill levels count.
 const LEARN_LEVEL_CHARS: Array<{ level: number; chars: string }> = [
   { level: 2, chars: "fj" },
-  { level: 3, chars: "et" },
+  { level: 3, chars: "dk" },
   { level: 4, chars: " " }, // spacebar
   { level: 6, chars: "oa" },
   { level: 7, chars: "in" },
   { level: 8, chars: "hs" },
   { level: 10, chars: "rl" },
-  { level: 11, chars: "ud" },
+  { level: 11, chars: "ue" },
   { level: 12, chars: "yw" },
   { level: 14, chars: "mg" },
   { level: 15, chars: "cp" },
-  { level: 16, chars: "kb" },
+  { level: 16, chars: "tb" },
   { level: 18, chars: "vx" },
   { level: 19, chars: "qz" },
 ];
