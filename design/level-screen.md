@@ -70,11 +70,11 @@ subsystems:
 
 ## Progress Beam
 
-A team-themed energy beam extends from the left edge of the screen toward the
-right as the player types, reaching full width at level completion. It lives in
-the background layer (behind text and character) so it never competes with
-typing, but it is deliberately loud — a glance downward reveals exactly how far
-through the level the player is.
+A team-themed energy beam extends from the left edge of the typing lane toward
+the right as the player types, reaching full width at level completion. It sits in
+the typing lane just above the active text line, behind the character
+companion, so the beam and companion read as one moving action layer without
+overlapping the letters themselves.
 
 - **Pokemon**: a jagged golden lightning beam with a bright leading-edge glow
   and a subtle flicker animation; box-shadow fans out in gold to fill the

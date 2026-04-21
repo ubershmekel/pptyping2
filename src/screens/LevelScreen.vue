@@ -28,14 +28,18 @@
 
     <div class="level-body">
       <div class="text-stage">
-        <div
-          ref="textDisplay"
-          class="text-display"
-          tabindex="0"
-          aria-label="Typing area"
-          role="textbox"
-          aria-readonly="true"
-        ></div>
+        <div class="typing-lane">
+          <div ref="progressBeam" class="progress-beam" aria-hidden="true"></div>
+          <div ref="charTrack" class="char-track"></div>
+          <div
+            ref="textDisplay"
+            class="text-display"
+            tabindex="0"
+            aria-label="Typing area"
+            role="textbox"
+            aria-readonly="true"
+          ></div>
+        </div>
       </div>
     </div>
 
@@ -87,16 +91,12 @@
       </div>
     </div>
 
-    <div ref="charTrack" class="char-track"></div>
-
     <div v-if="showKeyboard && availableLetters" class="level-keyboard">
       <KeyboardDisplay
         :availableLetters="availableLetters"
         :focusLetters="focusLetters"
       />
     </div>
-
-    <div ref="progressBeam" class="progress-beam" aria-hidden="true"></div>
 
     <div class="env-bg-deco" aria-hidden="true">
       <span v-for="n in 8" :key="n" class="env-particle"></span>
