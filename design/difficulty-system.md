@@ -15,9 +15,9 @@ dexterous and motivated child should find Hard genuinely challenging.
 
 | Tier   | Pokemon Label  | MLP Label          | Min Accuracy | Min WPM |
 | ------ | -------------- | ------------------ | ------------ | ------- |
-| Easy   | Casual Trainer | Friendship Student | 60%          | 10 WPM  |
-| Medium | Gym Leader     | Royal Guard        | 80%          | 25 WPM  |
-| Hard   | Elite Four     | Alicorn            | 90%          | 35 WPM  |
+| Easy   | Casual Trainer | Friendship Student | 80%          | 15 WPM  |
+| Medium | Gym Leader     | Royal Guard        | 90%          | 20 WPM  |
+| Hard   | Elite Four     | Alicorn            | 95%          | 25 WPM  |
 
 These are approximate. Thresholds may be tuned during playtesting, but the
 intent is: Easy is genuinely forgiving, Medium requires real effort, Hard
@@ -34,8 +34,10 @@ A level attempt **passes** if BOTH conditions are met:
 - `accuracy >= threshold.accuracy`
 - `wpm >= threshold.wpm`
 
-Failing either condition is a fail. The player must retry to unlock the next
-level.
+Failing either condition is a fail for scoring and activity-log feedback.
+Regular teaching levels still unlock the next level after any completed attempt.
+Only review / boss levels (`isFinale === true`) use fail state to block progress;
+the player must clear the boss level to unlock the next arc or finale.
 
 Note: The **speed test** (level 1) is handled differently — it doesn't pass or
 fail; it simply records a baseline WPM and unlocks level 2 regardless of
@@ -52,12 +54,11 @@ attempt.
 
 This allows a player to:
 
-- Grind through levels on Easy to see the story
+- Move through regular teaching levels even when a run needs more practice
 - Come back and beat their scores on Hard for personal achievement
 
 ## Key Files
 
-- `src/difficulty/difficultySystem.ts` — exports
-  `getThreshold(difficulty: Difficulty): { wpm: number; accuracy: number }` and
-  `isPassing(stats: LevelStats, difficulty: Difficulty): boolean`; no state,
-  pure functions
+- `src/types.ts` — exports `DIFFICULTY_THRESHOLDS`
+- `src/state/gameState.ts` — exports `didPass(...)` and applies the progression
+  gate rule when saving a level result

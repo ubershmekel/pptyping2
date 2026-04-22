@@ -138,6 +138,10 @@ function onCompleteRetry(): void {
     levelNumber.value === 1 ? "speed-test-intro" : "finger-guide";
 }
 
+function onPracticeLevel(targetLevel: number): void {
+  router.push(`/level/${targetLevel}`);
+}
+
 function onLevelSelect(): void {
   router.push("/level-select");
 }
@@ -227,6 +231,7 @@ const currentEvents = computed(() => {
       return {
         next: onLevelCompleteNext,
         retry: onCompleteRetry,
+        practiceLevel: onPracticeLevel,
         levelSelect: onLevelSelect,
       };
   }

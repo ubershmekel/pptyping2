@@ -268,7 +268,7 @@ test("pause menu retry restarts the current level attempt", async ({
   ).toHaveCount(0);
 });
 
-test("failed level try again returns to the finger guide", async ({ page }) => {
+test("failed level retry returns to the finger guide", async ({ page }) => {
   await seedProfile(page, buildLevel6Profile());
   await page.goto("/level/5");
 
@@ -279,7 +279,7 @@ test("failed level try again returns to the finger guide", async ({ page }) => {
   await completeLevelWithMistakes(page);
 
   await expect(page.locator(".level-complete-screen.lc-failed")).toBeVisible();
-  await page.getByRole("button", { name: /try again/i }).click();
+  await page.getByRole("button", { name: "Retry" }).click();
 
   await expect(page).toHaveURL(/\/level\/5$/);
   await expect(page.locator(".finger-guide-screen")).toBeVisible();

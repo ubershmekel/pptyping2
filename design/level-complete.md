@@ -20,9 +20,12 @@ compares them against the current difficulty's thresholds (see
 - **Pass**: WPM ≥ threshold AND accuracy ≥ threshold
 - **Fail**: either metric below threshold
 
-Passing unlocks the next level in the `PlayerProfile` and saves via
-`persistence.ts`. Failing does not advance the unlock state, but does update the
-level record if it's a new personal best.
+Completing a regular teaching level unlocks the next level in the
+`PlayerProfile` and saves via `persistence.ts`, even when the attempt misses the
+current difficulty thresholds. Boss / review levels (`isFinale === true`) are
+the only levels that can block progression; they unlock the next level or
+cutscene only after a passing attempt. Every attempt still updates the level
+record if it sets a new personal best.
 
 Every attempt (pass or fail) appends an `ActivityLogEntry` to the player's
 activity log in `PlayerProfile`. The log entry records the date, level number,
@@ -80,12 +83,16 @@ medals are awarded for any letter in that run.
 
 ## Actions
 
-- **Next Level** — available on pass, and always available on level 1; navigates
-  to the next level or to the cutscene if the arc is complete
+- **Next Level** — available after every regular teaching level attempt, after
+  passing a boss / review level, and always on level 1; navigates to the next
+  level or to the cutscene if the arc is complete
 - **Retry** — restarts the current level attempt; always available
+- **Practice slowest key** — on boss / review levels, navigates to the teaching
+  level that introduced the character with the slowest average key time; this is
+  highlighted with Retry when the boss blocks progress
 - **Level Select** — navigates to the level select screen; always available
-- If the arc is complete (this was the 3rd level of the arc): the Next button
-  navigates to the cutscene instead of directly to a level
+- If the arc is complete: the Next button navigates to the cutscene instead of
+  directly to a level
 
 ## Environment Continuity
 
@@ -95,7 +102,7 @@ within the same world.
 
 ## Key Files
 
-- `src/screens/levelCompleteScreen.ts` — receives final stats from the level
-  screen (via navigation state or a shared results object), renders the results
-  layout, updates `gameState.ts` with new records, handles the next/retry
-  navig
+- `src/screens/LevelComplete.vue` — renders results, boss medals, and action
+  buttons
+- `src/screens/LevelFlow.vue` — receives final stats from `LevelScreen.vue`,
+  updates `gameState.ts`, and handles next/retry/practice navigation

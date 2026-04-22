@@ -271,6 +271,10 @@
   box-shadow: 0 4px 16px var(--team-glow, rgba(255, 215, 0, 0.3));
 }
 
+.lc-btn-accent {
+  background: linear-gradient(135deg, #ffe36e, #ff9f43);
+}
+
 .lc-btn-primary:hover {
   transform: scale(1.04);
 }

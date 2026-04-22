@@ -47,10 +47,11 @@ Per-team progress:
 
 Per-level best performance:
 
-- `unlocked: boolean`
 - `bestWpm: number`
 - `bestAccuracy: number` (0-100)
-- `completed: boolean`
+- `completed: boolean` - true once the level has cleared its progression gate.
+  Regular teaching levels clear after any finished attempt; boss / review levels
+  clear only after a passing attempt.
 
 ### `LetterProgress`
 
@@ -100,20 +101,14 @@ the player can see their full practice history across all levels.
 
 Static data describing a single typing level:
 
-- `levelNumber: number`
-- `arcNumber: number`
-- `availableLetters: string[]` - the full set of letters the word pool may use
-  at this level
-- `newLetters: string[]` - letters being introduced this level (shown as
-  highlighted in UI)
+- `number: number`
+- `arc: number`
+- `availableLetters: string` - the full set of letters the word pool may use at
+  this level
 - `isSpeedTest: boolean` - level 1 flag; uses full keyboard, no letter
   restriction
 - `isFinale: boolean` - review / boss flag; only these levels can award
-  per-letter medals
-- `unlockThresholds: Record<Difficulty, { wpm: number; accuracy: number }>` -
-  pass/fail requirements
-- `storyBlurb: string` - 2-3 sentence narrative shown on level complete screen
-  (team-specific; resolved at runtime via `stories.ts`)
+  per-letter medals and block progression on a failed attempt
 
 ### `ArcDefinition`
 

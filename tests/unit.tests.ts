@@ -3,3 +3,4 @@ import "./screenMount.test";
 import "./content.test";
 import "./router.test";
 import "./letterMedals.test";
+import "./gameState.test";

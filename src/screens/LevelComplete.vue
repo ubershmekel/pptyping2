@@ -87,7 +87,7 @@
           <div
             :class="`lc-result-badge ${stats.passed ? 'badge-pass' : 'badge-fail'}`"
           >
-            {{ stats.passed ? "✓ Level Complete!" : "✗ Not quite!" }}
+            {{ resultBadgeLabel }}
           </div>
           <h2 class="lc-level-title">
             {{
@@ -210,26 +210,49 @@
         <div v-if="retryRec" class="lc-retry-rec" v-html="retryRec"></div>
 
         <div class="lc-actions">
-          <button
-            v-if="stats.passed"
-            class="lc-btn lc-btn-primary"
-            @click="emit('next')"
-          >
-            {{ levelNumber >= MAX_LEVEL ? "🏆 See Finale" : "Next Level →" }}
-          </button>
-          <button v-else class="lc-btn lc-btn-primary" @click="emit('retry')">
-            Try Again ↺
-          </button>
-          <button
-            v-if="!stats.passed"
-            class="lc-btn lc-btn-secondary"
-            @click="emit('next')"
-          >
-            Skip ahead anyway →
-          </button>
-          <button class="lc-btn lc-btn-secondary" @click="emit('levelSelect')">
-            Level Select
-          </button>
+          <template v-if="isBossLevel">
+            <button
+              v-if="canContinue"
+              class="lc-btn lc-btn-secondary"
+              @click="emit('next')"
+            >
+              {{ levelNumber >= MAX_LEVEL ? "See Finale" : "Next Level" }}
+            </button>
+            <button class="lc-btn lc-btn-primary" @click="emit('retry')">
+              Retry
+            </button>
+            <button
+              v-if="bossPracticeRecommendation"
+              class="lc-btn lc-btn-primary lc-btn-accent"
+              @click="
+                emit('practiceLevel', bossPracticeRecommendation.learnLevel)
+              "
+            >
+              Practice
+              {{ letterLabel(bossPracticeRecommendation.letter) }} - Level
+              {{ bossPracticeRecommendation.learnLevel }}
+            </button>
+            <button
+              class="lc-btn lc-btn-secondary"
+              @click="emit('levelSelect')"
+            >
+              Level Select
+            </button>
+          </template>
+          <template v-else>
+            <button class="lc-btn lc-btn-primary" @click="emit('next')">
+              {{ levelNumber >= MAX_LEVEL ? "See Finale" : "Next Level" }}
+            </button>
+            <button class="lc-btn lc-btn-secondary" @click="emit('retry')">
+              Retry
+            </button>
+            <button
+              class="lc-btn lc-btn-secondary"
+              @click="emit('levelSelect')"
+            >
+              Level Select
+            </button>
+          </template>
         </div>
       </div>
     </template>
@@ -259,7 +282,12 @@ const props = defineProps<{
   speedTestHistory?: SpeedTestEntry[];
 }>();
 
-const emit = defineEmits<{ next: []; retry: []; levelSelect: [] }>();
+const emit = defineEmits<{
+  next: [];
+  retry: [];
+  practiceLevel: [levelNumber: number];
+  levelSelect: [];
+}>();
 
 const screenEl = ref<HTMLElement | null>(null);
 const wpmBar = ref<HTMLElement | null>(null);
@@ -267,6 +295,11 @@ const accBar = ref<HTMLElement | null>(null);
 
 const isSpeedTest = computed(() => props.levelNumber === 1);
 const levelDef = computed(() => getLevelDef(props.levelNumber));
+const isBossLevel = computed(() => levelDef.value.isFinale);
+const isBlockingFailure = computed(
+  () => isBossLevel.value && !props.stats.passed,
+);
+const canContinue = computed(() => !isBlockingFailure.value);
 const isSpeedCheckLevel = computed(
   () => levelDef.value.isSpeedTest || props.levelNumber === MAX_LEVEL,
 );
@@ -296,11 +329,33 @@ const CURRICULUM_ORDER = Object.entries(CHAR_TO_LEARN_LEVEL)
   .sort((a, b) => a[1] - b[1])
   .map(([c]) => c);
 
-const retryRec = computed((): string | null => {
-  if (!levelDef.value.isFinale) return null;
+const bossPracticeRecommendation = computed<{
+  letter: string;
+  learnLevel: number;
+} | null>(() => {
+  if (!isBossLevel.value) return null;
   const chars = levelDef.value.availableLetters
     .split("")
-    .filter((c) => c !== " ");
+    .filter((c) => CHAR_TO_LEARN_LEVEL[c] !== undefined);
+  let slowestLetter = "";
+  let maxAvgTime = -1;
+  for (const char of CURRICULUM_ORDER) {
+    if (!chars.includes(char)) continue;
+    const avg = props.stats.charAvgTimes[char] ?? 0;
+    if (avg > maxAvgTime) {
+      maxAvgTime = avg;
+      slowestLetter = char;
+    }
+  }
+  const learnLevel = CHAR_TO_LEARN_LEVEL[slowestLetter];
+  return slowestLetter && learnLevel
+    ? { letter: slowestLetter, learnLevel }
+    : null;
+});
+
+const retryRec = computed((): string | null => {
+  if (!levelDef.value.isFinale) return null;
+  const chars = levelDef.value.availableLetters.split("");
   let maxErrors = -1;
   let worstErrorChar = "";
   for (const char of CURRICULUM_ORDER) {
@@ -311,16 +366,7 @@ const retryRec = computed((): string | null => {
       worstErrorChar = char;
     }
   }
-  let maxAvgTime = -1;
-  let slowestChar = "";
-  for (const char of CURRICULUM_ORDER) {
-    if (!chars.includes(char)) continue;
-    const avg = props.stats.charAvgTimes[char] ?? 0;
-    if (avg >= maxAvgTime) {
-      maxAvgTime = avg;
-      slowestChar = char;
-    }
-  }
+  const slowestChar = bossPracticeRecommendation.value?.letter ?? "";
   const lines: string[] = [];
   const hasErrors = maxErrors > 0 && worstErrorChar;
   const hasTiming = !!slowestChar;
@@ -347,6 +393,12 @@ const retryRec = computed((): string | null => {
     }
   }
   return lines.length > 0 ? lines.join("<br>") : null;
+});
+
+const resultBadgeLabel = computed(() => {
+  if (props.stats.passed) return "Level Complete!";
+  if (isBlockingFailure.value) return "Boss not cleared";
+  return "Level Complete - keep practicing";
 });
 
 const feedbackMessage = computed(() => {

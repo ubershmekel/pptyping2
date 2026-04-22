@@ -147,7 +147,9 @@ export function applyLevelResult(
 ): PlayerProfile {
   // Level 1 (speed test) always passes — no threshold, just record the run.
   const isSpeedTest = levelNumber === 1;
+  const levelDef = getLevelDef(levelNumber);
   const passed = isSpeedTest || didPass(stats, profile.difficulty);
+  const clearsProgressGate = isSpeedTest || !levelDef.isFinale || passed;
   const progress = profile.teams[profile.activeTeam];
   const existing: LevelRecord = progress.levelRecords[levelNumber] ?? {
     bestWpm: 0,
@@ -158,13 +160,17 @@ export function applyLevelResult(
   const updated: LevelRecord = {
     bestWpm: Math.max(existing.bestWpm, stats.wpm),
     bestAccuracy: Math.max(existing.bestAccuracy, stats.accuracy),
-    completed: existing.completed || passed,
+    completed: existing.completed || clearsProgressGate,
   };
 
   const newRecords = { ...progress.levelRecords, [levelNumber]: updated };
   let highestUnlocked = progress.highestUnlockedLevel;
 
-  if (passed && levelNumber === highestUnlocked && levelNumber < MAX_LEVEL) {
+  if (
+    clearsProgressGate &&
+    levelNumber === highestUnlocked &&
+    levelNumber < MAX_LEVEL
+  ) {
     highestUnlocked = levelNumber + 1;
     // Ensure the next level record exists
     if (!newRecords[highestUnlocked]) {
@@ -184,7 +190,7 @@ export function applyLevelResult(
       letterProgress: progress.letterProgress ?? {},
     },
     stats,
-    getLevelDef(levelNumber),
+    levelDef,
   );
 
   let next: PlayerProfile = {
