@@ -85,11 +85,12 @@ medals are awarded for any letter in that run.
 
 - **Next Level** — available after every regular teaching level attempt, after
   passing a boss / review level, and always on level 1; navigates to the next
-  level or to the cutscene if the arc is complete
+  level or to the cutscene if the arc is complete. This is the primary action
+  after a passing boss / review level.
 - **Retry** — restarts the current level attempt; always available
 - **Practice slowest key** — on boss / review levels, navigates to the teaching
   level that introduced the character with the slowest average key time; this is
-  highlighted with Retry when the boss blocks progress
+  highlighted with Retry only when the boss blocks progress
 - **Level Select** — navigates to the level select screen; always available
 - If the arc is complete: the Next button navigates to the cutscene instead of
   directly to a level

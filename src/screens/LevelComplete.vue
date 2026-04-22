@@ -213,17 +213,27 @@
           <template v-if="isBossLevel">
             <button
               v-if="canContinue"
-              class="lc-btn lc-btn-secondary"
+              class="lc-btn lc-btn-primary"
               @click="emit('next')"
             >
               {{ levelNumber >= MAX_LEVEL ? "See Finale" : "Next Level" }}
             </button>
-            <button class="lc-btn lc-btn-primary" @click="emit('retry')">
+            <button
+              :class="[
+                'lc-btn',
+                isBlockingFailure ? 'lc-btn-primary' : 'lc-btn-secondary',
+              ]"
+              @click="emit('retry')"
+            >
               Retry
             </button>
             <button
               v-if="bossPracticeRecommendation"
-              class="lc-btn lc-btn-primary lc-btn-accent"
+              :class="[
+                'lc-btn',
+                isBlockingFailure ? 'lc-btn-primary' : 'lc-btn-secondary',
+                isBlockingFailure ? 'lc-btn-accent' : '',
+              ]"
               @click="
                 emit('practiceLevel', bossPracticeRecommendation.learnLevel)
               "

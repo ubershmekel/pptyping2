@@ -95,7 +95,9 @@ async function pressCurrentCharacter(
   await page.keyboard.press(keyPress);
 }
 
-async function completeLevelWithMistakes(page: Page) {
+async function playThroughLevelWithMistakes(page: Page) {
+  // This really plays the level: read the highlighted character, type a wrong
+  // key first, then type the expected key so the game advances.
   for (let i = 0; i < 400; i++) {
     if (await page.locator(".level-complete-screen").isVisible()) return;
     if (
@@ -107,6 +109,24 @@ async function completeLevelWithMistakes(page: Page) {
       continue;
     }
     await pressCurrentCharacter(page, { makeMistake: true });
+  }
+  throw new Error("Level did not complete within the safety bound.");
+}
+
+async function playThroughLevelCorrectly(page: Page) {
+  // This really plays the level by reading the current on-screen character and
+  // pressing that key until the level-complete screen appears.
+  for (let i = 0; i < 400; i++) {
+    if (await page.locator(".level-complete-screen").isVisible()) return;
+    if (
+      (await page
+        .locator('.level-screen .char[data-state="current"]')
+        .count()) === 0
+    ) {
+      await page.waitForTimeout(50);
+      continue;
+    }
+    await pressCurrentCharacter(page);
   }
   throw new Error("Level did not complete within the safety bound.");
 }
@@ -276,11 +296,38 @@ test("failed level retry returns to the finger guide", async ({ page }) => {
   await page.getByRole("button", { name: /start level/i }).click();
   await expect(page.locator(".level-screen")).toBeVisible();
 
-  await completeLevelWithMistakes(page);
+  await playThroughLevelWithMistakes(page);
 
   await expect(page.locator(".level-complete-screen.lc-failed")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Retry" })).toHaveClass(
+    /lc-btn-primary/,
+  );
+  await expect(page.getByRole("button", { name: /Practice/i })).toHaveClass(
+    /lc-btn-primary/,
+  );
   await page.getByRole("button", { name: "Retry" }).click();
 
   await expect(page).toHaveURL(/\/level\/5$/);
   await expect(page.locator(".finger-guide-screen")).toBeVisible();
+});
+
+test("passed finale level promotes next level as the primary action", async ({
+  page,
+}) => {
+  await seedProfile(page, buildLevel6Profile());
+  await page.goto("/level/5");
+
+  await expect(page.locator(".finger-guide-screen")).toBeVisible();
+  await page.getByRole("button", { name: /start level/i }).click();
+  await expect(page.locator(".level-screen")).toBeVisible();
+
+  await playThroughLevelCorrectly(page);
+
+  await expect(page.locator(".level-complete-screen.lc-passed")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Next Level" })).toHaveClass(
+    /lc-btn-primary/,
+  );
+  await expect(page.getByRole("button", { name: "Retry" })).toHaveClass(
+    /lc-btn-secondary/,
+  );
 });
