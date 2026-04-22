@@ -2,3 +2,4 @@ import "./check-screen-lifecycle.test";
 import "./screenMount.test";
 import "./content.test";
 import "./router.test";
+import "./letterMedals.test";

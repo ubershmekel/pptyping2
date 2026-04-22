@@ -57,6 +57,27 @@
   color: #e0e0e0;
 }
 
+.ls-chest-btn {
+  padding: 0.4rem 0.9rem;
+  background: rgba(255, 215, 105, 0.12);
+  color: #ffd76a;
+  border: 1px solid rgba(255, 215, 105, 0.28);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.ls-chest-btn:hover,
+.ls-chest-btn:focus-visible {
+  background: rgba(255, 215, 105, 0.18);
+  border-color: rgba(255, 215, 105, 0.45);
+  outline: none;
+}
+
 .ls-title {
   flex: 1;
   font-family: var(--font-game);
@@ -700,6 +721,139 @@
   font-size: 1.1rem;
 }
 
+.ls-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(2, 5, 16, 0.78);
+  backdrop-filter: blur(6px);
+}
+
+.ls-treasure-modal {
+  width: min(680px, 100%);
+  max-height: min(78vh, 680px);
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: #0d1222;
+  border: 1px solid rgba(255, 215, 105, 0.28);
+  border-radius: var(--radius-md);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+}
+
+.ls-treasure-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.ls-treasure-title {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-game);
+  font-size: 0.82rem;
+}
+
+.ls-treasure-sub {
+  margin-top: 0.25rem;
+  color: #777;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.ls-treasure-close {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.ls-treasure-close:hover,
+.ls-treasure-close:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  outline: none;
+}
+
+.ls-treasure-table {
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+}
+
+.ls-treasure-row {
+  display: grid;
+  grid-template-columns: minmax(4.25rem, 1fr) 4rem 5rem 4rem 4rem;
+  gap: 0.65rem;
+  align-items: center;
+  min-width: 30rem;
+  padding: 0.52rem 0.7rem;
+  color: #bbb;
+  background: rgba(255, 255, 255, 0.025);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.78rem;
+}
+
+.ls-treasure-row:last-child {
+  border-bottom: 0;
+}
+
+.ls-treasure-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: #777;
+  background: #11182b;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.ls-treasure-letter {
+  color: #fff;
+  font-family: var(--font-game);
+  font-size: 0.62rem;
+}
+
+.ls-treasure-medal {
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.ls-medal-none {
+  color: #666;
+}
+
+.ls-medal-bronze {
+  color: #d99a5b;
+}
+
+.ls-medal-silver {
+  color: #d9e2ee;
+}
+
+.ls-medal-gold {
+  color: #ffd76a;
+}
+
+.ls-treasure-empty {
+  padding: 0.9rem 0.2rem 0.1rem;
+  color: #666;
+  font-size: 0.78rem;
+}
+
 /* ── Particles ────────────────────────────────────────────────────────────── */
 .ls-particles {
   position: fixed;
@@ -820,5 +974,23 @@
 @media (max-width: 520px) {
   .ls-map {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ls-header {
+    flex-wrap: wrap;
+  }
+
+  .ls-title {
+    min-width: 9rem;
+  }
+
+  .ls-modal-backdrop {
+    padding: 0.75rem;
+  }
+
+  .ls-treasure-row {
+    min-width: 27rem;
+    grid-template-columns: minmax(3.8rem, 1fr) 3.4rem 4rem 3.6rem 3.6rem;
+    gap: 0.45rem;
   }
 }

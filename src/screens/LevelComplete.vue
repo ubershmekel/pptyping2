@@ -168,6 +168,39 @@
           </div>
         </div>
 
+        <div v-if="medalEvaluation.results.length > 0" class="lc-medal-panel">
+          <div class="lc-medal-head">
+            <span>Review Medals</span>
+            <span v-if="medalEvaluation.heartbreak" class="lc-heartbreak"
+              >Heartbreak</span
+            >
+          </div>
+          <div v-if="medalEvaluation.heartbreak" class="lc-heartbreak-note">
+            One letter fell to 10 WPM or below, or 70% accuracy or below. No
+            medals were awarded for this run.
+          </div>
+          <div class="lc-medal-grid">
+            <div
+              v-for="result in medalEvaluation.results"
+              :key="result.letter"
+              :class="[
+                'lc-medal-row',
+                result.weakest ? 'lc-medal-weakest' : '',
+              ]"
+            >
+              <span class="lc-medal-letter">{{
+                letterLabel(result.letter)
+              }}</span>
+              <span :class="['lc-medal-tier', medalClass(result.medal)]">{{
+                medalLabel(result.medal)
+              }}</span>
+              <span>{{ result.wpm }} WPM</span>
+              <span>{{ result.accuracy }}%</span>
+              <span>{{ result.hits }} hits</span>
+            </div>
+          </div>
+        </div>
+
         <div
           :class="`lc-message ${stats.passed ? 'lc-message-pass' : 'lc-message-fail'}`"
         >
@@ -213,6 +246,10 @@ import "./levelComplete.css";
 import type { Difficulty, LevelStats, SpeedTestEntry, Team } from "../types";
 import { DIFFICULTY_THRESHOLDS } from "../types";
 import { CHAR_TO_LEARN_LEVEL, getLevelDef, MAX_LEVEL } from "../data/levels";
+import {
+  evaluateFinaleMedals,
+  type LetterMedalResult,
+} from "../state/letterMedals";
 
 const props = defineProps<{
   levelNumber: number;
@@ -234,6 +271,9 @@ const isSpeedCheckLevel = computed(
   () => levelDef.value.isSpeedTest || props.levelNumber === MAX_LEVEL,
 );
 const thresholds = computed(() => DIFFICULTY_THRESHOLDS[props.difficulty]);
+const medalEvaluation = computed(() =>
+  evaluateFinaleMedals(levelDef.value, props.stats),
+);
 
 const wpmBarWidth = computed(() =>
   Math.min(
@@ -342,6 +382,24 @@ function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
   const s = Math.round(seconds % 60);
   return m > 0 ? `${m}m ${s}s` : `${s}s`;
+}
+
+function medalLabel(medal: LetterMedalResult["medal"]): string {
+  const labels: Record<LetterMedalResult["medal"], string> = {
+    none: "-",
+    bronze: "🥉",
+    silver: "🥈",
+    gold: "🥇",
+  };
+  return labels[medal];
+}
+
+function medalClass(medal: LetterMedalResult["medal"]): string {
+  return `lc-medal-${medal}`;
+}
+
+function letterLabel(letter: string): string {
+  return letter === " " ? "SPACE" : letter.toUpperCase();
 }
 
 onMounted(() => {

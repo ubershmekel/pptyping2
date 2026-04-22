@@ -25,15 +25,23 @@ Controls WPM and accuracy thresholds for level pass/fail.
 
 The persisted player state. Contains:
 
-- `team: Team` - which team was chosen
+- `activeTeam: Team` - which team is currently selected
+- `teamSelected: boolean` - true once a team has been chosen
 - `difficulty: Difficulty` - current difficulty setting
-- `currentPosition: ScreenPosition` - where the player is in the flow (so
-  Continue works)
-- `levelRecords: Record<number, LevelRecord>` - keyed by level number
+- `teams: Record<Team, TeamProgress>` - per-team progress, records, and medals
 - `speedTestHistory: SpeedTestEntry[]` - ordered log of every speed test run,
   oldest first
 - `activityLog: ActivityLogEntry[]` - ordered log of every level 2+ completion
   attempt, oldest first
+
+### `TeamProgress`
+
+Per-team progress:
+
+- `levelRecords: Record<number, LevelRecord>` - keyed by level number
+- `highestUnlockedLevel: number`
+- `letterProgress: Record<string, LetterProgress>` - keyed by lowercase letter;
+  the spacebar uses the `" "` key
 
 ### `LevelRecord`
 
@@ -43,6 +51,24 @@ Per-level best performance:
 - `bestWpm: number`
 - `bestAccuracy: number` (0-100)
 - `completed: boolean`
+
+### `LetterProgress`
+
+Per-key practice stats and medal mastery:
+
+- `medal: "none" | "bronze" | "silver" | "gold"` - highest medal earned
+- `totalHits: number` - correct hits recorded for this key across typing runs
+- `recentWpm: number` - average key WPM across the last 1-2 runs that included
+  this key
+- `recentAccuracy: number` (0-100) - average key accuracy across the last 1-2
+  runs that included this key
+- `recentRuns: { wpm: number; accuracy: number }[]` - the raw last 1-2 samples
+
+Hits and recent stats update after any completed level or training run. Bronze
+is 15+ WPM, silver is 20+ WPM, and gold is 30+ WPM, but medals are only awarded
+on review / boss levels. A review run has a Heartbreak if any reviewed letter is
+10 WPM or below, or 70% accuracy or below; on Heartbreak no medals are awarded
+for that run, though per-key stats still update.
 
 ### `SpeedTestEntry`
 
@@ -82,6 +108,8 @@ Static data describing a single typing level:
   highlighted in UI)
 - `isSpeedTest: boolean` - level 1 flag; uses full keyboard, no letter
   restriction
+- `isFinale: boolean` - review / boss flag; only these levels can award
+  per-letter medals
 - `unlockThresholds: Record<Difficulty, { wpm: number; accuracy: number }>` -
   pass/fail requirements
 - `storyBlurb: string` - 2-3 sentence narrative shown on level complete screen

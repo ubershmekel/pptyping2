@@ -34,8 +34,9 @@ export interface LevelStats {
   errors: number;
   totalKeystrokes: number;
   passed: boolean;
-  charErrors: Record<string, number>; // incorrect presses per expected char (spaces excluded)
-  charAvgTimes: Record<string, number>; // avg ms between correct keystrokes per char (spaces excluded, first key excluded)
+  charHits: Record<string, number>; // correct presses per expected char
+  charErrors: Record<string, number>; // incorrect presses per expected char
+  charAvgTimes: Record<string, number>; // avg ms between correct keystrokes per char, first key excluded
 }
 
 // ─── Persistence ────────────────────────────────────────────────────────────
@@ -46,9 +47,25 @@ export interface LevelRecord {
   completed: boolean;
 }
 
+export type LetterMedal = "none" | "bronze" | "silver" | "gold";
+
+export interface LetterRunSample {
+  wpm: number;
+  accuracy: number; // 0-100
+}
+
+export interface LetterProgress {
+  medal: LetterMedal;
+  totalHits: number;
+  recentWpm: number;
+  recentAccuracy: number; // 0-100
+  recentRuns: LetterRunSample[];
+}
+
 export interface TeamProgress {
   levelRecords: Record<number, LevelRecord>;
   highestUnlockedLevel: number;
+  letterProgress: Record<string, LetterProgress>;
 }
 
 export interface SpeedTestEntry {

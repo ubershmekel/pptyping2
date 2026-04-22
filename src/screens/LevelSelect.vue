@@ -6,6 +6,9 @@
     <div class="ls-header">
       <button class="ls-back-btn" @click="router.push('/')">← Back</button>
       <h2 class="ls-title">Choose Level</h2>
+      <button class="ls-chest-btn" type="button" @click="showTreasure = true">
+        Treasure Chest
+      </button>
       <div class="ls-progress-pill">
         <span class="ls-prog-count">{{ totalCompleted }}</span>
         <span class="ls-prog-denom"> / 21</span>
@@ -133,6 +136,77 @@
       </div>
     </div>
 
+    <Teleport to="body">
+      <div
+        v-if="showTreasure"
+        class="ls-modal-backdrop"
+        @click.self="showTreasure = false"
+      >
+        <section
+          class="ls-treasure-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="treasure-title"
+        >
+          <div class="ls-treasure-head">
+            <div>
+              <h3 id="treasure-title" class="ls-treasure-title">
+                Treasure Chest
+              </h3>
+              <div class="ls-treasure-sub">
+                {{ learnedLetters.length }} learned keys
+              </div>
+            </div>
+            <button
+              class="ls-treasure-close"
+              type="button"
+              aria-label="Close treasure chest"
+              @click="showTreasure = false"
+            >
+              ×
+            </button>
+          </div>
+          <div class="ls-treasure-table" role="table">
+            <div class="ls-treasure-row ls-treasure-header" role="row">
+              <span role="columnheader">Key</span>
+              <span role="columnheader">Medal</span>
+              <span role="columnheader">Hits</span>
+              <span role="columnheader">WPM</span>
+              <span role="columnheader">Acc</span>
+            </div>
+            <div
+              v-for="letter in learnedLetters"
+              :key="letter"
+              class="ls-treasure-row"
+              role="row"
+            >
+              <span class="ls-treasure-letter" role="cell">{{
+                letterLabel(letter)
+              }}</span>
+              <span
+                :class="[
+                  'ls-treasure-medal',
+                  medalClass(letterProgressFor(letter)?.medal ?? 'none'),
+                ]"
+                role="cell"
+                >{{
+                  medalLabel(letterProgressFor(letter)?.medal ?? "none")
+                }}</span
+              >
+              <span role="cell">{{
+                letterProgressFor(letter)?.totalHits ?? 0
+              }}</span>
+              <span role="cell">{{ recentWpmLabel(letter) }}</span>
+              <span role="cell">{{ recentAccuracyLabel(letter) }}</span>
+            </div>
+          </div>
+          <div v-if="learnedLetters.length === 0" class="ls-treasure-empty">
+            Complete letter levels to fill the chest.
+          </div>
+        </section>
+      </div>
+    </Teleport>
+
     <div
       class="ls-training-card"
       @click="router.push('/training')"
@@ -160,8 +234,8 @@ import { useRoute, useRouter } from "vue-router";
 import "./levelSelect.css";
 import { useProfile } from "../composables/useProfile";
 import { activeProgress } from "../state/gameState";
-import { LEVELS, ARC_ENVIRONMENTS } from "../data/levels";
-import type { LevelDefinition } from "../types";
+import { LEVELS, ARC_ENVIRONMENTS, CHAR_TO_LEARN_LEVEL } from "../data/levels";
+import type { LetterMedal, LevelDefinition } from "../types";
 
 const ARC_ICONS: Record<number, string> = {
   1: "🌿",
@@ -186,6 +260,7 @@ const profile = computed(() => profileRef.value);
 
 const screenEl = ref<HTMLElement | null>(null);
 const levelCardEls = ref<HTMLElement[]>([]);
+const showTreasure = ref(false);
 
 const attempted = computed(() => {
   const q = route.query.attempted;
@@ -212,6 +287,15 @@ const arcLevels = computed<Record<number, LevelDefinition[]>>(() => {
   return map;
 });
 
+const learnedLetters = computed(() =>
+  Object.entries(CHAR_TO_LEARN_LEVEL)
+    .filter(
+      ([, level]) => progress.value.levelRecords[level]?.completed ?? false,
+    )
+    .sort((a, b) => a[1] - b[1] || curriculumSort(a[0], b[0]))
+    .map(([letter]) => letter),
+);
+
 function isUnlocked(n: number): boolean {
   return n <= progress.value.highestUnlockedLevel;
 }
@@ -222,6 +306,48 @@ function isCompleted(n: number): boolean {
 
 function levelRecord(n: number) {
   return progress.value.levelRecords[n];
+}
+
+function letterProgressFor(letter: string) {
+  return progress.value.letterProgress?.[letter];
+}
+
+function medalLabel(medal: LetterMedal): string {
+  const labels: Record<LetterMedal, string> = {
+    none: "-",
+    bronze: "🥉",
+    silver: "🥈",
+    gold: "🥇",
+  };
+  return labels[medal];
+}
+
+function medalClass(medal: LetterMedal): string {
+  return `ls-medal-${medal}`;
+}
+
+function recentWpmLabel(letter: string): string {
+  const stats = letterProgressFor(letter);
+  return stats && Array.isArray(stats.recentRuns) && stats.recentRuns.length > 0
+    ? String(stats.recentWpm)
+    : "--";
+}
+
+function recentAccuracyLabel(letter: string): string {
+  const stats = letterProgressFor(letter);
+  return stats && Array.isArray(stats.recentRuns) && stats.recentRuns.length > 0
+    ? `${stats.recentAccuracy}%`
+    : "--";
+}
+
+function letterLabel(letter: string): string {
+  return letter === " " ? "SPACE" : letter.toUpperCase();
+}
+
+function curriculumSort(a: string, b: string): number {
+  if (a === " ") return 1;
+  if (b === " ") return -1;
+  return a.localeCompare(b);
 }
 
 function levelStateClass(n: number): string {

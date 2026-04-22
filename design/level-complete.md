@@ -48,6 +48,24 @@ result is framed as a baseline, not a grade.
   the story blurb. On fail, no image is shown. See `assets.md` for the
   naming convention and asset list.
 
+### Review / boss levels
+
+When `isFinale === true`, the result screen also shows per-letter review
+results:
+
+- current medal result for each reviewed letter (none, bronze, silver, gold)
+- per-letter WPM converted from average key time
+- per-letter accuracy and hit count
+- weakest letters highlighted by lowest medal, slowest WPM, or lowest accuracy
+
+Medals are only awarded on these review / boss levels. Bronze (`🥉`) requires
+15+ WPM, silver (`🥈`) requires 20+ WPM, and gold (`🥇`) requires 30+ WPM for the
+letter.
+
+If any reviewed letter is 10 WPM or below, or 70% accuracy or below, the run
+triggers Heartbreak. On Heartbreak, the result screen labels the run and no
+medals are awarded for any letter in that run.
+
 ### Level 1 (speed test baseline)
 
 - Final WPM and accuracy (large, prominent)

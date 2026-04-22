@@ -23,7 +23,14 @@ The game saves after every significant state change:
 - Team selection
 - Difficulty change
 - Level completion (best WPM/accuracy update; new `ActivityLogEntry` appended to
-  `activityLog`)
+  `activityLog`; per-key `letterProgress` total hits and recent WPM / accuracy
+  update under the active team's progress)
+- Training activity completion (new `ActivityLogEntry` appended to
+  `activityLog`; per-key `letterProgress` stats update without changing level
+  records)
+- Review / boss level completion (`isFinale === true`): medals are awarded only
+  if the run avoids Heartbreak. Heartbreak blocks medals for the run but does
+  not block per-key stat updates.
 - Speed test completion (new `SpeedTestEntry` appended to `speedTestHistory`)
 - Screen navigation (updates `currentPosition` for the Continue button)
 

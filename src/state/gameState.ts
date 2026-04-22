@@ -9,7 +9,8 @@ import type {
   TeamProgress,
 } from "../types";
 import { DIFFICULTY_THRESHOLDS } from "../types";
-import { MAX_LEVEL } from "../data/levels";
+import { getLevelDef, MAX_LEVEL } from "../data/levels";
+import { applyLetterProgress } from "./letterMedals";
 
 const STORAGE_KEY = "pptyping_profile";
 
@@ -18,6 +19,7 @@ const STORAGE_KEY = "pptyping_profile";
 const DEFAULT_TEAM_PROGRESS: TeamProgress = {
   levelRecords: { 1: { bestWpm: 0, bestAccuracy: 0, completed: false } },
   highestUnlockedLevel: 1,
+  letterProgress: {},
 };
 
 export const DEFAULT_PROFILE: PlayerProfile = {
@@ -28,10 +30,12 @@ export const DEFAULT_PROFILE: PlayerProfile = {
     pokemon: {
       levelRecords: { 1: { bestWpm: 0, bestAccuracy: 0, completed: false } },
       highestUnlockedLevel: 1,
+      letterProgress: {},
     },
     mlp: {
       levelRecords: { 1: { bestWpm: 0, bestAccuracy: 0, completed: false } },
       highestUnlockedLevel: 1,
+      letterProgress: {},
     },
   },
   speedTestHistory: [],
@@ -65,6 +69,7 @@ export function loadProfile(): PlayerProfile {
               1: { bestWpm: 0, bestAccuracy: 0, completed: false },
             },
             highestUnlockedLevel: parsed.highestUnlockedLevel ?? 1,
+            letterProgress: {},
           },
           [otherTeam]: { ...DEFAULT_TEAM_PROGRESS },
         } as Record<Team, TeamProgress>,
@@ -107,10 +112,12 @@ export function resetProfile(): PlayerProfile {
       pokemon: {
         levelRecords: { 1: { bestWpm: 0, bestAccuracy: 0, completed: false } },
         highestUnlockedLevel: 1,
+        letterProgress: {},
       },
       mlp: {
         levelRecords: { 1: { bestWpm: 0, bestAccuracy: 0, completed: false } },
         highestUnlockedLevel: 1,
+        letterProgress: {},
       },
     },
     activityLog: [],
@@ -169,14 +176,22 @@ export function applyLevelResult(
     }
   }
 
+  const updatedProgress = applyLetterProgress(
+    {
+      ...progress,
+      levelRecords: newRecords,
+      highestUnlockedLevel: highestUnlocked,
+      letterProgress: progress.letterProgress ?? {},
+    },
+    stats,
+    getLevelDef(levelNumber),
+  );
+
   let next: PlayerProfile = {
     ...profile,
     teams: {
       ...profile.teams,
-      [profile.activeTeam]: {
-        levelRecords: newRecords,
-        highestUnlockedLevel: highestUnlocked,
-      },
+      [profile.activeTeam]: updatedProgress,
     },
   };
 
@@ -216,8 +231,20 @@ export function logTrainingActivity(
     passed: true,
     type,
   };
+  const progress = profile.teams[profile.activeTeam];
+  const updatedProgress = applyLetterProgress(
+    {
+      ...progress,
+      letterProgress: progress.letterProgress ?? {},
+    },
+    stats,
+  );
   const next: PlayerProfile = {
     ...profile,
+    teams: {
+      ...profile.teams,
+      [profile.activeTeam]: updatedProgress,
+    },
     activityLog: [...profile.activityLog, logEntry],
   };
   saveProfile(next);

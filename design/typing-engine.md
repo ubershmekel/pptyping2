@@ -54,6 +54,9 @@ The engine tracks:
   every keystroke.
 - **Elapsed time**: starts on first keystroke, pauses when the pause overlay is
   active.
+- **Per-key practice inputs**: correct hits, incorrect presses, and average
+  time between correct presses per expected key. SPACE is tracked under the
+  `" "` key.
 
 Stats are emitted continuously so the stats display (see `typing-engine.md`)
 can update without polling.
@@ -67,10 +70,11 @@ a particle burst.
 
 ### Level Complete Logic
 
-When all lines are typed, the engine emits `levelComplete` with the final stats
-object: `{ wpm, accuracy, elapsedSeconds, totalErrors }`. The level screen
-compares these against the difficulty thresholds (see `difficulty-system.md`)
-and transitions to the level complete screen.
+When all lines are typed, the engine emits `levelComplete` with final stats:
+overall WPM, accuracy, elapsed seconds, total errors, total keystrokes, and the
+per-letter hit/error/timing maps. The level screen compares the overall WPM and
+accuracy against the difficulty thresholds (see `difficulty-system.md`) and
+transitions to the level complete screen.
 
 ## Key Files
 

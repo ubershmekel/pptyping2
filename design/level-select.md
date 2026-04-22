@@ -35,6 +35,13 @@ Level cards show:
 - New letters introduced at that level (one chip per letter on learn levels;
   review levels show no new-letter chips)
 
+The header includes a Treasure Chest button that opens a modal over the level
+map. The modal lists all learned keys for the active team, including SPACE, and
+shows each key's current medal, total hits, recent WPM, and recent accuracy.
+Medal tiers are represented with `🥉`, `🥈`, and `🥇` icons. Stats come from
+`TeamProgress.letterProgress` and update after any completed typing run; medals
+still only change after review / boss levels.
+
 Cutscene nodes show an icon (🎬 intro, ▶ chapter, 🏆 finale) and label when
 unlocked, or a 🔒 icon when locked.
 
