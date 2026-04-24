@@ -480,11 +480,17 @@
 .ls-wpm {
   color: var(--arc-col, #4ade80);
 }
+.ls-wpm-tried {
+  color: #ca8a04;
+}
 .ls-sep {
   color: #444;
 }
 .ls-acc {
   color: #aaa;
+}
+.ls-acc-tried {
+  color: #a16207;
 }
 
 .ls-card-stats small {

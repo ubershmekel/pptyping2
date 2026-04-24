@@ -76,20 +76,22 @@
               <span v-if="isCompleted(lvl.number)" class="ls-status ls-done"
                 >✓</span
               >
-              <span v-else-if="isUnlocked(lvl.number)" class="ls-status ls-open"
+              <span
+                v-else-if="isUnlocked(lvl.number) && !isTried(lvl.number)"
+                class="ls-status ls-open"
                 >▶</span
               >
-              <span v-else class="ls-status ls-locked-icon">⚿</span>
+              <span v-else-if="!isUnlocked(lvl.number)" class="ls-status ls-locked-icon">⚿</span>
             </div>
             <div
-              v-if="isCompleted(lvl.number) && levelRecord(lvl.number)"
-              class="ls-card-stats"
+              v-if="(isCompleted(lvl.number) || isTried(lvl.number)) && levelRecord(lvl.number)"
+              :class="['ls-card-stats', isTried(lvl.number) ? 'ls-stats-tried' : '']"
             >
-              <span class="ls-wpm"
+              <span :class="isTried(lvl.number) && levelRecord(lvl.number)!.bestWpm < threshold.wpm ? 'ls-wpm-tried' : 'ls-wpm'"
                 >{{ levelRecord(lvl.number)!.bestWpm }}<small>wpm</small></span
               >
               <span class="ls-sep">·</span>
-              <span class="ls-acc"
+              <span :class="isTried(lvl.number) && levelRecord(lvl.number)!.bestAccuracy < threshold.accuracy ? 'ls-acc-tried' : 'ls-acc'"
                 >{{ levelRecord(lvl.number)!.bestAccuracy
                 }}<small>%</small></span
               >
@@ -236,6 +238,7 @@ import { useProfile } from "../composables/useProfile";
 import { activeProgress } from "../state/gameState";
 import { LEVELS, ARC_ENVIRONMENTS, CHAR_TO_LEARN_LEVEL } from "../data/levels";
 import type { LetterMedal, LevelDefinition } from "../types";
+import { DIFFICULTY_THRESHOLDS } from "../types";
 
 const ARC_ICONS: Record<number, string> = {
   1: "🌿",
@@ -303,6 +306,12 @@ function isUnlocked(n: number): boolean {
 function isCompleted(n: number): boolean {
   return progress.value.levelRecords[n]?.completed ?? false;
 }
+
+function isTried(n: number): boolean {
+  return isUnlocked(n) && !isCompleted(n) && (levelRecord(n)?.bestWpm ?? 0) > 0;
+}
+
+const threshold = computed(() => DIFFICULTY_THRESHOLDS[profile.value.difficulty]);
 
 function levelRecord(n: number) {
   return progress.value.levelRecords[n];

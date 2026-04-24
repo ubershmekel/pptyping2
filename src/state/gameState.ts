@@ -160,7 +160,7 @@ export function applyLevelResult(
   const updated: LevelRecord = {
     bestWpm: Math.max(existing.bestWpm, stats.wpm),
     bestAccuracy: Math.max(existing.bestAccuracy, stats.accuracy),
-    completed: existing.completed || clearsProgressGate,
+    completed: existing.completed || passed,
   };
 
   const newRecords = { ...progress.levelRecords, [levelNumber]: updated };
