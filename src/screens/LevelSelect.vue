@@ -173,8 +173,10 @@
               <span role="columnheader">Key</span>
               <span role="columnheader">Medal</span>
               <span role="columnheader">Hits</span>
-              <span role="columnheader">WPM</span>
-              <span role="columnheader">Acc</span>
+              <span role="columnheader">Best WPM</span>
+              <span role="columnheader">Best Acc</span>
+              <span role="columnheader">Recent WPM</span>
+              <span role="columnheader">Recent Acc</span>
             </div>
             <div
               v-for="letter in learnedLetters"
@@ -198,6 +200,8 @@
               <span role="cell">{{
                 letterProgressFor(letter)?.totalHits ?? 0
               }}</span>
+              <span role="cell">{{ bestWpmLabel(letter) }}</span>
+              <span role="cell">{{ bestAccuracyLabel(letter) }}</span>
               <span role="cell">{{ recentWpmLabel(letter) }}</span>
               <span role="cell">{{ recentAccuracyLabel(letter) }}</span>
             </div>
@@ -333,6 +337,16 @@ function medalLabel(medal: LetterMedal): string {
 
 function medalClass(medal: LetterMedal): string {
   return `ls-medal-${medal}`;
+}
+
+function bestWpmLabel(letter: string): string {
+  const stats = letterProgressFor(letter);
+  return stats && (stats.bestWpm ?? 0) > 0 ? String(stats.bestWpm) : "--";
+}
+
+function bestAccuracyLabel(letter: string): string {
+  const stats = letterProgressFor(letter);
+  return stats && (stats.bestWpm ?? 0) > 0 ? `${stats.bestAccuracy}%` : "--";
 }
 
 function recentWpmLabel(letter: string): string {

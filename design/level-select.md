@@ -29,34 +29,42 @@ Level cards show:
 
 - Level number (in Press Start 2P font)
 - ⚡ Speed badge for speed-test levels
-- Completion status icon (✓ done, ▶ open, ⚿ locked)
-- Best WPM and best accuracy (if any record exists)
-- "Not played yet" hint on unlocked-but-unplayed cards
+- Completion status icon (✓ done, ▶ open and not yet attempted, ⚿ locked;
+  no icon for levels that were attempted but not passed)
+- WPM and accuracy stats: arc-color on completed cards; yellow on attempted-but-
+  not-passed cards (each stat only turns yellow if it individually fell below the
+  active difficulty threshold); "Not played yet" on unlocked-but-unplayed cards
 - New letters introduced at that level (one chip per letter on learn levels;
   review levels show no new-letter chips)
 
 The header includes a Treasure Chest button that opens a modal over the level
 map. The modal lists all learned keys for the active team, including SPACE, and
-shows each key's current medal, total hits, recent WPM, and recent accuracy.
-Medal tiers are represented with `🥉`, `🥈`, and `🥇` icons. Stats come from
-`TeamProgress.letterProgress` and update after any completed typing run; medals
-still only change after review / boss levels.
+shows each key's current medal, total hits, best WPM, best accuracy (from the
+same run), recent WPM, and recent accuracy. Medal tiers are represented with
+`🥉`, `🥈`, and `🥇` icons. Best stats only advance on non-heartbreak boss
+completions; recent stats update after any completed typing run; medals still
+only change after review / boss levels.
 
 Cutscene nodes show an icon (🎬 intro, ▶ chapter, 🏆 finale) and label when
 unlocked, or a 🔒 icon when locked.
 
 ## Visual State Hierarchy
 
-Three clearly distinct states for level cards, in descending prominence:
+Four clearly distinct states for level cards, in descending prominence:
 
 1. **Completed** — arc-color border + gradient background + arc-color glow.
-   Chips tinted in arc color. ✓ icon glows.
+   Chips tinted in arc color. ✓ icon glows. Stats shown in arc color.
 
-2. **Unlocked (open)** — arc-color left accent border, subtle arc-color
-   background tint. ▶ icon in arc color. Hover lifts + glows. The _next_
-   playable level (frontier) also pulses gently to draw the eye.
+2. **Unlocked (open, not yet attempted)** — arc-color left accent border,
+   subtle arc-color background tint. ▶ icon in arc color. Hover lifts + glows.
+   The _next_ playable level (frontier) also pulses gently to draw the eye.
 
-3. **Locked** — near-invisible: dark background with diagonal hatch overlay,
+3. **Attempted but not passed** — same open card styling. No status icon. Stats
+   shown in yellow for each individual stat that fell below the active difficulty
+   threshold (WPM or accuracy independently); stats at or above threshold stay
+   in their normal color.
+
+4. **Locked** — near-invisible: dark background with diagonal hatch overlay,
    near-invisible border, very dim text and chips, no connector glow. Clicking a
    locked card triggers a shake animation; the card stays visible.
 

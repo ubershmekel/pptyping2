@@ -57,6 +57,8 @@ export interface LetterRunSample {
 export interface LetterProgress {
   medal: LetterMedal;
   totalHits: number;
+  bestWpm: number;
+  bestAccuracy: number; // accuracy from the run where bestWpm was achieved
   recentWpm: number;
   recentAccuracy: number; // 0-100
   recentRuns: LetterRunSample[];

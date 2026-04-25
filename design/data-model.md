@@ -59,17 +59,22 @@ Per-key practice stats and medal mastery:
 
 - `medal: "none" | "bronze" | "silver" | "gold"` - highest medal earned
 - `totalHits: number` - correct hits recorded for this key across typing runs
+- `bestWpm: number` - highest per-key WPM achieved in any non-heartbreak boss
+  run
+- `bestAccuracy: number` (0-100) - accuracy from the same run where `bestWpm`
+  was set
 - `recentWpm: number` - average key WPM across the last 1-2 runs that included
   this key
 - `recentAccuracy: number` (0-100) - average key accuracy across the last 1-2
   runs that included this key
 - `recentRuns: { wpm: number; accuracy: number }[]` - the raw last 1-2 samples
 
-Hits and recent stats update after any completed level or training run. Bronze
-is 15+ WPM, silver is 20+ WPM, and gold is 30+ WPM, but medals are only awarded
-on review / boss levels. A review run has a Heartbreak if any reviewed letter is
-10 WPM or below, or 70% accuracy or below; on Heartbreak no medals are awarded
-for that run, though per-key stats still update.
+`totalHits` and `recent*` update after any completed level or training run.
+`bestWpm` / `bestAccuracy` only advance on non-heartbreak boss completions.
+Bronze is 15+ WPM, silver is 20+ WPM, and gold is 30+ WPM, but medals are only
+awarded on review / boss levels. A review run has a Heartbreak if any reviewed
+letter is 10 WPM or below, or 70% accuracy or below; on Heartbreak no medals
+are awarded for that run, though per-key stats still update.
 
 ### `SpeedTestEntry`
 

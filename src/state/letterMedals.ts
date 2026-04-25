@@ -119,6 +119,9 @@ export function applyLetterProgress(
         recentRuns.length,
     );
 
+    const isBestRun =
+      medalEvaluation && !medalEvaluation.heartbreak &&
+      result.wpm > (existing.bestWpm ?? 0);
     letterProgress[result.letter] = {
       medal:
         medalEvaluation && !medalEvaluation.heartbreak
@@ -128,6 +131,8 @@ export function applyLetterProgress(
             )
           : existing.medal,
       totalHits: existing.totalHits + result.hits,
+      bestWpm: isBestRun ? result.wpm : (existing.bestWpm ?? 0),
+      bestAccuracy: isBestRun ? result.accuracy : (existing.bestAccuracy ?? 0),
       recentWpm,
       recentAccuracy,
       recentRuns,
@@ -162,6 +167,8 @@ function emptyLetterProgress(): LetterProgress {
   return {
     medal: MEDAL_BY_RANK[0],
     totalHits: 0,
+    bestWpm: 0,
+    bestAccuracy: 0,
     recentWpm: 0,
     recentAccuracy: 0,
     recentRuns: [],
