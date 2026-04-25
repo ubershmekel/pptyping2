@@ -18,41 +18,41 @@ export const LEVEL_TEXTS: Record<number, string> = {
   // Level 5: arc 1 finale — review f j d k + space
   5: "fjd jdk kfj djk jfd fkd djf kjd fkj dkf fjdk jkdf kdfj dfjk fjd jdk kfj djk jfd fkd djf kjd fkj dkf fjdk jkdf kdfj dfjk",
 
-  // Level 6: learn o a with f j anchors
-  6: "foj joa oaf afo fjoa jofa foaf jajo foj joa oaf afo fjoa jofa foaf jajo",
+  // Level 6: learn a l with f j anchors
+  6: "fal jal alf laj fla jla fjal jalf laff jalj alaf fjla fal jal alf laj fla jla fjal jalf laff jalj",
 
-  // Level 7: learn i n with f j anchors
-  7: "fin jin nif jif fjin jiff jinn nifi fin jin nif jif fjin jiff jinn nifi",
+  // Level 7: learn i s with f j anchors
+  7: "fis jis sif isj fsi jsi fjis jisf siff isjf fis jis sif isj fsi jsi fjis jisf siff isjf",
 
-  // Level 8: learn h s with f j anchors
-  8: "fjhs shfj hsjf jhss fjsh shjs jjff hhss fjhs shfj hsjf jhss fjsh shjs jjff hhss",
+  // Level 8: learn h g with f j anchors
+  8: "fhg jhg ghf fgh jhf hgj fjhg jhgf ghff hgjf fhg jhg ghf fgh jhf hgj fjhg jhgf ghff hgjf",
 
-  // Level 9: arc 2 finale — review f j o a i n h s
-  9: "finish fashion jason shoji oasis join fish finish fashion jason shoji oasis join fish",
+  // Level 9: arc 2 finale — review f j a l i s h g
+  9: "flash jail fish lash sail hail gash sigh flag fig jig ails halls flash jail fish lash sail hail gash sigh",
 
-  // Level 10: learn r l with f j anchors
-  10: "fjrl jrfl rljf lfjr frjl jrlf llfj rrjf fjrl jrfl rljf lfjr frjl jrlf llfj rrjf",
+  // Level 10: learn r o with f j anchors
+  10: "fro jro rof ofj orf jor fjro jorf roff ofjr fro jro rof ofj orf jor fjro jorf roff ofjr",
 
-  // Level 11: learn u e with f j anchors
-  11: "fjue juef eujf fuje jufe eeuj feuf ujfe fjue juef eujf fuje jufe eeuj feuf ujfe",
+  // Level 11: learn u w with f j anchors
+  11: "fuw juw wuf uwj fwu jwu fjuw juwf wuff uwjf fuw juw wuf uwj fwu jwu fjuw juwf wuff uwjf",
 
-  // Level 12: learn y w with f j anchors
-  12: "fjwy wyfj jywf wfyj fwyj jyyf wwfj yjfw fjwy wyfj jywf wfyj fwyj jyyf wwfj yjfw",
+  // Level 12: learn y e with f j anchors
+  12: "fye jye yef ejy fey jey fjye jeyf yeff ejyf fye jye yef ejy fey jey fjye jeyf yeff ejyf",
 
-  // Level 13: arc 3 finale — review f j r l u e y w
-  13: "jury july fury rule fuel lure flew jelly jewel yell wry jury july fury rule fuel lure flew jelly jewel",
+  // Level 13: arc 3 finale — review f j r o u w y e
+  13: "jury fury your fore wore joey four euro woe few rye ore joy row owe yore jury fury your fore wore joey",
 
-  // Level 14: learn m g with f j anchors
-  14: "fjmg gmfj mjfg gfmj jgmf ffgm jjmg mgfj fjmg gmfj mjfg gfmj jgmf ffgm jjmg mgfj",
+  // Level 14: learn m c with f j anchors
+  14: "fmc jmc cmf mcj fcm jcm fjmc jmcf cmff mcjf fmc jmc cmf mcj fcm jcm fjmc jmcf cmff mcjf",
 
-  // Level 15: learn c p with f j anchors
-  15: "fjcp pcfj cjpf pfcj jcpf ffcp jjpc cpfj fjcp pcfj cjpf pfcj jcpf ffcp jjpc cpfj",
+  // Level 15: learn n t with f j anchors
+  15: "fnt jnt tnf nfj ftn jtn fjnt jtnf tnff ntjf fnt jnt tnf nfj ftn jtn fjnt jtnf tnff ntjf",
 
-  // Level 16: learn t b with f j anchors
-  16: "fjtb btfj tjbf bfjt jtbf fftb jjbt tbfj fjtb btfj tjbf bfjt jtbf fftb jjbt tbfj",
+  // Level 16: learn p b with f j anchors
+  16: "fpb jpb pbf bfj fbp jbp fjpb jbpf pbff bfjp fpb jpb pbf bfj fbp jbp fjpb jbpf pbff bfjp",
 
-  // Level 17: arc 4 finale — review f j m g c p t b
-  17: "fjmg gcmp pctg tbfj mgcp jbtg pcfj mgtb fjmg gcmp pctg tbfj mgcp jbtg pcfj mgtb",
+  // Level 17: arc 4 finale — review f j m c n t p b
+  17: "fjmc jntp pbtf mcnj jbtp fcnt tjpb bmnf fjmc jntp pbtf mcnj jbtp fcnt tjpb bmnf fjmc jntp",
 
   // Level 18: learn v x with f j anchors
   18: "fjvx vxfj jvxf xfvj fvjx jjvx ffxv xjfv fjvx vxfj jvxf xfvj fvjx jjvx ffxv xjfv",
@@ -112,18 +112,18 @@ export const LEVEL_LETTERS: Record<number, string> = {
   3: "fjdk", // no space
   4: "fj ", // space introduced
   5: "fjdk ", // arc 1 finale
-  6: "fjoa ",
-  7: "fjin ",
-  8: "fjhs ",
-  9: "fjoainhs ", // arc 2 finale
-  10: "fjrl ",
-  11: "fjue ",
-  12: "fjyw ",
-  13: "fjrlueyw ", // arc 3 finale
-  14: "fjmg ",
-  15: "fjcp ",
-  16: "fjtb ",
-  17: "fjmgcptb ", // arc 4 finale
+  6: "fjal ",
+  7: "fjis ",
+  8: "fjhg ",
+  9: "fjalisgh ", // arc 2 finale
+  10: "fjro ",
+  11: "fjuw ",
+  12: "fjye ",
+  13: "fjrouwye ", // arc 3 finale
+  14: "fjmc ",
+  15: "fjnt ",
+  16: "fjpb ",
+  17: "fjmcntpb ", // arc 4 finale
   18: "fjvx ",
   19: "fjqz ",
   20: "fjvxqz ", // arc 5 finale
