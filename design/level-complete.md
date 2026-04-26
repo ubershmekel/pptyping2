@@ -61,9 +61,10 @@ results:
 - per-letter accuracy and hit count
 - weakest letters highlighted by lowest medal, slowest WPM, or lowest accuracy
 
-Medals are only awarded on these review / boss levels. Bronze (`🥉`) requires
-15+ WPM, silver (`🥈`) requires 20+ WPM, and gold (`🥇`) requires 30+ WPM for the
-letter.
+Medals are only awarded on these review / boss levels. Bronze requires 15+ WPM,
+silver requires 20+ WPM, and gold requires 30+ WPM for the letter. Awarded
+tiers are shown with the active team's bronze, silver, and gold rank keycap SVG
+icons from `src/assets/medals/{pok|mlp}/`.
 
 If any reviewed letter is 10 WPM or below, or 70% accuracy or below, the run
 triggers Heartbreak. On Heartbreak, the result screen labels the run and no

@@ -193,10 +193,15 @@
                   medalClass(letterProgressFor(letter)?.medal ?? 'none'),
                 ]"
                 role="cell"
-                >{{
-                  medalLabel(letterProgressFor(letter)?.medal ?? "none")
-                }}</span
               >
+                <img
+                  v-if="medalIcon(letterProgressFor(letter)?.medal ?? 'none')"
+                  class="ls-medal-icon"
+                  :src="medalIcon(letterProgressFor(letter)?.medal ?? 'none')!"
+                  :alt="medalLabel(letterProgressFor(letter)?.medal ?? 'none')"
+                />
+                <span v-else>{{ medalLabel("none") }}</span>
+              </span>
               <span role="cell">{{
                 letterProgressFor(letter)?.totalHits ?? 0
               }}</span>
@@ -243,6 +248,7 @@ import { activeProgress } from "../state/gameState";
 import { LEVELS, ARC_ENVIRONMENTS, CHAR_TO_LEARN_LEVEL } from "../data/levels";
 import type { LetterMedal, LevelDefinition } from "../types";
 import { DIFFICULTY_THRESHOLDS } from "../types";
+import { medalIconForTeam } from "../assets/medals";
 
 const ARC_ICONS: Record<number, string> = {
   1: "🌿",
@@ -328,11 +334,15 @@ function letterProgressFor(letter: string) {
 function medalLabel(medal: LetterMedal): string {
   const labels: Record<LetterMedal, string> = {
     none: "-",
-    bronze: "🥉",
-    silver: "🥈",
-    gold: "🥇",
+    bronze: "Bronze medal",
+    silver: "Silver medal",
+    gold: "Gold medal",
   };
   return labels[medal];
+}
+
+function medalIcon(medal: LetterMedal): string | null {
+  return medalIconForTeam(profile.value.activeTeam, medal);
 }
 
 function medalClass(medal: LetterMedal): string {

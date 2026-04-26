@@ -71,6 +71,8 @@ test("letter progress keeps highest medals and still records heartbreak stats", 
       d: {
         medal: "gold",
         totalHits: 4,
+        bestWpm: 30,
+        bestAccuracy: 100,
         recentWpm: 30,
         recentAccuracy: 100,
         recentRuns: [{ wpm: 30, accuracy: 100 }],

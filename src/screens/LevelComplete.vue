@@ -191,9 +191,15 @@
               <span class="lc-medal-letter">{{
                 letterLabel(result.letter)
               }}</span>
-              <span :class="['lc-medal-tier', medalClass(result.medal)]">{{
-                medalLabel(result.medal)
-              }}</span>
+              <span :class="['lc-medal-tier', medalClass(result.medal)]">
+                <img
+                  v-if="medalIcon(result.medal)"
+                  class="lc-medal-icon"
+                  :src="medalIcon(result.medal)!"
+                  :alt="medalLabel(result.medal)"
+                />
+                <span v-else>{{ medalLabel("none") }}</span>
+              </span>
               <span>{{ result.wpm }} WPM</span>
               <span>{{ result.accuracy }}%</span>
               <span>{{ result.hits }} hits</span>
@@ -283,6 +289,7 @@ import {
   evaluateFinaleMedals,
   type LetterMedalResult,
 } from "../state/letterMedals";
+import { medalIconForTeam } from "../assets/medals";
 
 const props = defineProps<{
   levelNumber: number;
@@ -449,11 +456,15 @@ function formatTime(seconds: number): string {
 function medalLabel(medal: LetterMedalResult["medal"]): string {
   const labels: Record<LetterMedalResult["medal"], string> = {
     none: "-",
-    bronze: "🥉",
-    silver: "🥈",
-    gold: "🥇",
+    bronze: "Bronze medal",
+    silver: "Silver medal",
+    gold: "Gold medal",
   };
   return labels[medal];
+}
+
+function medalIcon(medal: LetterMedalResult["medal"]): string | null {
+  return medalIconForTeam(props.team, medal);
 }
 
 function medalClass(medal: LetterMedalResult["medal"]): string {

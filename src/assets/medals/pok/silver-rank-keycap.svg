@@ -1,0 +1,59 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <!-- Silver gradient -->
+    <linearGradient id="silverGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D9D9D9"/>
+      <stop offset="50%" stop-color="#C0C0C0"/>
+      <stop offset="100%" stop-color="#8E8E8E"/>
+    </linearGradient>
+
+    <!-- Dark edge -->
+    <linearGradient id="silverEdge" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9E9E9E"/>
+      <stop offset="100%" stop-color="#5F5F5F"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Base -->
+  <path id="key-base"
+        d="M64 120 Q64 64 120 64 H392 Q448 64 448 120 V392 Q448 448 392 448 H120 Q64 448 64 392 Z"
+        fill="url(#silverEdge)"/>
+
+  <!-- Top face -->
+  <path id="key-top"
+        d="M96 140 Q96 96 140 96 H372 Q416 96 416 140 V372 Q416 416 372 416 H140 Q96 416 96 372 Z"
+        fill="url(#silverGradient)"/>
+
+  <!-- Inner border -->
+  <path
+        d="M110 150 Q110 110 150 110 H362 Q402 110 402 150 V362 Q402 402 362 402 H150 Q110 402 110 362 Z"
+        fill="none"
+        stroke="#F5F5F5"
+        stroke-width="6"
+        opacity="0.6"/>
+
+  <!-- Poké Ball icon (smaller) -->
+  <g id="poke-icon" transform="translate(190,260) scale(0.65)">
+    <circle cx="0" cy="0" r="80" fill="none" stroke="#3E2723" stroke-width="10"/>
+    <line x1="-80" y1="0" x2="80" y2="0" stroke="#3E2723" stroke-width="10"/>
+    <circle cx="0" cy="0" r="20" fill="none" stroke="#3E2723" stroke-width="10"/>
+  </g>
+
+  <!-- Large engraved 2 (nudged left + fully inside) -->
+  <path id="rank-number"
+        d="M270 160 
+           Q330 120 390 170
+           Q430 210 390 250
+           L310 320
+           H400
+           V360
+           H260
+           V320
+           L350 240
+           Q380 215 350 185
+           Q320 160 280 190 Z"
+        fill="#3E2723"
+        opacity="0.9"/>
+
+</svg>

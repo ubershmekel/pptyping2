@@ -41,7 +41,8 @@ The header includes a Treasure Chest button that opens a modal over the level
 map. The modal lists all learned keys for the active team, including SPACE, and
 shows each key's current medal, total hits, best WPM, best accuracy (from the
 same run), recent WPM, and recent accuracy. Medal tiers are represented with
-`🥉`, `🥈`, and `🥇` icons. Best stats only advance on non-heartbreak boss
+the active team's bronze, silver, and gold rank keycap SVG icons from
+`src/assets/medals/{pok|mlp}/`. Best stats only advance on non-heartbreak boss
 completions; recent stats update after any completed typing run; medals still
 only change after review / boss levels.
 

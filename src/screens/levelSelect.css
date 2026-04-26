@@ -834,8 +834,19 @@
 }
 
 .ls-treasure-medal {
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
   font-size: 1rem;
   font-weight: 900;
+}
+
+.ls-medal-icon {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
 }
 
 .ls-medal-none {

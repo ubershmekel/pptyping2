@@ -115,6 +115,23 @@ Contract for letter keys:
   `data-row="{top|home|bottom}"`
 - runtime code must target those semantic classes and `data-*` attributes
 
+### Medal Rank Keycaps
+
+Review / boss medals are bundled SVG keycap badges. The medal asset manifest in
+`src/assets/medals/index.ts` maps the active team and medal tier to the correct
+SVG.
+
+Naming convention: `src/assets/medals/{team-prefix}/{tier}-rank-keycap.svg`
+
+Examples:
+
+- `src/assets/medals/pok/bronze-rank-keycap.svg`
+- `src/assets/medals/pok/silver-rank-keycap.svg`
+- `src/assets/medals/pok/gold-rank-keycap.svg`
+- `src/assets/medals/mlp/bronze-rank-keycap.svg`
+- `src/assets/medals/mlp/silver-rank-keycap.svg`
+- `src/assets/medals/mlp/gold-rank-keycap.svg`
+
 ## Audio
 
 ### Sound Effects
