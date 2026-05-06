@@ -39,12 +39,32 @@ Level cards show:
 
 The header includes a Treasure Chest button that opens a modal over the level
 map. The modal lists all learned keys for the active team, including SPACE, and
-shows each key's current medal, total hits, best WPM, best accuracy (from the
+shows each key's current medal, total hits, boss WPM, boss accuracy (from the
 same run), recent WPM, and recent accuracy. Medal tiers are represented with
 the active team's bronze, silver, and gold rank keycap SVG icons from
-`src/assets/medals/{pok|mlp}/`. Best stats only advance on non-heartbreak boss
+`src/assets/medals/{pok|mlp}/`. Boss stats only advance on non-heartbreak boss
 completions; recent stats update after any completed typing run; medals still
 only change after review / boss levels.
+
+## Treasure Chest
+
+Learners need a clear answer to "what should I work on next?" After they unlock
+new keys their per-letter skill varies widely — some keys feel natural, others
+still feel shaky. Without visibility into that variation they tend to replay
+whatever level they just finished rather than targeting their real weak spots.
+
+The Treasure Chest gives them that visibility. By showing every learned key with
+its boss WPM, recent WPM, and medal tier in one place, it makes the gap between
+"what I can do under boss conditions" and "what I'm doing right now" obvious.
+The list is sorted by boss WPM descending so the weakest keys drift to the
+bottom — exactly the ones that deserve more attention.
+
+The medal tiers reinforce mastery as a reachable goal rather than a vague aspiration:
+a learner can look at a bronze key, see the WPM they'd need for silver, and
+return to the relevant review level with a concrete target in mind. The result is
+intrinsic motivation to keep refining instead of just advancing.
+
+## Cutscene labels
 
 Cutscene nodes show an icon (🎬 intro, ▶ chapter, 🏆 finale) and label when
 unlocked, or a 🔒 icon when locked.

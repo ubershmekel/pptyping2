@@ -173,8 +173,8 @@
               <span role="columnheader">Key</span>
               <span role="columnheader">Medal</span>
               <span role="columnheader">Hits</span>
-              <span role="columnheader">Best WPM</span>
-              <span role="columnheader">Best Acc</span>
+              <span role="columnheader">Boss WPM</span>
+              <span role="columnheader">Boss Acc</span>
               <span role="columnheader">Recent WPM</span>
               <span role="columnheader">Recent Acc</span>
             </div>
@@ -305,7 +305,16 @@ const learnedLetters = computed(() =>
     .filter(
       ([, level]) => progress.value.levelRecords[level]?.completed ?? false,
     )
-    .sort((a, b) => a[1] - b[1] || curriculumSort(a[0], b[0]))
+    .sort((a, b) => {
+      const aProgress = progress.value.letterProgress?.[a[0]];
+      const bProgress = progress.value.letterProgress?.[b[0]];
+      const aBestWpm = aProgress?.bestWpm ?? 0;
+      const bBestWpm = bProgress?.bestWpm ?? 0;
+      if (bBestWpm !== aBestWpm) return bBestWpm - aBestWpm;
+      const aRecentWpm = aProgress?.recentWpm ?? 0;
+      const bRecentWpm = bProgress?.recentWpm ?? 0;
+      return bRecentWpm - aRecentWpm;
+    })
     .map(([letter]) => letter),
 );
 
@@ -377,11 +386,6 @@ function letterLabel(letter: string): string {
   return letter === " " ? "SPACE" : letter.toUpperCase();
 }
 
-function curriculumSort(a: string, b: string): number {
-  if (a === " ") return 1;
-  if (b === " ") return -1;
-  return a.localeCompare(b);
-}
 
 function levelStateClass(n: number): string {
   if (isCompleted(n)) return "ls-card-done";
