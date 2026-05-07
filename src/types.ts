@@ -17,7 +17,7 @@ export const DIFFICULTY_THRESHOLDS: Record<Difficulty, DifficultyThreshold> = {
 
 export const DIFFICULTY_DISPLAY: Record<Team, Record<Difficulty, string>> = {
   pokemon: { easy: "Casual Trainer", medium: "Gym Leader", hard: "Elite Four" },
-  mlp: { easy: "Friendship Student", medium: "Royal Guard", hard: "Alicorn" },
+  mlp: { easy: "Friendship Student", medium: "Pony", hard: "Royal Guard" },
 };
 
 export const TEAM_DISPLAY: Record<Team, string> = {
