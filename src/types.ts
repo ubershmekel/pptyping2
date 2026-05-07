@@ -71,13 +71,13 @@ export interface TeamProgress {
 }
 
 export interface SpeedTestEntry {
-  date: string; // YYYY-MM-DD
+  date: string; // ISO 8601 timestamp
   wpm: number;
   accuracy: number; // 0-100
 }
 
 export interface ActivityLogEntry {
-  date: string; // YYYY-MM-DD
+  date: string; // ISO 8601 timestamp
   levelNumber: number;
   wpm: number;
   accuracy: number; // 0-100

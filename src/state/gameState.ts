@@ -14,6 +14,7 @@ import { applyLetterProgress } from "./letterMedals";
 
 const STORAGE_KEY = "pptyping_profile";
 
+
 // ─── Defaults ────────────────────────────────────────────────────────────────
 
 const DEFAULT_TEAM_PROGRESS: TeamProgress = {
@@ -203,7 +204,7 @@ export function applyLevelResult(
 
   if (isSpeedTest) {
     const entry: SpeedTestEntry = {
-      date: new Date().toISOString().slice(0, 10),
+      date: new Date().toISOString(),
       wpm: stats.wpm,
       accuracy: stats.accuracy,
     };
@@ -211,7 +212,7 @@ export function applyLevelResult(
   }
 
   const logEntry: ActivityLogEntry = {
-    date: new Date().toISOString().slice(0, 10),
+    date: new Date().toISOString(),
     levelNumber,
     wpm: stats.wpm,
     accuracy: stats.accuracy,
@@ -230,7 +231,7 @@ export function logTrainingActivity(
   stats: LevelStats,
 ): PlayerProfile {
   const logEntry: ActivityLogEntry = {
-    date: new Date().toISOString().slice(0, 10),
+    date: new Date().toISOString(),
     levelNumber: 0,
     wpm: stats.wpm,
     accuracy: stats.accuracy,

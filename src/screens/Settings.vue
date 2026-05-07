@@ -88,7 +88,7 @@
                   :key="i"
                   :class="entry.passed ? 'st-log-pass' : 'st-log-fail'"
                 >
-                  <td>{{ entry.date }}</td>
+                  <td>{{ new Date(entry.date).toLocaleDateString() }}</td>
                   <td>
                     {{
                       entry.type === "training-speedcheck"
