@@ -6,6 +6,9 @@
     <div class="ls-header">
       <button class="ls-back-btn" @click="router.push('/')">← Back</button>
       <h2 class="ls-title">Choose Level</h2>
+      <button class="ls-sidequest-btn" type="button" @click="showChallenges = true">
+        Side Quests
+      </button>
       <button class="ls-chest-btn" type="button" @click="showTreasure = true">
         Treasure Chest
       </button>
@@ -218,20 +221,56 @@
       </div>
     </Teleport>
 
-    <div
-      class="ls-training-card"
-      @click="router.push('/training')"
-      role="button"
-      tabindex="0"
-      @keydown.enter.space.prevent="router.push('/training')"
-    >
-      <div class="ls-training-icon">🥋</div>
-      <div class="ls-training-text">
-        <div class="ls-training-name">Training Mode</div>
-        <div class="ls-training-sub">Speed check → targeted drill → repeat</div>
+    <Teleport to="body">
+      <div
+        v-if="showChallenges"
+        class="ls-modal-backdrop"
+        @click.self="showChallenges = false"
+      >
+        <section
+          class="ls-treasure-modal ls-challenges-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="challenges-title"
+        >
+          <div class="ls-treasure-head">
+            <h3 id="challenges-title" class="ls-treasure-title">Side Quests</h3>
+            <button
+              class="ls-treasure-close"
+              type="button"
+              aria-label="Close challenges"
+              @click="showChallenges = false"
+            >
+              ×
+            </button>
+          </div>
+          <div class="ls-challenges-list">
+            <button
+              class="ls-challenge-item"
+              @click="router.push('/training')"
+            >
+              <span class="ls-challenge-icon">🥋</span>
+              <div class="ls-challenge-text">
+                <div class="ls-challenge-name">Training Mode</div>
+                <div class="ls-challenge-sub">Speed check → targeted drill → repeat</div>
+              </div>
+              <span class="ls-challenge-arrow">→</span>
+            </button>
+            <button
+              class="ls-challenge-item"
+              @click="router.push('/abcs')"
+            >
+              <span class="ls-challenge-icon">🔤</span>
+              <div class="ls-challenge-text">
+                <div class="ls-challenge-name">ABCs Challenge</div>
+                <div class="ls-challenge-sub">Close your eyes and type the alphabet</div>
+              </div>
+              <span class="ls-challenge-arrow">→</span>
+            </button>
+          </div>
+        </section>
       </div>
-      <div class="ls-training-arrow">→</div>
-    </div>
+    </Teleport>
 
     <div class="ls-particles" aria-hidden="true">
       <span v-for="n in 20" :key="n" class="ls-particle"></span>
@@ -274,6 +313,7 @@ const profile = computed(() => profileRef.value);
 const screenEl = ref<HTMLElement | null>(null);
 const levelCardEls = ref<HTMLElement[]>([]);
 const showTreasure = ref(false);
+const showChallenges = ref(false);
 
 const attempted = computed(() => {
   const q = route.query.attempted;

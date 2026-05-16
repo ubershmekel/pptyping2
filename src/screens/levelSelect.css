@@ -78,6 +78,27 @@
   outline: none;
 }
 
+.ls-sidequest-btn {
+  padding: 0.4rem 0.9rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: #aaa;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.ls-sidequest-btn:hover,
+.ls-sidequest-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  outline: none;
+}
+
 .ls-title {
   flex: 1;
   font-family: var(--font-game);
@@ -678,51 +699,63 @@
   animation-delay: 2.4s;
 }
 
-/* ── Training Mode card ──────────────────────────────────────────────────── */
+/* ── Challenges dialog ───────────────────────────────────────────────────── */
 
-.ls-training-card {
+.ls-challenges-modal {
+  width: min(420px, 100%);
+  max-height: unset;
+}
+
+.ls-challenges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ls-challenge-item {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin: 1rem 1rem 0;
-  padding: 1rem 1.25rem;
+  width: 100%;
+  padding: 0.9rem 1rem;
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   cursor: pointer;
+  text-align: left;
   transition:
     background 0.15s,
     border-color 0.15s;
 }
 
-.ls-training-card:hover {
+.ls-challenge-item:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-.ls-training-icon {
-  font-size: 1.5rem;
+.ls-challenge-icon {
+  font-size: 1.4rem;
   flex-shrink: 0;
 }
 
-.ls-training-text {
+.ls-challenge-text {
   flex: 1;
 }
 
-.ls-training-name {
+.ls-challenge-name {
   font-family: var(--font-game);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #fff;
   letter-spacing: 0.5px;
 }
 
-.ls-training-sub {
-  font-size: 0.75rem;
+.ls-challenge-sub {
+  font-size: 0.72rem;
   color: #666;
   margin-top: 0.15rem;
 }
 
-.ls-training-arrow {
+.ls-challenge-arrow {
   color: #555;
   font-size: 1.1rem;
 }
