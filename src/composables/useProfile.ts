@@ -32,7 +32,7 @@ export function useProfile() {
   }
 
   function onTrainingActivity(
-    type: "training-speedcheck" | "training-drill",
+    type: "training-speedcheck" | "training-drill" | "abcs",
     stats: LevelStats,
   ): void {
     update(logTrainingActivity(profile.value, type, stats));

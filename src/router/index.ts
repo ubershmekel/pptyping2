@@ -46,6 +46,10 @@ const router = createRouter({
       path: "/training",
       component: () => import("../screens/TrainingFlow.vue"),
     },
+    {
+      path: "/abcs",
+      component: () => import("../screens/ABCsFlow.vue"),
+    },
     // Unknown routes → main menu
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
@@ -53,7 +57,7 @@ const router = createRouter({
 
 // ─── Global guards ────────────────────────────────────────────────────────────
 
-const GAMEPLAY_PATHS = ["/level-select", "/cutscene", "/level", "/training"];
+const GAMEPLAY_PATHS = ["/level-select", "/cutscene", "/level", "/training", "/abcs"];
 
 router.beforeEach((to) => {
   const { profile } = useProfile();

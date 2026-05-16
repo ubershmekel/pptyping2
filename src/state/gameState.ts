@@ -227,7 +227,7 @@ export function applyLevelResult(
 /** Log a training-mode activity (speed check or drill) without affecting level progress. */
 export function logTrainingActivity(
   profile: PlayerProfile,
-  type: "training-speedcheck" | "training-drill",
+  type: "training-speedcheck" | "training-drill" | "abcs",
   stats: LevelStats,
 ): PlayerProfile {
   const logEntry: ActivityLogEntry = {

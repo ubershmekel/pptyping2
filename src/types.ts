@@ -82,7 +82,7 @@ export interface ActivityLogEntry {
   wpm: number;
   accuracy: number; // 0-100
   passed: boolean;
-  type?: "level" | "training-speedcheck" | "training-drill";
+  type?: "level" | "training-speedcheck" | "training-drill" | "abcs";
 }
 
 export interface PlayerProfile {

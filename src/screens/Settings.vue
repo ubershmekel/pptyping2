@@ -90,13 +90,7 @@
                 >
                   <td>{{ new Date(entry.date).toLocaleDateString() }}</td>
                   <td>
-                    {{
-                      entry.type === "training-speedcheck"
-                        ? "Training: Speed Check"
-                        : entry.type === "training-drill"
-                          ? "Training: Drill"
-                          : `Level ${entry.levelNumber}`
-                    }}
+                    {{ activityLabel(entry) }}
                   </td>
                   <td>{{ entry.wpm }}</td>
                   <td>{{ entry.accuracy }}%</td>
@@ -117,9 +111,21 @@ import { useRouter } from "vue-router";
 import "./settings.css";
 import { useProfile } from "../composables/useProfile";
 import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from "../types";
-import type { Difficulty } from "../types";
+import type { ActivityLogEntry, Difficulty } from "../types";
 
 const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
+
+const ACTIVITY_LABELS: Record<string, string> = {
+  "training-speedcheck": "Training: Speed Check",
+  "training-drill": "Training: Drill",
+  abcs: "ABCs",
+};
+
+function activityLabel(entry: ActivityLogEntry): string {
+  return (
+    (entry.type && ACTIVITY_LABELS[entry.type]) ?? `Level ${entry.levelNumber}`
+  );
+}
 
 const router = useRouter();
 const { profile: profileRef, onSetDifficulty } = useProfile();

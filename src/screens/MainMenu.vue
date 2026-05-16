@@ -36,6 +36,10 @@
         <span class="mm-btn-label">Training Mode</span>
         <span class="mm-btn-sub">speed check + drill on slow keys</span>
       </button>
+      <button class="mm-btn mm-btn-ghost" @click="router.push('/abcs')">
+        <span class="mm-btn-label">ABCs Challenge</span>
+        <span class="mm-btn-sub">close your eyes and type the alphabet</span>
+      </button>
       <button
         class="mm-btn mm-btn-ghost mm-btn-settings"
         @click="router.push('/settings')"
