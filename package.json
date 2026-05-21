@@ -23,8 +23,9 @@
     "vite": "^5.1.0"
   },
   "dependencies": {
-    "tsx": "^4.21.0",
     "@vitejs/plugin-vue": "^6.0.5",
+    "jsfxr": "^1.4.1",
+    "tsx": "^4.21.0",
     "vue": "^3.5.32",
     "vue-router": "^4.6.4"
   }

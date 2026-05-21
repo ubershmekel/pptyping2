@@ -118,6 +118,7 @@ import { getLevelDef, ARC_ENVIRONMENTS } from "../data/levels";
 import { CharacterCompanion } from "../components/character";
 import { ParticleManager } from "../particles/particleManager";
 import KeyboardDisplay from "./KeyboardDisplay.vue";
+import { initSounds, playError } from "../sound";
 
 // ─── TypingEngine (unchanged from original) ────────────────────────────────────
 
@@ -540,6 +541,7 @@ onMounted(() => {
     );
   }
 
+  initSounds();
   const levelText = props.text ?? getLevelText(props.levelNumber);
   const thresholds = DIFFICULTY_THRESHOLDS[props.difficulty];
   engine = new TypingEngine(levelText);
@@ -583,6 +585,7 @@ onMounted(() => {
 
   engine.onError = (_charIndex, span) => {
     comboCount = 0;
+    playError();
     const errSpan = span ?? engine!.getCurrentSpan();
     spawnEffect(errSpan, "error");
     if (errSpan) {
