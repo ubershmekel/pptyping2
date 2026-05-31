@@ -57,36 +57,3 @@
   flex-wrap: wrap;
 }
 
-.dc-btn-primary,
-.dc-btn-secondary {
-  padding: 0.65rem 1.5rem;
-  border: none;
-  border-radius: var(--radius-xl);
-  font-family: var(--font-game);
-  font-size: 0.7rem;
-  cursor: pointer;
-  transition:
-    transform 0.15s,
-    box-shadow 0.15s;
-}
-
-.dc-btn-primary {
-  background: var(--team-primary, #ffd700);
-  color: #1a1a1a;
-  box-shadow: 0 4px 16px var(--team-glow, rgba(255, 215, 0, 0.3));
-}
-
-.dc-btn-primary:hover {
-  transform: scale(1.04);
-}
-
-.dc-btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
-  color: #888;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.dc-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #bbb;
-}

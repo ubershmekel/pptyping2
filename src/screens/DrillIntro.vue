@@ -56,13 +56,13 @@
       </div>
 
       <div class="di-actions">
-        <button class="di-btn-primary" @click="emit('drill', drillLetters)">
-          Start Drill →
+        <button class="btn-primary" @click="onDrill">
+          Start Drill <EnterKeyIcon />
         </button>
-        <button class="di-btn-secondary" @click="emit('retry')">
+        <button class="btn-secondary" @click="emit('retry')">
           Retry Speed Check
         </button>
-        <button class="di-btn-secondary" @click="emit('mainMenu')">
+        <button class="btn-secondary" @click="emit('mainMenu')">
           Main Menu
         </button>
       </div>
@@ -71,13 +71,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
+import EnterKeyIcon from "../components/EnterKeyIcon.vue";
 import "./drillIntro.css";
 import type { LevelStats, Team } from "../types";
-
-onMounted(() => {
-  document.title = "Drill Intro";
-});
 
 const props = defineProps<{
   stats: LevelStats;
@@ -118,4 +115,24 @@ const drillLetters = computed(() => [...ANCHORS, ...extraLetters.value]);
 
 // The slow non-anchor letters get visual emphasis.
 const focusLetters = computed(() => new Set(extraLetters.value));
+
+let gone = false;
+function onDrill(): void {
+  if (gone) return;
+  gone = true;
+  emit("drill", drillLetters.value);
+}
+
+function keyHandler(e: KeyboardEvent): void {
+  if (e.key === "Enter") onDrill();
+}
+
+onMounted(() => {
+  document.title = "Drill Intro";
+  document.addEventListener("keydown", keyHandler);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", keyHandler);
+});
 </script>

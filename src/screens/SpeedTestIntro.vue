@@ -9,8 +9,8 @@
         can see how much you've improved.
       </p>
       <div class="sti-actions">
-        <button class="sti-btn-primary" @click="onStart">Start →</button>
-        <button class="sti-btn-secondary" @click="emit('back')">
+        <button class="btn-primary" @click="onStart">Start <EnterKeyIcon /></button>
+        <button class="btn-secondary" @click="emit('back')">
           ← Level Select
         </button>
       </div>
@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
+import EnterKeyIcon from "../components/EnterKeyIcon.vue";
 import "./speedTestIntro.css";
 import type { Team } from "../types";
 

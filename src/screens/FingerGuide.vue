@@ -29,8 +29,8 @@
       </div>
 
       <div class="fg-actions">
-        <button class="fg-btn-primary" @click="onStart">Start Level →</button>
-        <button class="fg-btn-secondary" @click="emit('back')">
+        <button class="btn-primary" @click="onStart">Start Level <EnterKeyIcon /></button>
+        <button class="btn-secondary" @click="emit('back')">
           ← Level Select
         </button>
       </div>
@@ -40,6 +40,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import EnterKeyIcon from "../components/EnterKeyIcon.vue";
 import "./fingerGuide.css";
 import { getLevelDef } from "../data/levels";
 import { LEVEL_LETTERS } from "../data/wordLists";

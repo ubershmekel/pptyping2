@@ -8,32 +8,45 @@
       <p class="ai-instruction">
         Close your eyes and type the alphabet from memory.
       </p>
-      <p class="ai-sub">
-        a b c d e f g h i j k l m n o p q r s t u v w x y z
-      </p>
+      <p class="ai-sub">a b c d e f g h i j k l m n o p q r s t u v w x y z</p>
 
       <div class="ai-actions">
-        <button class="ai-btn-primary" @click="emit('start')">
-          Close Eyes &amp; Start
+        <button class="btn-primary" @click="onStart">
+          Close Eyes &amp; Start <EnterKeyIcon />
         </button>
-        <button class="ai-btn-secondary" @click="emit('quit')">
-          Main Menu
-        </button>
+        <button class="btn-secondary" @click="emit('quit')">Main Menu</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
+import EnterKeyIcon from "../components/EnterKeyIcon.vue";
 import "./abcsIntro.css";
 import type { Team } from "../types";
-
-onMounted(() => {
-  document.title = "Blind ABC Challenge";
-});
 
 defineProps<{ team: Team }>();
 
 const emit = defineEmits<{ start: []; quit: [] }>();
+
+let gone = false;
+function onStart(): void {
+  if (gone) return;
+  gone = true;
+  emit("start");
+}
+
+function keyHandler(e: KeyboardEvent): void {
+  if (e.key === "Enter") onStart();
+}
+
+onMounted(() => {
+  document.title = "Blind ABC Challenge";
+  document.addEventListener("keydown", keyHandler);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", keyHandler);
+});
 </script>

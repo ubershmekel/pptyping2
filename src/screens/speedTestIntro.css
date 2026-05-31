@@ -62,38 +62,8 @@
   margin-top: 0.25rem;
 }
 
-.sti-btn-primary,
-.sti-btn-secondary {
+.speed-test-intro-screen .btn-primary,
+.speed-test-intro-screen .btn-secondary {
   padding: 0.75rem 2.2rem;
-  border: none;
-  border-radius: var(--radius-xl);
-  font-family: var(--font-game);
   font-size: 0.8rem;
-  cursor: pointer;
-  transition:
-    transform 0.15s,
-    box-shadow 0.15s,
-    background 0.15s;
-}
-
-.sti-btn-primary {
-  background: var(--team-primary, #ffd700);
-  color: #1a1a1a;
-  box-shadow: 0 4px 20px var(--team-glow, rgba(255, 215, 0, 0.35));
-}
-
-.sti-btn-primary:hover {
-  transform: scale(1.04);
-  box-shadow: 0 6px 28px var(--team-glow, rgba(255, 215, 0, 0.5));
-}
-
-.sti-btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
-  color: #888;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sti-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #bbb;
 }

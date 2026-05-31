@@ -67,13 +67,13 @@
           </table>
         </div>
         <div class="lc-actions">
-          <button class="lc-btn lc-btn-primary" @click="emit('next')">
-            Next Level →
+          <button class="btn-primary" @click="emit('next')">
+            Next Level <EnterKeyIcon />
           </button>
-          <button class="lc-btn lc-btn-secondary" @click="emit('retry')">
+          <button class="btn-secondary" @click="emit('retry')">
             Retry ↺
           </button>
-          <button class="lc-btn lc-btn-secondary" @click="emit('levelSelect')">
+          <button class="btn-secondary" @click="emit('levelSelect')">
             Level Select
           </button>
         </div>
@@ -219,25 +219,21 @@
           <template v-if="isBossLevel">
             <button
               v-if="canContinue"
-              class="lc-btn lc-btn-primary"
+              class="btn-primary"
               @click="emit('next')"
             >
-              {{ levelNumber >= MAX_LEVEL ? "See Finale" : "Next Level" }}
+              {{ levelNumber >= MAX_LEVEL ? "See Finale" : "Next Level" }} <EnterKeyIcon />
             </button>
             <button
-              :class="[
-                'lc-btn',
-                isBlockingFailure ? 'lc-btn-primary' : 'lc-btn-secondary',
-              ]"
+              :class="isBlockingFailure ? 'btn-primary' : 'btn-secondary'"
               @click="emit('retry')"
             >
-              Retry
+              Retry <EnterKeyIcon v-if="isBlockingFailure" />
             </button>
             <button
               v-if="bossPracticeRecommendation"
               :class="[
-                'lc-btn',
-                isBlockingFailure ? 'lc-btn-primary' : 'lc-btn-secondary',
+                isBlockingFailure ? 'btn-primary' : 'btn-secondary',
                 isBlockingFailure ? 'lc-btn-accent' : '',
               ]"
               @click="
@@ -249,21 +245,21 @@
               {{ bossPracticeRecommendation.learnLevel }}
             </button>
             <button
-              class="lc-btn lc-btn-secondary"
+              class="btn-secondary"
               @click="emit('levelSelect')"
             >
               Level Select
             </button>
           </template>
           <template v-else>
-            <button class="lc-btn lc-btn-primary" @click="emit('next')">
-              {{ levelNumber >= MAX_LEVEL ? "See Finale" : "Next Level" }}
+            <button class="btn-primary" @click="emit('next')">
+              {{ levelNumber >= MAX_LEVEL ? "See Finale" : "Next Level" }} <EnterKeyIcon />
             </button>
-            <button class="lc-btn lc-btn-secondary" @click="emit('retry')">
+            <button class="btn-secondary" @click="emit('retry')">
               Retry
             </button>
             <button
-              class="lc-btn lc-btn-secondary"
+              class="btn-secondary"
               @click="emit('levelSelect')"
             >
               Level Select
@@ -280,7 +276,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import EnterKeyIcon from "../components/EnterKeyIcon.vue";
 import "./levelComplete.css";
 import type { Difficulty, LevelStats, SpeedTestEntry, Team } from "../types";
 import { DIFFICULTY_THRESHOLDS } from "../types";
@@ -475,8 +472,19 @@ function letterLabel(letter: string): string {
   return letter === " " ? "SPACE" : letter.toUpperCase();
 }
 
+function keyHandler(e: KeyboardEvent): void {
+  if (e.key !== "Enter") return;
+  if (isBlockingFailure.value) emit("retry");
+  else emit("next");
+}
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", keyHandler);
+});
+
 onMounted(() => {
   document.title = "Level Complete";
+  document.addEventListener("keydown", keyHandler);
   if (screenEl.value) {
     screenEl.value.classList.add("screen-enter");
     requestAnimationFrame(() =>

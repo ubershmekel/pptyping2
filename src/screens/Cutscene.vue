@@ -34,14 +34,13 @@
 
       <div class="cs-actions">
         <div class="cs-action-row">
-          <button class="cs-next-btn" @click="go">
-            {{ cutsceneIndex === 5 ? "Play Again" : "Continue" }}
+          <button class="btn-primary" @click="go">
+            {{ cutsceneIndex === 5 ? "Play Again" : "Continue" }} <EnterKeyIcon />
           </button>
           <button class="cs-level-select-btn" @click="leave(goLevelSelect)">
             Level Select
           </button>
         </div>
-        <div class="cs-hint">Press Enter or use Continue to advance</div>
       </div>
     </div>
 
@@ -54,6 +53,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import EnterKeyIcon from "../components/EnterKeyIcon.vue";
 import "./cutscene.css";
 import { useProfile } from "../composables/useProfile";
 import { CUTSCENE_STORIES } from "../data/stories";

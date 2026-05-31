@@ -15,13 +15,13 @@
       </div>
 
       <div class="dc-actions">
-        <button class="dc-btn-primary" @click="emit('next')">
-          Speed Check Again →
+        <button class="btn-primary" @click="emit('next')">
+          Speed Check Again <EnterKeyIcon />
         </button>
-        <button class="dc-btn-secondary" @click="emit('retry')">
+        <button class="btn-secondary" @click="emit('retry')">
           Retry Drill ↺
         </button>
-        <button class="dc-btn-secondary" @click="emit('quit')">
+        <button class="btn-secondary" @click="emit('quit')">
           Main Menu
         </button>
       </div>
@@ -30,13 +30,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
+import EnterKeyIcon from "../components/EnterKeyIcon.vue";
 import "./drillComplete.css";
 import type { LevelStats, Team } from "../types";
-
-onMounted(() => {
-  document.title = "Drill Complete";
-});
 
 defineProps<{
   stats: LevelStats;
@@ -44,4 +41,17 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{ next: []; retry: []; quit: [] }>();
+
+function keyHandler(e: KeyboardEvent): void {
+  if (e.key === "Enter") emit("next");
+}
+
+onMounted(() => {
+  document.title = "Drill Complete";
+  document.addEventListener("keydown", keyHandler);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", keyHandler);
+});
 </script>

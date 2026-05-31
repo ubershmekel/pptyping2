@@ -19,10 +19,10 @@
       </div>
 
       <div class="ac-actions">
-        <button class="ac-btn-primary" @click="emit('retry')">
-          Try Again ↺
+        <button class="btn-primary" @click="emit('retry')">
+          Try Again ↺ <EnterKeyIcon />
         </button>
-        <button class="ac-btn-secondary" @click="emit('quit')">
+        <button class="btn-secondary" @click="emit('quit')">
           Main Menu
         </button>
       </div>
@@ -31,13 +31,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
+import EnterKeyIcon from "../components/EnterKeyIcon.vue";
 import "./abcsComplete.css";
 import type { LevelStats, Team } from "../types";
-
-onMounted(() => {
-  document.title = "ABC Challenge Complete";
-});
 
 defineProps<{
   stats: LevelStats;
@@ -45,4 +42,17 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{ retry: []; quit: [] }>();
+
+function keyHandler(e: KeyboardEvent): void {
+  if (e.key === "Enter") emit("retry");
+}
+
+onMounted(() => {
+  document.title = "ABC Challenge Complete";
+  document.addEventListener("keydown", keyHandler);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", keyHandler);
+});
 </script>

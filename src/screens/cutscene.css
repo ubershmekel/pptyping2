@@ -624,23 +624,12 @@
   align-items: center;
 }
 
-.cs-next-btn {
+.cutscene-screen .btn-primary {
   min-width: 180px;
   padding: 0.9rem 2rem;
-  background: var(--team-primary, #ffd700);
-  color: #1a1a1a;
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 16px var(--team-glow, rgba(255, 215, 0, 0.3));
   font-size: 1rem;
   font-weight: 800;
-  transition:
-    transform 0.15s,
-    box-shadow 0.15s;
-}
-
-.cs-next-btn:hover {
-  transform: scale(1.04);
-  box-shadow: 0 6px 24px var(--team-glow, rgba(255, 215, 0, 0.5));
 }
 
 .cs-level-select-btn {
