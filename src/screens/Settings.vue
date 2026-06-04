@@ -88,7 +88,10 @@
                   :key="i"
                   :class="entry.passed ? 'st-log-pass' : 'st-log-fail'"
                 >
-                  <td>{{ new Date(entry.date).toLocaleDateString() }}</td>
+                  <td>
+                    <div>{{ new Date(entry.date).toLocaleDateString() }}</div>
+                    <div class="st-log-time">{{ new Date(entry.date).toLocaleTimeString() }}</div>
+                  </td>
                   <td>
                     {{ activityLabel(entry) }}
                   </td>

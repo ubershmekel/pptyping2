@@ -244,6 +244,11 @@
   color: #e57373;
 }
 
+.st-log-time {
+  font-size: 0.78em;
+  opacity: 0.65;
+}
+
 /* ── Shortcuts card ──────────────────────────────────────────────────────── */
 
 .st-shortcut-list {
