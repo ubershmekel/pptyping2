@@ -68,9 +68,8 @@ export function evaluateFinaleMedals(
   const slowestWpm = Math.min(...measured.map((result) => result.wpm));
   const lowestAccuracy = Math.min(...measured.map((result) => result.accuracy));
 
-  return {
-    heartbreak,
-    results: measured.map((result) => ({
+  const results = measured
+    .map((result) => ({
       ...result,
       medal: heartbreak ? "none" : result.medal,
       heartbreak,
@@ -78,8 +77,16 @@ export function evaluateFinaleMedals(
         MEDAL_RANK[result.medal] === lowestMedalRank ||
         result.wpm === slowestWpm ||
         result.accuracy === lowestAccuracy,
-    })),
-  };
+    }))
+    // On a normal run, lead with the best medals so the player sees their wins first.
+    // On heartbreak, surface the worst letter immediately so they know exactly what broke the run.
+    .sort((a, b) =>
+      heartbreak
+        ? a.wpm - b.wpm || a.accuracy - b.accuracy
+        : MEDAL_RANK[b.medal] - MEDAL_RANK[a.medal] || b.wpm - a.wpm,
+    );
+
+  return { heartbreak, results };
 }
 
 export function applyLetterProgress(
@@ -120,7 +127,8 @@ export function applyLetterProgress(
     );
 
     const isBestRun =
-      medalEvaluation && !medalEvaluation.heartbreak &&
+      medalEvaluation &&
+      !medalEvaluation.heartbreak &&
       result.wpm > (existing.bestWpm ?? 0);
     letterProgress[result.letter] = {
       medal:
