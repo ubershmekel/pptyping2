@@ -67,6 +67,32 @@
         </section>
 
         <section class="st-card">
+          <h3 class="st-card-title">Backup</h3>
+          <p class="st-about-text">
+            Your progress is saved only in this browser. Download a backup to
+            keep it safe, or restore it on another device.
+          </p>
+          <div class="st-backup-btns">
+            <button class="st-link-btn" @click="downloadBackup">
+              ⬇ Download backup
+            </button>
+            <button class="st-link-btn" @click="fileInput?.click()">
+              ⬆ Restore from backup
+            </button>
+          </div>
+          <input
+            ref="fileInput"
+            type="file"
+            accept="application/json,.json"
+            hidden
+            @change="restoreBackup"
+          />
+          <p v-if="backupMessage" class="st-backup-msg" :class="backupStatus">
+            {{ backupMessage }}
+          </p>
+        </section>
+
+        <section class="st-card">
           <h3 class="st-card-title">Activity Log</h3>
           <p v-if="profile.activityLog.length === 0" class="st-log-empty">
             No attempts yet. Complete a level to see your history here.
@@ -113,6 +139,7 @@ import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import "./settings.css";
 import { useProfile } from "../composables/useProfile";
+import { exportProfile, importProfile } from "../state/gameState";
 import { DIFFICULTY_DISPLAY, DIFFICULTY_THRESHOLDS } from "../types";
 import type { ActivityLogEntry, Difficulty } from "../types";
 
@@ -131,13 +158,55 @@ function activityLabel(entry: ActivityLogEntry): string {
 }
 
 const router = useRouter();
-const { profile: profileRef, onSetDifficulty } = useProfile();
+const { profile: profileRef, onSetDifficulty, update } = useProfile();
 const profile = computed(() => profileRef.value);
 
 const screenEl = ref<HTMLElement | null>(null);
+const fileInput = ref<HTMLInputElement | null>(null);
+const backupMessage = ref("");
+const backupStatus = ref<"st-backup-ok" | "st-backup-err">("st-backup-ok");
 
 function changeDifficulty(d: Difficulty): void {
   onSetDifficulty(d);
+}
+
+function downloadBackup(): void {
+  const json = exportProfile(profile.value);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const stamp = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `pptyping-backup-${stamp}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  backupStatus.value = "st-backup-ok";
+  backupMessage.value = "Backup downloaded.";
+}
+
+function restoreBackup(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const restored = importProfile(String(reader.result));
+    if (restored) {
+      update(restored);
+      backupStatus.value = "st-backup-ok";
+      backupMessage.value = "Backup restored.";
+    } else {
+      backupStatus.value = "st-backup-err";
+      backupMessage.value = "That file isn't a valid PP Typing backup.";
+    }
+    input.value = "";
+  };
+  reader.onerror = () => {
+    backupStatus.value = "st-backup-err";
+    backupMessage.value = "Couldn't read that file.";
+    input.value = "";
+  };
+  reader.readAsText(file);
 }
 
 onMounted(() => {

@@ -137,6 +137,27 @@
   flex-shrink: 0;
 }
 
+/* ── Backup card ─────────────────────────────────────────────────────────── */
+
+.st-backup-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.st-backup-msg {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.st-backup-ok {
+  color: #4caf50;
+}
+
+.st-backup-err {
+  color: #e57373;
+}
+
 /* ── Difficulty card ─────────────────────────────────────────────────────── */
 
 .st-diff-options {
